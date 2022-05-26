@@ -42,7 +42,7 @@ const routes = [
   //usuarios
   {
     path: '/usuarios',
-    name: 'UsuariosList',    
+    name: 'usuariosList',    
     component: () => import(/* webpackChunkName: "usauriosList" */ '../components/users/usuarios/usuariosList.vue')
   },
   {
