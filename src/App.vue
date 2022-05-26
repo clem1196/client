@@ -58,7 +58,7 @@
                 >About</a
               >
             </li>
-            <li v-if="vendedor" class="nav-item">
+            <li v-if="vendedor || admin" class="nav-item">
               <a
                 class="nav-link active"
                 aria-current="page"
@@ -67,7 +67,7 @@
                 >Ventas</a
               >
             </li>
-            <li v-if="almacenero" class="nav-item">
+            <li v-if="almacenero || admin" class="nav-item">
               <a
                 class="nav-link active"
                 aria-current="page"
@@ -76,7 +76,7 @@
                 >Compras</a
               >
             </li>            
-            <li v-if="admin || empleado" class="nav-item">
+            <li v-if="empleado || admin" class="nav-item">
               <a
                 class="nav-link active"
                 aria-current="page"
