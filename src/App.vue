@@ -45,9 +45,8 @@
         </div>
 
         <div v-else class="collapse navbar-collapse" id="navbarTogglerDemo01">
-          <a class="navbar-brand" style="color: white" href="/"
-            ><i class="bi-house-door-fill"></i> Home</a
-          >
+          <a class="navbar-brand" style="color: white" href="/">
+          <i class="bi-house-door-fill"></i> Home</a>
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <a
@@ -58,7 +57,7 @@
                 >About</a
               >
             </li>
-            <li v-if="vendedor || admin" class="nav-item">
+            <li v-if="vendedor || auditor || admin" class="nav-item">
               <a
                 class="nav-link active"
                 aria-current="page"
@@ -68,9 +67,9 @@
               >
             </li>
 <<<<<<< HEAD
-            <li v-if="contador" class="nav-item">
+           
 =======
-            <li v-if="almacenero || admin" class="nav-item">
+            <li v-if="contador || auditor|| admin" class="nav-item">
 >>>>>>> 56de660026cda533f08c099995f1ba8007ac5b2e
               <a
                 class="nav-link active"
@@ -81,9 +80,9 @@
               >
             </li>            
 <<<<<<< HEAD
-            <li v-if="auditor" class="nav-item">
+            
 =======
-            <li v-if="empleado || admin" class="nav-item">
+            <li v-if="auditor || admin" class="nav-item">
 >>>>>>> 56de660026cda533f08c099995f1ba8007ac5b2e
               <a
                 class="nav-link active"
