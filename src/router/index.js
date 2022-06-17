@@ -42,7 +42,11 @@ const routes = [
   //usuarios
   {
     path: '/usuarios',
+<<<<<<< HEAD
     name: 'usuariosList',
+=======
+    name: 'usuariosList',    
+>>>>>>> 56de660026cda533f08c099995f1ba8007ac5b2e
     component: () => import(/* webpackChunkName: "usauriosList" */ '../components/users/usuarios/usuariosList.vue')
   },
   {

@@ -58,7 +58,7 @@
                 >About</a
               >
             </li>
-            <li v-if="vendedor" class="nav-item">
+            <li v-if="vendedor || admin" class="nav-item">
               <a
                 class="nav-link active"
                 aria-current="page"
@@ -67,7 +67,11 @@
                 >Ventas</a
               >
             </li>
+<<<<<<< HEAD
             <li v-if="contador" class="nav-item">
+=======
+            <li v-if="almacenero || admin" class="nav-item">
+>>>>>>> 56de660026cda533f08c099995f1ba8007ac5b2e
               <a
                 class="nav-link active"
                 aria-current="page"
@@ -76,7 +80,11 @@
                 >Contabilidad</a
               >
             </li>            
+<<<<<<< HEAD
             <li v-if="auditor" class="nav-item">
+=======
+            <li v-if="empleado || admin" class="nav-item">
+>>>>>>> 56de660026cda533f08c099995f1ba8007ac5b2e
               <a
                 class="nav-link active"
                 aria-current="page"
