@@ -16,10 +16,10 @@
       aria-hidden="true"
     >
       <div class="modal-dialog">
-        <div class="modal-content">
+        <div v-if="message.noEliminar == false" class="modal-content">
           <div class="modal-header" style="background: #5dade2">
             <h5 class="modal-title" id="editarModalLabel" style="color: white">
-              {{ title }}
+              {{title}}
             </h5>
 
             <a href="/usuarios" class="btn btn-close"></a>
@@ -88,6 +88,30 @@
                 >
               </div>
             </form>
+            <div
+              v-if="message.advertencia == true"
+              class="alert alert-warning"
+              role="alert"
+            >
+              Va eliminar su propia cuenta, si continúa deberá iniciar sesión
+              nuevamente.
+            </div>           
+          </div>
+        </div>
+        <div v-else class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Atención</h5>
+            <a href="/usuarios" class="btn btn-close"></a>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-danger" role="alert">
+              No debe eliminar a este usuario "Admin". El sistema requiere al
+              menos de un Administrador.
+            </div>
+
+            <div class="modal-footer">
+              <a class="btn btn-secondary" href="/usuarios">Cancelar</a>
+            </div>
           </div>
         </div>
         <div
@@ -107,6 +131,7 @@
 </template>
 
 <script>
+import Hlpers from "../../../services/Helpers";
 import axios from "axios";
 import usuariosList from "./usuariosList.vue";
 export default {
@@ -133,6 +158,8 @@ export default {
       message: {
         success: "",
         err: "",
+        advertencia: false,
+        noEliminar: false,
       },
     };
   },
@@ -148,11 +175,12 @@ export default {
       const edit = document.getElementById("edit");
       edit.click();
     },
-
+    //obtener un usuario y usuarios(por nombre y rol)
     async getUser() {
+      const nameOfToken = await Hlpers.obtenerNombreUsuario();
       const token = localStorage.getItem("token");
       const result = await axios.get(
-        "http://localhost:4000/api/usuarios/" + this.$route.params.id,
+        "http://localhost:4000/api/data/" + this.$route.params.id,
         {
           headers: {
             Authorization: JSON.parse(token),
@@ -161,11 +189,44 @@ export default {
       );
       //console.log(result.data)
       //datos para editar
-      this.new_datos.new_nombre_usuario = result.data.usuario[0].nombre_usuario;
-      this.new_datos.new_contraseña = result.data.usuario[0].contraseña;
+      this.new_datos.new_nombre_usuario = result.data.user[0].nombre_usuario;
+      this.new_datos.new_contraseña = result.data.user[0].contraseña;
       //datos originales
-      this.datos.nombre_usuario = result.data.usuario[0].nombre_usuario;
-      this.datos.contraseña = result.data.usuario[0].contraseña;
+      this.datos.nombre_usuario = result.data.user[0].nombre_usuario;
+      this.datos.contraseña = result.data.user[0].contraseña;     
+
+      //obtener el nombre del usuario a editar
+      const userName = result.data.user[0].nombre_usuario;
+      //obtener todos los roles del usuario a editar
+      const userRoles = result.data.usersNames_rolesNames.filter(
+        (element) => element.nombre_usuario == userName
+      );
+      //filtramos userRoles con el nombre del rol admin
+      const userRol = userRoles.filter(
+        (element) => element.nombre_rol == "admin"
+      );
+      //obtener la cantidad de usuarios admin
+      const userAdmin = result.data.usersNames_rolesNames.filter(
+        (element) => element.nombre_rol == "admin"
+      );
+      console.log({
+        nombre: userName,
+        roles: userRoles,
+        userRol: userRol,
+        numeroAdmin: userAdmin.length,
+      });
+      //si el usuario a editar es admin y es el último
+      if (userRol.length > 0 && userAdmin.length < 2) {
+        //restringimos su eliminación
+        this.message.noEliminar = true;
+        this.err = false;
+      }
+      //si el usuario a eliminar es admin y es el usuario actual.
+      if (userRol.length > 0 && userName === nameOfToken) {
+        //advertimos que debe iniciar sesión nuevamente
+        this.message.advertencia = true;
+        this.err = false;
+      }
     },
 
     async editUser() {
@@ -175,22 +236,22 @@ export default {
           "http://localhost:4000/api/usuarios/" + this.$route.params.id,
           {
             nombre_usuario: this.new_datos.new_nombre_usuario,
-            contraseña: this.new_datos.new_contraseña
+            contraseña: this.new_datos.new_contraseña,
           },
           {
-              headers:{
-                  Authorization: JSON.parse(token)
-              }
+            headers: {
+              Authorization: JSON.parse(token),
+            },
           }
-
         );
-        if(result.data.Message.length>0) {
-            this.message.success=result.data.Message;
-            location.replace("/usuarios");
-        }       
+        if (result.data.Message.length > 0) {
+          this.message.success = result.data.Message;
+          this.message.err = false;
+          location.replace("/usuarios");
+        }
       } catch (error) {
-        this.message.err="El usuario ya existe o los campos no se llenaron correctamente";
-        console.log(error);
+        this.message.err = error.response.data.Message;
+        console.log(error.response);
       }
     },
   },

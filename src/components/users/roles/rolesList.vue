@@ -1,57 +1,74 @@
 <template>
-  <div class="container mt-5">
-    <div class="row card-header">
-      <a href="/usuarios-roles" class="col-auto"><h5>Regresar</h5></a>
-    </div>
-
-    <!--Form-->
-    <div class="row mt-5 m-auto">
+  <div class="container-fluid mt-4">
+    <!--Llamamos al componente headerWiev de navegación-->
+    <header-view></header-view>
+    <div class="mt-4">
       <!--Add-->
-      <div class="col-5">
-        <a class="btn btn-info" style="width: 25%" href="/roles/add"
-          >Agregar</a
-        >
+      <a class="btn btn-primary" href="/roles/add">Agregar</a>
+      <!--Switch-->
+      <div style="float: right">
+        <div class="form-check form-switch" @click="cambiarFilter">
+          <label class="form-check-label" for="swit">Búsqueda estrícta</label>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="switch"
+          />
+        </div>
       </div>
-
-      <!--Search-->
-      <div class="col-7">
-        <form @submit.prevent="getSearchRoles">
+    </div>
+    <!--Form-->
+    <!--Search libre-->
+    <div v-if="filter == true" class="col-12">
+      <form @keyup="getSearchRoles" class="mt-2">
+        <i class="bi-search"></i>
+        <input
+          class="border rounded"
+          style="width: 100%"
+          v-model="text"
+          type="search"
+          placeholder="Search"
+        />
+      </form>
+    </div>
+    <!--Search estricto-->
+    <div v-else class="col-12">
+      <form @submit.prevent="getSearchRoles" class="mt-4">
+        <div
+          style="float: right"
+          class="btn-group"
+          role="group"
+          aria-label="Basic mixed styles example"
+        >
           <button
-            v-if="text.length > 0"
-            class="btn btn-light"
-            style="width: 50%"
+            v-if="success.length > 0 || err.length > 0"
+            @click="getDataPages(1)"
             type="button"
+            class="btn btn-light"
+          >
+            Salir
+          </button>
+          <button
+            v-if="text"
+            type="button"
+            class="btn btn-secondary"
             @click="limpiarText"
           >
             Limpiar
           </button>
-          
-          <button
-            v-if="success.length > 0 || err.length > 0"
-            class="btn btn-warning"
-            style="width: 25%"
-            type="button"
-            @click="getDataPages(1)"
-          >
-            Salir
-          </button>
-         
-          <button v-if="text.length>0" type="submit" style="width: 25%" class="btn btn-primary">
-            Buscar
-          </button>
-
-          <div class="mt-2">
-            <i class="bi-search"></i>
-            <input
-              class="border rounded"
-              style="width: 100%"
-              v-model="text"
-              type="search"
-              placeholder=""
-            />
-          </div>
-        </form>
-      </div>
+          <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+        <i class="bi-search">
+          <input
+            class="border rounded"
+            style="width: 100%"
+            v-model="text"
+            type="search"
+            placeholder="Search"
+          />
+        </i>
+      </form>
     </div>
 
     <!--Table-->
@@ -59,7 +76,7 @@
       <thead>
         <tr style="background: #ecedef">
           <th>
-            <i class="bi-caret-down-fill" style="font-size: 1rem"></i>
+            <img src="../../../assets/sort.png" alt="" width="14">
             <button
               @click="sortId"
               class="btn btn-default btn-sm"
@@ -69,7 +86,7 @@
             </button>
           </th>
           <th>
-            <i class="bi-caret-down-fill" style="font-size: 1rem"></i>
+            <img src="../../../assets/sort.png" alt="" width="14">
             <button
               @click="sortNombre"
               class="btn btn-default btn-sm"
@@ -79,7 +96,7 @@
             </button>
           </th>
           <th>
-            <i class="bi-caret-down-fill" style="font-size: 1rem"></i>
+            <img src="../../../assets/sort.png" alt="" width="14">
             <button
               @click="sortCreado"
               class="btn btn-default btn-sm"
@@ -89,7 +106,7 @@
             </button>
           </th>
           <th>
-            <i class="bi-caret-down-fill" style="font-size: 1rem"></i>
+            <img src="../../../assets/sort.png" alt="" width="14">
             <button
               class="btn btn-default btn-sm"
               style="border: 0; font-size: 1.2rem"
@@ -98,7 +115,7 @@
               Modificado
             </button>
           </th>
-          <th></th>
+          <th>Acciones</th>
           <th></th>
         </tr>
       </thead>
@@ -125,49 +142,90 @@
       </tbody>
     </table>
 
-    <!--PAGINATION-->
-    <nav aria-label="Page navigation example">
-      <ul v-if="pagination" class="pagination justify-content-left">
-        <!--Previous-->
-        <li @click="getPrevious" class="page-item">
-          <button type="button" class="page-link">Previous</button>
-        </li>
-        <!--Pages-->
-        <li
-          v-for="pag in totalPages()"
-          :key="pag"
-          @click="getDataPages(pag)"
-          class="page-item"
-          :class="isActive(pag)"
-        >
-          <button
-            v-if="currentPage - 1 < pag && pag < currentPage + 3"
-            type="button"
-            class="page-link"
+    <!--PAGINATION-->   
+      <nav aria-label="Page navigation example">
+        <ul v-if="pagination" class="pagination justify-content-left">
+          <li class="page-item disabled">
+            <button class="page-link">Páginas:</button>
+          </li>
+          <!--Primera página-->
+          <li v-if="currentPage >= 2" @click="getFirstPage" class="page-item">
+            <button type="button" class="page-link">Primera</button>
+          </li>
+          <li v-else @click="getFirstPage" class="page-item disabled">
+            <button type="button" class="page-link">Primera</button>
+          </li>
+          <!--Atras-->
+          <li v-if="currentPage >= 2" @click="getPrevious" class="page-item">
+            <button type="button" class="page-link">
+              <i class="bi-chevron-left"></i>
+            </button>
+          </li>
+          <li v-else @click="getPrevious" class="page-item disabled">
+            <button type="button" class="page-link">
+              <i class="bi-chevron-left"></i>
+            </button>
+          </li>
+          <!--Pages-->
+          <li
+            v-for="pag in totalPages()"
+            :key="pag"
+            @click="getDataPages(pag)"
+            class="page-item"
+            :class="isActive(pag)"
           >
-            {{ pag }}
-          </button>
-        </li>
-        <!--Next-->
-        <li @click="getNext" class="page-item">
-          <button type="button" class="page-link">Next</button>
-        </li>
-        <!--Total-->
-        <li class="page-item disabled">
-          <button class="page-link">
-            Total roles: {{ this.roles.length }}
-          </button>
-        </li>
-      </ul>
-    </nav>
-
+            <button
+              v-if="currentPage - 1 < pag && pag < currentPage + 3"
+              type="button"
+              class="page-link"
+            >
+              {{ pag }}
+            </button>
+          </li>
+          <!--Siguiente-->
+          <li
+            v-if="currentPage < totalPages()"
+            @click="getNext"
+            class="page-item"
+          >
+            <button
+              v-if="currentPage < totalPages()"
+              type="button"
+              class="page-link"
+            >
+              <i class="bi-chevron-right"></i>
+            </button>
+          </li>
+          <li v-else @click="getNext" class="page-item disabled">
+            <button type="button" class="page-link">
+              <i class="bi-chevron-right"></i>
+            </button>
+          </li>
+          <!--Última página-->
+          <li
+            v-if="currentPage < totalPages()"
+            @click="getLastPage"
+            class="page-item"
+          >
+            <button type="button" class="page-link">Última</button>
+          </li>
+          <li v-else @click="getLastPage" class="page-item disabled">
+            <button type="button" class="page-link">Última</button>
+          </li>
+          <!--Total-->
+          <li class="page-item disabled">
+            <button class="page-link">Total: {{ this.roles.length }}</button>
+          </li>
+        </ul>
+      </nav>    
     <!--Messages-->
     <small v-if="success.length > 0" class="text-success">{{ success }} </small>
     <small v-if="err.length > 0" class="text-danger">{{ err }}</small>
-  </div>
+  </div>  
 </template>
 
 <script>
+import headerView from "../../../views/headerView.vue";
 import axios from "axios";
 export default {
   name: "roles-list",
@@ -180,6 +238,7 @@ export default {
       rows: 5,
       pagination: true,
       //search
+      filter: true,
       searchRoles: [],
       text: "",
       //Messages
@@ -187,27 +246,32 @@ export default {
       success: "",
     };
   },
+  components: {
+    headerView,
+  },
   async mounted() {
-      await this.getRoles();
-      this. getDataPages(1);
+    await this.getRoles();
+    this.getDataPages(this.currentPage);
   },
   methods: {
-    //LIST
+    //LIST ROLES
     async getRoles() {
       try {
         const token = localStorage.getItem("token");
-        const result = await axios.get("http://localhost:4000/api/roles", {
+        const result = await axios.get("http://localhost:4000/api/data", {
           headers: {
             Authorization: JSON.parse(token),
           },
-        }); 
-        console.log(result.data)      
+        });
+        //console.log(result.data);
         if (result.data.roles.length > 0) {
           this.roles = result.data.roles;
+          this.err = false;
         } else {
           console.log("No hay datos que mostrar");
         }
       } catch (error) {
+        this.err = error.response.data.Message;
         console.log(error);
       }
     },
@@ -268,14 +332,12 @@ export default {
     sortModificado() {
       const asc = (a, b) => {
         return (
-          new Date(a.actualizado).valueOf() -
-          new Date(b.actualizado).valueOf()
+          new Date(a.actualizado).valueOf() - new Date(b.actualizado).valueOf()
         );
       };
       const desc = (a, b) => {
         return (
-          new Date(b.actualizado).valueOf() -
-          new Date(a.actualizado).valueOf()
+          new Date(b.actualizado).valueOf() - new Date(a.actualizado).valueOf()
         );
       };
 
@@ -297,17 +359,15 @@ export default {
           return this.roles.filter(
             (rol) =>
               (rol.idroles !== null &&
-                rol.idroles.toString().indexOf(query)> - 1) ||
+                rol.idroles.toString().indexOf(query) > -1) ||
               (rol.nombre_rol !== null &&
-                rol.nombre_rol
-                  .toLowerCase()
-                  .indexOf(query.toLowerCase()) > -1) ||
+                rol.nombre_rol.toLowerCase().indexOf(query.toLowerCase()) >
+                  -1) ||
               (rol.registrado !== null &&
-                rol.registrado.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
+                rol.registrado.toLowerCase().indexOf(query.toLowerCase()) >
+                  -1) ||
               (rol.actualizado !== null &&
-                rol.actualizado
-                  .toLowerCase()
-                  .indexOf(query.toLowerCase()) > -1)
+                rol.actualizado.toLowerCase().indexOf(query.toLowerCase()) > -1)
           );
         };
         if (filterItems(this.text).length > 0) {
@@ -324,17 +384,28 @@ export default {
         }
       }
     },
+    //limpiar el campo search
     limpiarText() {
       this.text = "";
+    },
+    //cabiar switch a modo avanzado
+    cambiarFilter() {
+      if (this.filter == true) {
+        this.filter = false;
+      } else {
+        this.filter = true;
+      }
     },
 
     //PAGINATION
     isActive(numPage) {
       return numPage == this.currentPage ? "active" : "";
     },
+    //Total de páginas
     totalPages() {
       return Math.ceil(this.roles.length / this.rows);
     },
+    //obtener el numero de páginas
     getDataPages(numPage) {
       this.text = "";
       this.err = false;
@@ -352,17 +423,33 @@ export default {
         this.searchRoles = this.roles.slice(init, end);
       }
     },
+    //primera
+    getFirstPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+      this.getDataPages(1);
+    },
+    //Atrás
     getPrevious() {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
       this.getDataPages(this.currentPage);
     },
+    //Siguiente
     getNext() {
       if (this.currentPage < this.totalPages()) {
         this.currentPage++;
       }
       this.getDataPages(this.currentPage);
+    },
+    //Último
+    getLastPage() {
+      if (this.currentPage < this.totalPages()) {
+        this.currentPage++;
+      }
+      this.getDataPages(this.totalPages());
     },
   },
 };

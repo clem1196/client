@@ -16,7 +16,7 @@
       aria-hidden="true"
     >
       <div class="modal-dialog">
-        <div class="modal-content">
+        <div v-if="message.noEliminar==false" class="modal-content">
           <div class="modal-header" style="background: #5dade2;">
             <h5 class="modal-title" id="editarModalLabel" style="color: white;">
               {{ title }}
@@ -58,6 +58,24 @@
                 <a class="btn" href="/roles" style="color: white;">Cancelar</a>
               </div>
             </form>
+          </div>
+        </div>
+
+        <!--No debe eliminar-->
+        <div v-else class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title" id="deleteModalLabel">Atención</h5>
+
+            <a href="/roles" class="btn btn-close"></a>
+          </div>
+          <div class="modal-body">
+            <div class="alert alert-danger" role="alert">
+              No debe modificar el rol "Admin". El sistema requiere de un
+              Administrador.
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-secondary" href="/roles">Regresar</a>
           </div>
         </div>
         <div
@@ -103,6 +121,7 @@ export default {
       message: {
         success: "",
         err: "",
+        noEliminar: false
       },
     };
   },
@@ -122,7 +141,7 @@ export default {
     async getRol() {
       const token = localStorage.getItem("token");
       const result = await axios.get(
-        "http://localhost:4000/api/roles/" + this.$route.params.id,
+        "http://localhost:4000/api/data/" + this.$route.params.id,
         {
           headers: {
             Authorization: JSON.parse(token),
@@ -130,11 +149,26 @@ export default {
         }
       );
       //console.log(result.data)
-      //datos para editar
+
+      //datos originales
+      this.datos.nombre_rol = result.data.rol[0].nombre_rol;       
+
+      //datos para comparar
       this.new_datos.new_nombre_rol = result.data.rol[0].nombre_rol;
       
-      //datos originales
-      this.datos.nombre_rol = result.data.rol[0].nombre_rol;
+      
+        //obtener el nombre del rol a eliminar
+        const rolName = result.data.rol[0].nombre_rol;
+
+        console.log({
+          rol: rolName,
+        });
+        //si el rol es admin
+        if (rolName==="admin") {
+          //restringimos su eliminación
+          this.message.noEliminar = true;
+          this.err = false;
+        }
       
     },
 
@@ -155,11 +189,12 @@ export default {
         );
         if(result.data.Message.length>0) {
             this.message.success=result.data.Message;
+            this.message.err=false;
             location.replace("/roles");
         }       
       } catch (error) {
-        this.message.err="El rol ya existe o los campos no se llenaron correctamente";
-        console.log(error);
+        this.message.err=error.response.data.Message;
+        console.log(error.response.data.Message);
       }
     },
   },

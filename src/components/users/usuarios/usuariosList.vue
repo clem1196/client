@@ -1,65 +1,84 @@
 <template>
-  <div class="container mt-5">
-    <div class="row card-header">
-      <a href="/usuarios-roles" class="col-auto"><h5>Regresar</h5></a>
-    </div>
-
-    <!--Form-->
-    <div class="row mt-5 m-auto">
+  <div class="container-fluid mt-4">
+    <!--Llamamos al componente headerWiev de navegación-->
+    <header-view></header-view>
+    <div class="mt-4">
       <!--Add-->
-      <div class="col-5">
-        <a class="btn btn-info" style="width: 25%" href="/usuarios/add"
-          >Agregar</a
-        >
+      <a class="btn btn-primary btn-block" type="button" href="/usuarios/add"
+        >Agregar
+      </a>
+      <!--Switch-->
+      <div style="float: right">
+        <div class="form-check form-switch" @click="cambiarFilter">
+          <label class="form-check-label" for="swit">Búsqueda estrícta</label>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="switch"
+          />
+        </div>
       </div>
-
-      <!--Search-->
-      <div class="col-7">
-        <form @submit.prevent="getSearchUsuarios">
+    </div>
+    <!--Form-->
+    <!--Search libre-->
+    <div v-if="filter == true" class="col-12">
+      <form @keyup="getSearchUsuarios" class="mt-2">
+        <i class="bi-search"></i>
+        <input
+          class="border rounded"
+          style="width: 100%"
+          v-model="text"
+          type="search"
+          placeholder="Search"
+        />
+      </form>
+    </div>
+    <!--Search estricto-->
+    <div v-else class="col-12">
+      <form @submit.prevent="getSearchUsuarios" class="mt-4">
+        <div
+          style="float: right"
+          class="btn-group"
+          role="group"
+          aria-label="Basic mixed styles example"
+        >
           <button
-            v-if="text.length > 0"
-            class="btn btn-light"
-            style="width: 50%"
+            v-if="success.length > 0 || err.length > 0"
+            @click="getDataPages(1)"
             type="button"
+            class="btn btn-light"
+          >
+            Salir
+          </button>
+          <button
+            v-if="text"
+            type="button"
+            class="btn btn-secondary"
             @click="limpiarText"
           >
             Limpiar
           </button>
-          
-          <button
-            v-if="success.length > 0 || err.length > 0"
-            class="btn btn-warning"
-            style="width: 25%"
-            type="button"
-            @click="getDataPages(1)"
-          >
-            Salir
-          </button>
-         
-          <button v-if="text.length>0" type="submit" style="width: 25%" class="btn btn-primary">
-            Buscar
-          </button>
-
-          <div class="mt-2">
-            <i class="bi-search"></i>
-            <input
-              class="border rounded"
-              style="width: 100%"
-              v-model="text"
-              type="search"
-              placeholder=""
-            />
-          </div>
-        </form>
-      </div>
+          <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+        <i class="bi-search">
+          <input
+            class="border rounded"
+            style="width: 100%"
+            v-model="text"
+            type="search"
+            placeholder="Search"
+          />
+        </i>
+      </form>
     </div>
 
     <!--Table-->
-    <table class="table table-hover mt-2">
+    <table id="datos" class="table table-hover mt-2">
       <thead>
         <tr style="background: #ecedef">
           <th>
-            <i class="bi-caret-down-fill" style="font-size: 1rem"></i>
+            <img src="../../../assets/sort.png" alt="" width="14">
             <button
               @click="sortId"
               class="btn btn-default btn-sm"
@@ -69,7 +88,7 @@
             </button>
           </th>
           <th>
-            <i class="bi-caret-down-fill" style="font-size: 1rem"></i>
+            <img src="../../../assets/sort.png" alt="" width="14">
             <button
               @click="sortNombre"
               class="btn btn-default btn-sm"
@@ -79,7 +98,7 @@
             </button>
           </th>
           <th>
-            <i class="bi-caret-down-fill" style="font-size: 1rem"></i>
+           <img src="../../../assets/sort.png" alt="" width="14">
             <button
               @click="sortCreado"
               class="btn btn-default btn-sm"
@@ -89,16 +108,16 @@
             </button>
           </th>
           <th>
-            <i class="bi-caret-down-fill" style="font-size: 1rem"></i>
+            <img src="../../../assets/sort.png" alt="" width="14">
             <button
               class="btn btn-default btn-sm"
               style="border: 0; font-size: 1.2rem"
               @click="sortModificado"
             >
-              Modificado
+              Ultimo acceso
             </button>
           </th>
-          <th></th>
+          <th>Acciones</th>
           <th></th>
         </tr>
       </thead>
@@ -128,9 +147,26 @@
     <!--PAGINATION-->
     <nav aria-label="Page navigation example">
       <ul v-if="pagination" class="pagination justify-content-left">
-        <!--Previous-->
-        <li @click="getPrevious" class="page-item">
-          <button type="button" class="page-link">Previous</button>
+        <li class="page-item disabled">
+          <button class="page-link">Páginas:</button>
+        </li>
+        <!--Primera página-->
+        <li v-if="currentPage >= 2" @click="getFirstPage" class="page-item">
+          <button type="button" class="page-link">Primera</button>
+        </li>
+        <li v-else @click="getFirstPage" class="page-item disabled">
+          <button type="button" class="page-link">Primera</button>
+        </li>
+        <!--Atras-->
+        <li v-if="currentPage >= 2" @click="getPrevious" class="page-item">
+          <button type="button" class="page-link">
+            <i class="bi-chevron-left"></i>
+          </button>
+        </li>
+        <li v-else @click="getPrevious" class="page-item disabled">
+          <button type="button" class="page-link">
+            <i class="bi-chevron-left"></i>
+          </button>
         </li>
         <!--Pages-->
         <li
@@ -148,14 +184,40 @@
             {{ pag }}
           </button>
         </li>
-        <!--Next-->
-        <li @click="getNext" class="page-item">
-          <button type="button" class="page-link">Next</button>
+        <!--Siguiente-->
+        <li
+          v-if="currentPage < totalPages()"
+          @click="getNext"
+          class="page-item"
+        >
+          <button
+            v-if="currentPage < totalPages()"
+            type="button"
+            class="page-link"
+          >
+            <i class="bi-chevron-right"></i>
+          </button>
+        </li>
+        <li v-else @click="getNext" class="page-item disabled">
+          <button type="button" class="page-link">
+            <i class="bi-chevron-right"></i>
+          </button>
+        </li>
+        <!--Última página-->
+        <li
+          v-if="currentPage < totalPages()"
+          @click="getLastPage"
+          class="page-item"
+        >
+          <button type="button" class="page-link">Última</button>
+        </li>
+        <li v-else @click="getLastPage" class="page-item disabled">
+          <button type="button" class="page-link">Última</button>
         </li>
         <!--Total-->
         <li class="page-item disabled">
           <button class="page-link">
-            Total usuarios: {{ this.usuarios.length }}
+            Total: {{ this.usuarios.length }}
           </button>
         </li>
       </ul>
@@ -168,6 +230,7 @@
 </template>
 
 <script>
+import headerView from "../../../views/headerView.vue";
 import axios from "axios";
 export default {
   name: "user-list",
@@ -180,6 +243,7 @@ export default {
       rows: 5,
       pagination: true,
       //search
+      filter: true,
       searchUsuarios: [],
       text: "",
       //Messages
@@ -187,27 +251,32 @@ export default {
       success: "",
     };
   },
+  components: {
+    headerView,
+  },
   async mounted() {
-      await this.getUsuarios();
-      this. getDataPages(1);
+    await this.getUsers();
+    this.getDataPages(this.currentPage);
   },
   methods: {
-    //LIST
-    async getUsuarios() {
+    //LIST USUARIOS
+    async getUsers() {
       try {
         const token = localStorage.getItem("token");
-        const result = await axios.get("http://localhost:4000/api/usuarios", {
+        const result = await axios.get("http://localhost:4000/api/data", {
           headers: {
             Authorization: JSON.parse(token),
           },
         });
-        if (result.data.usuarios.length > 0) {
-          this.usuarios = result.data.usuarios;
+        if (result.data.users.length > 0) {
+          this.usuarios = result.data.users;
+          this.err = false;
         } else {
           console.log("No hay datos que mostrar");
         }
       } catch (error) {
-        console.log(error);
+        this.err = error.response.data.Message;
+        console.log(error.response);
       }
     },
 
@@ -296,13 +365,14 @@ export default {
           return this.usuarios.filter(
             (usuario) =>
               (usuario.idusuario !== null &&
-                usuario.idusuario.toString().indexOf(query)> - 1) ||
+                usuario.idusuario.toString().indexOf(query) > -1) ||
               (usuario.nombre_usuario !== null &&
                 usuario.nombre_usuario
                   .toLowerCase()
                   .indexOf(query.toLowerCase()) > -1) ||
               (usuario.registrado !== null &&
-                usuario.registrado.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
+                usuario.registrado.toLowerCase().indexOf(query.toLowerCase()) >
+                  -1) ||
               (usuario.ultimo_acceso !== null &&
                 usuario.ultimo_acceso
                   .toLowerCase()
@@ -313,7 +383,11 @@ export default {
           this.searchUsuarios = filterItems(this.text);
           this.pagination = false;
           this.success =
-            "Se encontraron" + this.searchUsuarios.length + "registros";
+            "Se encontraron" +
+            " " +
+            this.searchUsuarios.length +
+            " " +
+            "registros";
           this.err = false;
         } else {
           this.searchUsuarios = [];
@@ -323,17 +397,28 @@ export default {
         }
       }
     },
+    //limpiar el campo del search
     limpiarText() {
       this.text = "";
     },
-
-    //PAGINATION
+    //cabiar switch a modo avanzado
+    cambiarFilter() {
+      if (this.filter == true) {
+        this.filter = false;
+      } else {
+        this.filter = true;
+      }
+    },
+    
+    //PAGINATION 
     isActive(numPage) {
       return numPage == this.currentPage ? "active" : "";
     },
+    //Total de páginas
     totalPages() {
       return Math.ceil(this.usuarios.length / this.rows);
     },
+    //obtener el numero de páginas
     getDataPages(numPage) {
       this.text = "";
       this.err = false;
@@ -351,17 +436,33 @@ export default {
         this.searchUsuarios = this.usuarios.slice(init, end);
       }
     },
+    //primera
+    getFirstPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+      this.getDataPages(1);
+    },
+    //Atrás
     getPrevious() {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
       this.getDataPages(this.currentPage);
     },
+    //Siguiente
     getNext() {
       if (this.currentPage < this.totalPages()) {
         this.currentPage++;
       }
       this.getDataPages(this.currentPage);
+    },
+    //Último
+    getLastPage() {
+      if (this.currentPage < this.totalPages()) {
+        this.currentPage++;
+      }
+      this.getDataPages(this.totalPages());
     },
   },
 };

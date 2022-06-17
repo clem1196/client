@@ -68,9 +68,8 @@ export default {
           contraseña: this.contraseña,
         };
         this.$emit("log-in-submitted", login);
-        this.nombre_usuario = "";
-        this.contraseña = "";
-
+        //this.nombre_usuario = "";
+        //this.contraseña = "";
         const result = await axios({
           method: "POST",
           url: "http://localhost:4000/api/ingreso",
@@ -83,8 +82,9 @@ export default {
           location.replace("/");
         }
       } catch (error) {
-        this.err = "El usaurio o la contraseña no es correcta";
+        this.err = error.response.data.Message;
         this.success = false;
+        console.log(error.response)
       }
     },
   },

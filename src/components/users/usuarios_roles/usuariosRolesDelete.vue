@@ -8,6 +8,8 @@
       data-bs-whatever="@mdo"
       hidden
     ></button>
+
+    <!--normal-->
     <div
       class="modal fade"
       id="deleteModal"
@@ -16,27 +18,44 @@
       aria-hidden="true"
     >
       <div class="modal-dialog">
+        <!--No eliminar-->
         <div class="modal-content">
-          <div class="modal-header bg-danger">
-            <h5 class="modal-title" id="deleteModalLabel" style="color: white">
-              {{ title }}
-            </h5>
-
+          <div class="modal-header bg-light">
+            <h5 id="deleteModalLabel" class="modal-title">Atención!</h5>
             <a href="/usuarios-roles" class="btn btn-close"></a>
           </div>
-          <div class="modal-footer-sm bg-danger">
-            <button class="btn btn-light m-3" @click="deleteUserRoles">
+          <div v-if="message.noEliminar == true" class="modal-body">
+            <div class="alert alert-danger" role="alert">
+              No debe eliminar a este usuario "Admin". El sistema requiere al
+              menos de un Administrador.
+            </div>
+          </div>
+          <div v-else class="modal-body">
+            <div
+              v-if="message.advertencia == true"
+              class="alert alert-warning"
+              role="alert"
+            >
+              Va eliminar su propia cuenta, si continúa deberá iniciar sesión
+              nuevamente.
+            </div>
+            <div>Seguro que desea eliminar esto?.</div>
+          </div>
+          <div v-if="message.noEliminar == false" class="modal-footer">
+            <button class="btn btn-danger m-3" @click="deleteUserRoles">
               Si
             </button>
-            <a
-              class="btn btn-default"
-              href="/usuarios-roles"
-              style="color: white"
-              >No</a
-            >
+            <a type="button" class="btn btn-light" href="/usuarios-roles">
+              No
+            </a>
+          </div>
+          <div v-else class="modal-footer">
+            <a type="button" class="btn btn-light" href="/usuarios-roles">
+              Regresar
+            </a>
           </div>
         </div>
-
+        <!--messages-->
         <div
           v-if="message.success"
           class="alert alert-success mt-4 d-flex align-items-center"
@@ -55,6 +74,7 @@
 
 <script>
 import axios from "axios";
+import Helpers from "../../../services/Helpers";
 import usuariosRolesList from "./usuariosRolesList.vue";
 export default {
   name: "usuariosRoles-delete",
@@ -65,45 +85,90 @@ export default {
     },
   },
   data() {
-    return { 
-        
+    return {
       message: {
         success: "",
         err: "",
+        noEliminar: false,
+        advertencia: false,
       },
     };
   },
 
   components: { usuariosRolesList },
-  async mounted() {    
-    this.darclick();
+  async mounted() {
+    await this.getUser();
+    await this.darclick();
   },
 
   methods: {
-    darclick() {
+    async darclick() {
       const del = document.getElementById("delete");
       del.click();
+    },
+    //obtener usuarios por nombre y rol
+    async getUser() {
+      try {
+        const nameOfToken = await Helpers.obtenerNombreUsuario();
+        const token = localStorage.getItem("token");
+        //obtenemos datos de usuarios_roles
+        const result = await axios.get(
+          "http://localhost:4000/api/data/" + this.$route.params.id,
+          {
+            headers: {
+              Authorization: JSON.parse(token),
+            },
+          }
+        );
+        //console.log(result.data);
+
+        // comprobamos que el rol del usuario a editar sea admin
+        //luego filtramos el rol admin en el array para obtener la cantidad de usuarios admin 
+        if (result.data.userName_rolName[0].nombre_rol == "admin" &&
+            result.data.usersNames_rolesNames.filter(element => element.nombre_rol === "admin").length < 2
+        ) {
+          //significa que hay solo un administrador, entonces restringimos su eliminación
+          this.message.noEliminar = true;
+          this.err = false;
+        }
+        if (
+          result.data.userName_rolName[0].nombre_usuario == nameOfToken &&
+          result.data.userName_rolName[0].nombre_rol == "admin"
+        ) {
+          //significa que hay mas de un administrador, entonces advertimos su eliminación
+          this.message.advertencia = true;
+          this.err = false;
+        }
+      } catch (error) {
+        this.err = error.response.data.Message;
+        console.log(error.response);
+      }
     },
     async deleteUserRoles() {
       try {
         const token = localStorage.getItem("token");
         const result = await axios.delete(
           "http://localhost:4000/api/u_roles/" + this.$route.params.id,
-          
-          {
-              headers:{
-                  Authorization: JSON.parse(token)
-              }
-          }
 
+          {
+            headers: {
+              Authorization: JSON.parse(token),
+            },
+          }
         );
-        if(result.data.Message.length>0) {
-            this.message.success=result.data.Message;
-            location.replace("/usuarios-roles");
-        }       
+        if (result.data.Reset == true) {
+          this.message.success = result.data.Message;
+          this.message.err = false;
+          await Helpers.Logout();
+          location.replace("/login");
+        } else {
+          this.message.success = result.data.Message;
+          this.message.err = false;
+          location.replace("/usuarios-roles");
+        }
       } catch (error) {
-        this.message.err="No se pudo eliminar";
-        console.log(error);
+        this.message.err = error.response.data.Message;
+        console.log(error.response);
       }
     },
   },
@@ -111,5 +176,4 @@ export default {
 </script>
 
 <style>
-
 </style>

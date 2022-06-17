@@ -68,63 +68,63 @@
 import axios from "axios";
 import rolesList from "./rolesList.vue";
 export default {
-name: "roles-list",
-props:{
-    title:{
-        type: String,
-        default: "Agregar roles"
-    }
-},
-data(){
+  name: "roles-list",
+  props: {
+    title: {
+      type: String,
+      default: "Agregar roles",
+    },
+  },
+  data() {
+    return {
+      //datos originales que se recibe del servidor
+      datos: {
+        nombre_rol: "",
+      },
+      //recibe del servidor o del catch
+      message: {
+        success: "",
+        err: "",
+      },
+    };
+  },
 
-    return{
-        //datos originales que se recibe del servidor
-        datos:{
-            nombre_rol: ""            
-        },        
-        //recibe del servidor o del catch
-        message:{
-            success:"",
-            err:""
-        }
-    }
-},
+  components: { rolesList },
+  async mounted() {
+    this.darclick();
+  },
 
-components:{rolesList},
-async mounted(){
-this.darclick();
-},
-
-methods:{
-    darclick(){
-        const add = document.getElementById("add");
-        add.click();
+  methods: {
+    darclick() {
+      const add = document.getElementById("add");
+      add.click();
     },
 
-    async addRol(){
-        try {
-            const token = localStorage.getItem("token");
-            const result = await axios({
-                method:"POST",
-                url: "http://localhost:4000/api/roles/crear",
-                data: this.datos,
-                headers:{
-                    Authorization: JSON.parse(token)
-                }
-            });
-            if(result.data.Message.length){
-                this.message.success=result.data.Message;
-                location.replace("/roles");
-            }
-        } catch (error) { 
-            this.message.err="El rol ya existe o los campos no se llenaron correctamente";           
-            console.log(error);
+    async addRol() {
+      try {
+        const token = localStorage.getItem("token");
+        const result = await axios({
+          method: "POST",
+          url: "http://localhost:4000/api/roles/crear",
+          data: this.datos,
+          headers: {
+            Authorization: JSON.parse(token),
+          },
+        });
+        if (result.data.Message.length) {
+          this.message.success = result.data.Message;
+          this.message.err=false;
+          location.replace("/roles");
         }
-    }
-}
-}
+      } catch (error) {
+        //accedemos a en RED en modo desarrolador y en response.
+        console.log(error.response);
+        this.message.err = error.response.data.Message;
+      }
+    },
+  },
+};
 </script>
 
 <style>
-
 </style>

@@ -16,17 +16,36 @@
       aria-hidden="true"
     >
       <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header bg-danger">
-            <h5 class="modal-title" id="deleteModalLabel" style="color: white">
+        <div v-if="message.noEliminar == false" class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title">Delete</h5>
+            <a href="/roles" class="btn btn-close"></a>
+          </div>
+          <div class="modal-body">
+            <h5 class="modal-title">
               {{ title }}
             </h5>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger m-3" @click="deleteRol">Si</button>
+            <a class="btn btn-light" href="/roles">No</a>
+          </div>
+        </div>
+        <!--No debe eliminar-->
+        <div v-else class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title" id="deleteModalLabel">Atención</h5>
 
             <a href="/roles" class="btn btn-close"></a>
           </div>
-          <div class="modal-footer-sm bg-danger">
-            <button class="btn btn-light m-3" @click="deleteRol">Si</button>
-            <a class="btn btn-default" href="/roles" style="color: white">No</a>
+          <div class="modal-body">
+            <div class="alert alert-danger" role="alert">
+              No debe eliminar el rol "Admin". El sistema requiere de un
+              Administrador.
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-secondary" href="/roles">Regresar</a>
           </div>
         </div>
 
@@ -58,18 +77,18 @@ export default {
     },
   },
   data() {
-    return { 
-        
+    return {
       message: {
         success: "",
         err: "",
+        noEliminar: false,
       },
     };
   },
 
   components: { rolesList },
   async mounted() {
-    
+    await this.getRol();
     this.darclick();
   },
 
@@ -78,26 +97,54 @@ export default {
       const del = document.getElementById("delete");
       del.click();
     },
+    async getRol() {
+      try {
+        const token = localStorage.getItem("token");
+        const result = await axios({
+          method: "GET",
+          url: "http://localhost:4000/api/data/" + this.$route.params.id,
+
+          headers: {
+            Authorization: JSON.parse(token),
+          },
+        });
+        console.log(result.data);
+
+        //obtener el nombre del rol a eliminar
+        const rolName = result.data.rol[0].nombre_rol;
+
+        //console.log({rol: rolName});
+        //si el rol es admin
+        if (rolName==="admin") {
+          //restringimos su eliminación
+          this.message.noEliminar = true;
+          this.err = false;
+        }
+      } catch (error) {
+        this.message.err = error.response.data.Message;
+        console.log(error.response);
+      }
+    },
     async deleteRol() {
       try {
         const token = localStorage.getItem("token");
         const result = await axios.delete(
           "http://localhost:4000/api/roles/" + this.$route.params.id,
-          
-          {
-              headers:{
-                  Authorization: JSON.parse(token)
-              }
-          }
 
-        );        
-        if(result.data.Message.length>0) {
-            this.message.success=result.data.Message;
-            location.replace("/roles");
-        }       
+          {
+            headers: {
+              Authorization: JSON.parse(token),
+            },
+          }
+        );
+        if (result.data.Message.length > 0) {
+          this.message.success = result.data.Message;
+          this.message.err = false;
+          location.replace("/roles");
+        }
       } catch (error) {
-        this.message.err="El rol no existe o ya fue eliminado";
-        console.log(error);
+        this.message.err = error.response.data.Message;
+        console.log(error.response.data.Message);
       }
     },
   },
@@ -105,5 +152,4 @@ export default {
 </script>
 
 <style>
-
 </style>

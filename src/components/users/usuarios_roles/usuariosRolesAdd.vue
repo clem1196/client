@@ -35,11 +35,12 @@
                   id="idusuario"
                   class="form-control"
                   required
+                  readonly
                   focus
                   disabled
                 />
                 <select id="selectIdUsuario" @change="llenarUsuarios">
-                  <option value="">Seleccione</option>
+                  <option value="0">Seleccione</option>
                   <option
                     v-for="usuario in arrayUsuarios"
                     :key="usuario"
@@ -59,9 +60,10 @@
                   class="form-control"
                   required
                   disabled
+                  readonly
                 />
                 <select id="selectIdRoles" @change="llenarRoles">
-                  <option value="">Seleccione</option>
+                  <option value="0">Seleccione</option>
                   <option
                     v-for="rol in arrayRoles"
                     :key="rol"
@@ -92,8 +94,7 @@
               </div>
             </form>
           </div>
-        </div>
-
+        </div>      
         <!--messages-->
         <div
           v-if="message.success"
@@ -115,141 +116,125 @@
 import axios from "axios";
 import usuariosRolesList from "./usuariosRolesList.vue";
 export default {
-name: "usuariosRoles-add",
-props:{
-    title:{
-        type: String,
-        default: "Asignando Rol"
-    }
-},
-data(){
+  name: "usuariosRoles-add",
+  props: {
+    title: {
+      type: String,
+      default: "Asignando Rol",
+    },
+  },
+  data() {
+    return {
+      //datos originales que se recibe del servidor
+      datos: {
+        idusuario: null,
+        idroles: null,
+      },
 
-    return{
-        //datos originales que se recibe del servidor
-        datos:{
-            idusuario:null,
-            idroles:null
-        },
-        
-        //recibe del servidor o del catch
-        message:{
-            success:"",
-            err:""
-        },
+      //recibe del servidor o del catch
+      message: {
+        success: "",
+        err: "",
+      },
 
-        arrayUsuarios:[],
-        arrayRoles:[]
+      arrayUsuarios: [],
+      arrayRoles: [],
+    };
+  },
 
-    }
-},
+  components: { usuariosRolesList },
+  async mounted() {
+    await this.getUsers();   
+    this.darclick();
+  },
 
-components:{usuariosRolesList},
-async mounted(){
-    await this.Usuarios();
-    await this.Roles()
-this.darclick();
-},
-
-methods:{
-    darclick(){
-        const add = document.getElementById("add");
-        add.click();
+  methods: {
+    darclick() {
+      const add = document.getElementById("add");
+      add.click();
     },
 
-    async llenarUsuarios(){
-        let elementSelectId=document.getElementById("selectIdUsuario");
-        let inputId=document.getElementById("idusuario");
+    async llenarUsuarios() {
+      let elementSelectId = document.getElementById("selectIdUsuario");
+      let inputId = document.getElementById("idusuario");
 
-        inputId.value=elementSelectId.value;
-        this.datos.idusuario=parseInt(inputId.value);
-        inputId.disabled=false;
+      inputId.value = elementSelectId.value;
+      this.datos.idusuario = parseInt(inputId.value);
+      inputId.disabled = false;
     },
-    async llenarRoles(){
-        let elementSelectId=document.getElementById("selectIdRoles");
-        let inputId=document.getElementById("idroles");
+    async llenarRoles() {
+      let elementSelectId = document.getElementById("selectIdRoles");
+      let inputId = document.getElementById("idroles");
 
-        inputId.value=elementSelectId.value;
-        this.datos.idroles=parseInt(inputId.value);
-        inputId.disabled=false;
+      inputId.value = elementSelectId.value;
+      this.datos.idroles = parseInt(inputId.value);
+      inputId.disabled = false;
     },
-
-    async Usuarios(){
-        try {
-            const token=localStorage.getItem("token");
-            const usuarioResult= await axios.get(
-                "http://localhost:4000/api/usuarios",
-                {
-                    headers:{
-                        Authorization:JSON.parse(token)
-                    }
-                }
-            );
-            for (let index = 0; index < usuarioResult.data.usuarios.length; index++) {
-                const objetos_usuarios = {
-                    value:usuarioResult.data.usuarios[index].idusuario,
-                    text: usuarioResult.data.usuarios[index].nombre_usuario,
-                };
-                this.arrayUsuarios.push(objetos_usuarios);
-                
-            }
-        } catch (error) {
-            console.log(error);
+    //obtener usuarios
+    async getUsers() {
+      try {
+        const token = localStorage.getItem("token");
+        const result = await axios.get(
+          "http://localhost:4000/api/data",
+          {
+            headers: {
+              Authorization: JSON.parse(token),
+            },
+          }
+        );
+        console.log(result.data)
+        //usuarios
+        for (
+          let index = 0;
+          index < result.data.users.length;
+          index++
+        ) {
+          const objetos_usuarios = {
+            value: result.data.users[index].idusuario,
+            text: result.data.users[index].nombre_usuario,
+          };
+          this.arrayUsuarios.push(objetos_usuarios);
         }
-    },
-
-    async Roles(){
-       try {
-            const token=localStorage.getItem("token");
-            const rolesResult= await axios.get(
-                "http://localhost:4000/api/roles",
-                {
-                    headers:{
-                        Authorization:JSON.parse(token)
-                    }
-                }
-            );
-            for (let index = 0; index < rolesResult.data.roles.length; index++) {
-                const objetos_roles = {
-                    value:rolesResult.data.roles[index].idroles,
-                    text: rolesResult.data.roles[index].nombre_rol,
-                };
-                this.arrayRoles.push(objetos_roles);
-                
-            }
-        } catch (error) {
-            console.log(error);
-        } 
-    },
-
-
-
-    async addUserRoles(){
-        try {
-            const token = localStorage.getItem("token");
-            const result = await axios({
-                method:"POST",
-                url: "http://localhost:4000/api/u_roles/crear",
-                data: {
-                    idusuario:this.datos.idusuario,
-                    idroles:this.datos.idroles
-                },
-                headers:{
-                    Authorization: JSON.parse(token)
-                }
-            });
-            if(result.data.Message.length){
-                this.message.success=result.data.Message;
-                location.replace("/usuarios-roles");
-            }
-        } catch (error) { 
-            this.message.err="El usuario ya existe o los campos no se llenaron correctamente";           
-            console.log(error);
+        //roles
+        for (let index = 0; index < result.data.roles.length; index++) {
+          const objetos_roles = {
+            value: result.data.roles[index].idroles,
+            text: result.data.roles[index].nombre_rol,
+          };
+          this.arrayRoles.push(objetos_roles);
         }
-    }
-}
-}
+      } catch (error) {
+        console.log(error);
+      }
+    },   
+
+    async addUserRoles() {
+      try {
+        const token = localStorage.getItem("token");
+        const result = await axios({
+          method: "POST",
+          url: "http://localhost:4000/api/u_roles/crear",
+          data: {
+            idusuario: this.datos.idusuario,
+            idroles: this.datos.idroles,
+          },
+          headers: {
+            Authorization: JSON.parse(token),
+          },
+        });
+        if (result.data.Message.length) {
+          this.message.success = result.data.Message;
+          this.message.err = false;
+          location.replace("/usuarios-roles");
+        }
+      } catch (error) {
+        this.message.err = error.response.data.Message;
+        console.log(error.response);
+      }
+    },
+  },
+};
 </script>
 
 <style>
-
 </style>

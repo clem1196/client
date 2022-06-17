@@ -179,11 +179,12 @@ methods:{
             });
             if(result.data.Message.length){
                 this.message.success=result.data.Message;
+                this.message.err=false;
                 location.replace("/usuarios-roles-nuevo/add");
             }
         } catch (error) { 
-            this.message.err="El usuario ya existe o los campos no se llenaron correctamente";           
-            console.log(error);
+            this.message.err=error.response.data.Message;           
+            console.log(error.response);
         }
     }
 }

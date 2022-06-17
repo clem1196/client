@@ -67,16 +67,16 @@
                 >Ventas</a
               >
             </li>
-            <li v-if="almacenero" class="nav-item">
+            <li v-if="contador" class="nav-item">
               <a
                 class="nav-link active"
                 aria-current="page"
                 style="color: white"
-                href="/compras"
-                >Compras</a
+                href="/contabilidad"
+                >Contabilidad</a
               >
             </li>            
-            <li v-if="admin || empleado" class="nav-item">
+            <li v-if="auditor" class="nav-item">
               <a
                 class="nav-link active"
                 aria-current="page"
@@ -116,23 +116,24 @@ export default {
       token: "",
       user: "",
       admin: false,
-      empleado: false,
+      auditor: false,
       vendedor: false,
-      almacenero: false,
+      contador: false,
     };
   },
   async mounted() {
     if (Helper.token) {
-      //token
-      this.token = Helper.token;
+      //cerrar sesión
       await Helper.CaducarToken();
+      //token
+      this.token = Helper.token;      
       //user
       this.user = await Helper.obtenerNombreUsuario();
       //roles
       this.admin = await Helper.isAdministrator();
-      this.empleado = await Helper.isEmployee();
+      this.auditor = await Helper.isAuditor();
       this.vendedor = await Helper.isSeller();
-      this.almacenero = await Helper.isGrocer();
+      this.contador = await Helper.isAccountant();
     }
   },
 };

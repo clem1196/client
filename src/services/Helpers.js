@@ -1,98 +1,105 @@
-const token= localStorage.getItem("token");
+const token = localStorage.getItem("token");
 if (token) {
-    const isloggedIn=()=>{
+
+    const isloggedIn = () => {
         return true
     };
-    const listRoles=[];
-    const result= JSON.parse(window.atob(token.split(".")[1])).rol;
+    const listRoles = [];
+    const result = JSON.parse(window.atob(token.split(".")[1])).rol;
     result.forEach(element => {
         listRoles.push(element.nombre_rol);
     });
 
+    /*para encontrar un valor en un array[] podemos usar find() o filter()
+      - find() retorna un objeto con el primero que coincide la busqueda, caso contrario retorna undefined 
+      - filter() retorna un nuevo array con todos los resultados que coincide la busqueda, caso contrario retona un array vacío
+
+    aquí utilizaremos find().*/
+
     //admin
-    const isAdministrator=async()=>{
-        if (listRoles.find((element)=>element=="admin")=="admin") {
+    const isAdministrator = async () => {
+        if (listRoles.find(element => element === "admin")) {
             return true;
-        }else{
+        } else {
             return false
         }
     };
     //empleado
-    const isEmployee=async()=>{
-        if ((listRoles.find((element)=>element=="empleado")=="empleado") || (listRoles.find((element)=>element=="admin")=="admin")) {
+    const isAuditor = async () => {
+        if (listRoles.find(element => element === "auditor" || element === "admin")) {
             return true;
-        }else{
+        } else {
             return false
         }
     };
     //vendedor
-    const isSeller=async()=>{
-        if ((listRoles.find((element)=>element=="vendedor")=="vendedor") || (listRoles.find((element)=>element=="admin")=="admin")) {
+    const isSeller = async () => {
+        if (listRoles.find(element => element === "vendedor" || element === "auditor" || element === "admin")) {
             return true;
-        }else{
+        } else {
             return false
         }
     };
     //almacenero
-    const isGrocer=async()=>{
-        if ((listRoles.find((element)=>element=="almacenero")=="almacenero") || (listRoles.find((element)=>element=="admin")=="admin")) {
+    const isAccountant = async () => {
+        if (listRoles.find(element => element === "contador" || element === "auditor" || element === "admin")) {
             return true;
-        }else{
+        } else {
             return false
         }
     };
-
-    const getUrls=async ()=>{
-        let path=[];
-        if (await isAdministrator() || await isEmployee()) {
+    //obtener el path según el rol
+    const getUrls = async () => {
+        let path = [];
+        if (await isAdministrator() || await isAuditor()) {
             path.push("/usuarios-roles")
-        }else if(await isSeller()){
+        } else if (await isSeller()) {
             path.push("/ventas")
-        }else if(await isGrocer()){
-            path.push("/compras")
-        }else{
+        } else if (await isAccountant()) {
+            path.push("/contabilidad")
+        } else {
             path.push("/")
         }
         return path[0];
     };
-
-    const obtenerNombreUsuario= async ()=>{
+    //obtener el nombre del usuario desde el token
+    const obtenerNombreUsuario = async () => {
         try {
-            const nomUsuario= JSON.parse(window.atob(token.split(".")[1])).username;
+            const nomUsuario = JSON.parse(window.atob(token.split(".")[1])).username;
             return nomUsuario;
         } catch (error) {
             console.log(error);
         }
     };
-
-    const Logout = async ()=>{
+    //cerrar sesión
+    const Logout = async () => {
         localStorage.removeItem("token");
         localStorage.clear();
         location.replace("/");
     }
-
-    const CaducarToken=async()=>{
-        const Exp= JSON.parse(window.atob(token.split(".")[1])).exp;
-        if(Date.now()>=Exp*1000){
+    //caducar token
+    const CaducarToken = async () => {
+        const Exp = JSON.parse(window.atob(token.split(".")[1])).exp;
+        if (Date.now() >= Exp * 1000) {
             alert("Su sesión a caducado, inicie sesión nuevamente");
             Logout();
-            location.replace("/Login")
+            location.replace("/login")
         }
     };
 
-    module.exports={
+    module.exports = {
         token,
         isloggedIn,
         isAdministrator,
-        isEmployee,
+        isAuditor,
         isSeller,
-        isGrocer,
+        isAccountant,
         getUrls,
         Logout,
         obtenerNombreUsuario,
         CaducarToken
 
     }
-}else{
-   console.log('No ha iniciado sesión');
+} else {    
+    console.log('No ha iniciado sesión');
 }
