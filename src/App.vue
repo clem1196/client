@@ -46,7 +46,8 @@
 
         <div v-else class="collapse navbar-collapse" id="navbarTogglerDemo01">
           <a class="navbar-brand" style="color: white" href="/">
-          <i class="bi-house-door-fill"></i> Home</a>
+            <i class="bi-house-door-fill"></i> Home</a
+          >
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <a
@@ -66,11 +67,7 @@
                 >Ventas</a
               >
             </li>
-<<<<<<< HEAD
-           
-=======
-            <li v-if="contador || auditor|| admin" class="nav-item">
->>>>>>> 56de660026cda533f08c099995f1ba8007ac5b2e
+            <li v-if="contador || auditor || admin" class="nav-item">
               <a
                 class="nav-link active"
                 aria-current="page"
@@ -78,12 +75,8 @@
                 href="/contabilidad"
                 >Contabilidad</a
               >
-            </li>            
-<<<<<<< HEAD
-            
-=======
+            </li>
             <li v-if="auditor || admin" class="nav-item">
->>>>>>> 56de660026cda533f08c099995f1ba8007ac5b2e
               <a
                 class="nav-link active"
                 aria-current="page"
@@ -111,7 +104,7 @@
         </div>
       </div>
     </nav>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -133,7 +126,7 @@ export default {
       //cerrar sesión
       await Helper.CaducarToken();
       //token
-      this.token = Helper.token;      
+      this.token = Helper.token;
       //user
       this.user = await Helper.obtenerNombreUsuario();
       //roles
