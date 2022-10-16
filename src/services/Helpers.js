@@ -24,7 +24,7 @@ if (token) {
             return false
         }
     };
-    //empleado
+    //auditor
     const isAuditor = async () => {
         if (listRoles.find(element => element === "auditor" || element === "admin")) {
             return true;
@@ -40,7 +40,7 @@ if (token) {
             return false
         }
     };
-    //almacenero
+    //contador
     const isAccountant = async () => {
         if (listRoles.find(element => element === "contador" || element === "auditor" || element === "admin")) {
             return true;

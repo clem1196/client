@@ -111,7 +111,7 @@ export default {
         console.log(result.data);
 
         //obtener el nombre del rol a eliminar
-        const rolName = result.data.rol[0].nombre_rol;
+        const rolName = result.data.roles_ById[0].nombre_rol;
 
         //console.log({rol: rolName});
         //si el rol es admin

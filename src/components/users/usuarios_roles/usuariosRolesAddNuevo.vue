@@ -176,10 +176,10 @@ export default {
           };
           this.arrayUsuarios.push(objetos_usuarios);
         }
-        (this.userUltimoText =
-          this.arrayUsuarios[this.arrayUsuarios.length - 1].text),
-          (this.userUltimoValue =
-            this.arrayUsuarios[this.arrayUsuarios.length - 1].value);
+        this.userUltimoText =
+          this.arrayUsuarios[this.arrayUsuarios.length - 1].text;
+        this.userUltimoValue =
+          this.arrayUsuarios[this.arrayUsuarios.length - 1].value;
         //roles
         for (let index = 0; index < result.data.roles.length; index++) {
           const objetos_roles = {

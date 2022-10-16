@@ -39,7 +39,7 @@
                   disabled
                 />
                 <select id="selectIdUsuario" @change="llenarUsuarios">
-                  <option value="0">Seleccione</option>
+                  <option :value="datos.idusuario">{{textInitialUsers}}</option>
                   <option
                     v-for="usuario in arrayUsuarios"
                     :key="usuario"
@@ -48,7 +48,8 @@
                     {{ usuario.text }}
                   </option>
                 </select>
-              </div>
+               
+              </div>              
               <!--campo idroles-->
               <div class="mb-3">
                 <label for="idroles" class="col-form-label">Rol:</label>
@@ -61,7 +62,7 @@
                   disabled
                 />
                 <select id="selectIdRoles" @change="llenarRoles">
-                  <option value="0">Seleccione</option>
+                  <option :value="datos.idroles">{{textInitialRoles}}</option>
                   <option
                     v-for="rol in arrayRoles"
                     :key="rol"
@@ -97,13 +98,11 @@
             <div>
               <div
                 v-if="message.advertencia == true"
-                class="alert alert-warning"
+                class="alert alert-warning mt-4"
                 role="alert"
               >
-                <strong
-                  >Va modificar su propia cuenta, si continúa deberá iniciar
-                  sesión nuevamente</strong
-                >
+                Va modificar su propia cuenta, si continúa deberá iniciar sesión
+                nuevamente
               </div>
             </div>
             <!--messages-->
@@ -119,27 +118,24 @@
             </div>
           </div>
         </div>
+
+
+
         <!--restrición-->
         <div v-else class="modal-content">
           <div class="modal-header bg-light">
-            <h5 class="modal-title" id="editarModalLabel">
-              Atencion!
-            </h5>
+            <h5 class="modal-title" id="editarModalLabel">Atencion!</h5>
             <a href="/usuarios-roles" class="btn btn-close"></a>
           </div>
-          <div class="modal-body">     
-              <div class="alert alert-danger" role="alert">
-                <strong
-                  >No debe modificar al usuario "admin", El sistema requiere al
-                  menos de un Administrador
-                </strong>
-              </div>
+          <div class="modal-body">
+            <div class="alert alert-danger" role="alert">
+              No debe modificar al usuario "admin", El sistema requiere al menos
+              de un Administrador
+            </div>
           </div>
           <div class="modal-footer">
-              <a class="btn btn-secondary" href="/usuarios-roles" 
-                >Regresar</a
-              >
-            </div>
+            <a class="btn btn-secondary" href="/usuarios-roles">Regresar</a>
+          </div>
         </div>
       </div>
     </div>
@@ -171,7 +167,6 @@ export default {
         new_idusuario: null,
         new_idroles: null,
       },
-
       //recibe del servidor
       message: {
         success: "",
@@ -180,9 +175,14 @@ export default {
         advertencia: false,
         noEliminar: false,
       },
-
+      //usuarios para el select
       arrayUsuarios: [],
+      //roles para el select
       arrayRoles: [],
+      //para llenar el text del usuario seleccionado
+      textInitialUsers:"",
+      //para llenar el text del rol seleccionado
+      textInitialRoles:"",
     };
   },
 
@@ -193,9 +193,9 @@ export default {
   },
 
   methods: {
-    async darclick() {     
-        const edit = document.getElementById("editar");
-        edit.click();
+    async darclick() {
+      const edit = document.getElementById("editar");
+      edit.click();
     },
     async llenarUsuarios() {
       let elementSelectId = document.getElementById("selectIdUsuario");
@@ -228,7 +228,12 @@ export default {
         });
         console.log(result.data);
 
-        //usuarios
+        
+        //asignamos el valor del textInitialUsers
+        this.textInitialUsers= result.data.usersNames_rolesNames_ById[0].nombre_usuario
+         //asignamos el valor del textInitialRoles
+        this.textInitialRoles= result.data.usersNames_rolesNames_ById[0].nombre_rol
+                
         //para llenar arrayUsuarios
         for (let index = 0; index < result.data.users.length; index++) {
           const objetos_usuarios = {
@@ -236,9 +241,7 @@ export default {
             text: result.data.users[index].nombre_usuario,
           };
           this.arrayUsuarios.push(objetos_usuarios);
-        }
-
-        //roles
+          }        
         //para llenar arrayRoles
         for (let index = 0; index < result.data.roles.length; index++) {
           const objetos_roles = {
@@ -249,25 +252,29 @@ export default {
         }
 
         //datos para llenar los campos del usuario que vamos modificar
-        this.datos.idusuario = result.data.user_rol[0].idusuario;
-        this.datos.idroles = result.data.user_rol[0].idroles;
+        this.datos.idusuario = result.data.users_roles_ById[0].idusuario;
+        this.datos.idroles = result.data.users_roles_ById[0].idroles;
         //datos para comparar los campos si hubo o no cambios
-        this.new_datos.new_idusuario = result.data.user_rol[0].idusuario;
-        this.new_datos.new_idroles = result.data.user_rol[0].idroles;
+        this.new_datos.new_idusuario = result.data.users_roles_ById[0].idusuario;
+        this.new_datos.new_idroles = result.data.users_roles_ById[0].idroles;
 
         //Advertir o restringir para no editar un usuario "admin",
         // comprobamos que el rol del usuario a editar sea admin,
-        //luego filtramos el rol admin en el array para obtener la cantidad de usuarios admin        
-        if (result.data.userName_rolName[0].nombre_rol == "admin" &&
-            result.data.usersNames_rolesNames.filter(element => element.nombre_rol === "admin").length < 2
+        //luego filtramos el rol admin en el array para obtener la cantidad de usuarios admin
+        if (
+          result.data.usersNames_rolesNames_ById[0].nombre_rol == "admin" &&
+          result.data.usersNames_rolesNames.filter(
+            (element) => element.nombre_rol === "admin"
+          ).length < 2
         ) {
           //significa que hay solo un administrador, entonces restringimos su edición
           this.message.noEliminar = true;
-          this.err = false;
+          this.message.err = false;
         }
         if (
-          result.data.userName_rolName[0].nombre_usuario == nameOfToken &&
-          result.data.userName_rolName[0].nombre_rol == "admin"
+          result.data.usersNames_rolesNames_ById[0].nombre_usuario ==
+            nameOfToken &&
+          result.data.usersNames_rolesNames_ById[0].nombre_rol == "admin"
         ) {
           //significa que hay mas de un administrador, entonces advertimos su edición
           this.message.advertencia = true;

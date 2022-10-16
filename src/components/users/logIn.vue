@@ -1,5 +1,5 @@
 <template>
-  <div class="col-4 align-self-center mt-5 m-auto">
+  <div class="col-4 self mt-5 m-auto">
     <div class="form-header mt-3">
       <h2 class="text-center mt-2">
         <i class="bi-person-circle" style="font-size: 6rem; color: white"></i>
@@ -75,6 +75,7 @@ export default {
           url: "http://localhost:4000/api/ingreso",
           data: login,
         });
+        console.log(result)
         if (result.data.Message.length > 0) {
           localStorage.setItem("token", JSON.stringify(result.data.token));
           this.success = result.data.Message;

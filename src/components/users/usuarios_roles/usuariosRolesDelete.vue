@@ -124,7 +124,7 @@ export default {
 
         // comprobamos que el rol del usuario a editar sea admin
         //luego filtramos el rol admin en el array para obtener la cantidad de usuarios admin 
-        if (result.data.userName_rolName[0].nombre_rol == "admin" &&
+        if (result.data.usersNames_rolesNames_ById[0].nombre_rol == "admin" &&
             result.data.usersNames_rolesNames.filter(element => element.nombre_rol === "admin").length < 2
         ) {
           //significa que hay solo un administrador, entonces restringimos su eliminación
@@ -132,8 +132,8 @@ export default {
           this.err = false;
         }
         if (
-          result.data.userName_rolName[0].nombre_usuario == nameOfToken &&
-          result.data.userName_rolName[0].nombre_rol == "admin"
+          result.data.usersNames_rolesNames_ById[0].nombre_usuario == nameOfToken &&
+          result.data.usersNames_rolesNames_ById[0].nombre_rol == "admin"
         ) {
           //significa que hay mas de un administrador, entonces advertimos su eliminación
           this.message.advertencia = true;

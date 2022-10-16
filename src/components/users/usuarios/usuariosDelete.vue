@@ -116,7 +116,7 @@ export default {
         console.log(result.data);
 
         //obtener el nombre del usuario a eliminar
-        const userName = result.data.user[0].nombre_usuario;
+        const userName = result.data.users_ById[0].nombre_usuario;
         //obtener todos los roles del usuario a eliminar
         const userRoles = result.data.usersNames_rolesNames.filter(
           (element) => element.nombre_usuario == userName

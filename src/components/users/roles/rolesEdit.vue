@@ -16,9 +16,9 @@
       aria-hidden="true"
     >
       <div class="modal-dialog">
-        <div v-if="message.noEliminar==false" class="modal-content">
-          <div class="modal-header" style="background: #5dade2;">
-            <h5 class="modal-title" id="editarModalLabel" style="color: white;">
+        <div v-if="message.noEliminar == false" class="modal-content">
+          <div class="modal-header" style="background: #5dade2">
+            <h5 class="modal-title" id="editarModalLabel" style="color: white">
               {{ title }}
             </h5>
 
@@ -38,13 +38,13 @@
                 />
                 <div
                   v-if="this.new_datos.new_nombre_rol.length < 3"
-                  style="color: red;"
+                  style="color: red"
                 >
                   Mínimo 3 caracteres
                 </div>
               </div>
 
-              <div class="modal-footer-sm" style="background: #5dade2;">
+              <div class="modal-footer-sm" style="background: #5dade2">
                 <button
                   v-if="new_datos.new_nombre_rol !== datos.nombre_rol"
                   type="submit"
@@ -55,7 +55,7 @@
                 <button v-else disabled type="submit" class="btn btn-light m-3">
                   Guardar
                 </button>
-                <a class="btn" href="/roles" style="color: white;">Cancelar</a>
+                <a class="btn" href="/roles" style="color: white">Cancelar</a>
               </div>
             </form>
           </div>
@@ -110,18 +110,16 @@ export default {
       //datos originales del servidor
       datos: {
         nombre_rol: "",
-        
       },
       //datos para editar
       new_datos: {
         new_nombre_rol: "",
-        
       },
       //recibe del servidor o del catch
       message: {
         success: "",
         err: "",
-        noEliminar: false
+        noEliminar: false,
       },
     };
   },
@@ -151,25 +149,23 @@ export default {
       //console.log(result.data)
 
       //datos originales
-      this.datos.nombre_rol = result.data.rol[0].nombre_rol;       
+      this.datos.nombre_rol = result.data.roles_ById[0].nombre_rol;
 
       //datos para comparar
-      this.new_datos.new_nombre_rol = result.data.rol[0].nombre_rol;
-      
-      
-        //obtener el nombre del rol a eliminar
-        const rolName = result.data.rol[0].nombre_rol;
+      this.new_datos.new_nombre_rol = result.data.roles_ById[0].nombre_rol;
 
-        console.log({
-          rol: rolName,
-        });
-        //si el rol es admin
-        if (rolName==="admin") {
-          //restringimos su eliminación
-          this.message.noEliminar = true;
-          this.err = false;
-        }
-      
+      //obtener el nombre del rol a eliminar
+      const rolName = result.data.roles_ById[0].nombre_rol;
+
+      console.log({
+        rol: rolName,
+      });
+      //si el rol es admin
+      if (rolName === "admin") {
+        //restringimos su eliminación
+        this.message.noEliminar = true;
+        this.err = false;
+      }
     },
 
     async editRol() {
@@ -178,22 +174,21 @@ export default {
         const result = await axios.put(
           "http://localhost:4000/api/roles/" + this.$route.params.id,
           {
-            nombre_rol: this.new_datos.new_nombre_rol,            
+            nombre_rol: this.new_datos.new_nombre_rol,
           },
           {
-              headers:{
-                  Authorization: JSON.parse(token)
-              }
+            headers: {
+              Authorization: JSON.parse(token),
+            },
           }
-
         );
-        if(result.data.Message.length>0) {
-            this.message.success=result.data.Message;
-            this.message.err=false;
-            location.replace("/roles");
-        }       
+        if (result.data.Message.length > 0) {
+          this.message.success = result.data.Message;
+          this.message.err = false;
+          location.replace("/roles");
+        }
       } catch (error) {
-        this.message.err=error.response.data.Message;
+        this.message.err = error.response.data.Message;
         console.log(error.response.data.Message);
       }
     },
@@ -202,5 +197,4 @@ export default {
 </script>
 
 <style>
-
 </style>

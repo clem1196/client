@@ -90,10 +90,10 @@
             </form>
             <div
               v-if="message.advertencia == true"
-              class="alert alert-warning"
+              class="alert alert-warning mt-4"
               role="alert"
             >
-              Va eliminar su propia cuenta, si continúa deberá iniciar sesión
+              Va modificar su propia cuenta, si continúa deberá iniciar sesión
               nuevamente.
             </div>           
           </div>
@@ -105,7 +105,7 @@
           </div>
           <div class="modal-body">
             <div class="alert alert-danger" role="alert">
-              No debe eliminar a este usuario "Admin". El sistema requiere al
+              No debe modificar a este usuario "Admin". El sistema requiere al
               menos de un Administrador.
             </div>
 
@@ -189,14 +189,14 @@ export default {
       );
       //console.log(result.data)
       //datos para editar
-      this.new_datos.new_nombre_usuario = result.data.user[0].nombre_usuario;
-      this.new_datos.new_contraseña = result.data.user[0].contraseña;
+      this.new_datos.new_nombre_usuario = result.data.users_ById[0].nombre_usuario;
+      this.new_datos.new_contraseña = result.data.users_ById[0].contraseña;
       //datos originales
-      this.datos.nombre_usuario = result.data.user[0].nombre_usuario;
-      this.datos.contraseña = result.data.user[0].contraseña;     
+      this.datos.nombre_usuario = result.data.users_ById[0].nombre_usuario;
+      this.datos.contraseña = result.data.users_ById[0].contraseña;     
 
       //obtener el nombre del usuario a editar
-      const userName = result.data.user[0].nombre_usuario;
+      const userName = result.data.users_ById[0].nombre_usuario;
       //obtener todos los roles del usuario a editar
       const userRoles = result.data.usersNames_rolesNames.filter(
         (element) => element.nombre_usuario == userName
