@@ -2,14 +2,15 @@
   <div class="container-fluid mt-4">
     <!--Llamamos al componente headerWiev de navegación-->
     <header-view></header-view>
-    <div class="mt-2">
+    <div class="mt-4">
       <!--Add-->
-      <a class="btn btn-primary" href="/usuarios/add">Crear nuevo</a>
-      <a class="btn btn-primary m-3" href="/usuarios-roles/add">Asignar rol </a>
+      <a class="btn btn-primary btn-block" type="button" href="/documentos/add"
+        >Agregar doc
+      </a>
       <!--Switch-->
-      <div style="float: right" class="m-4">
+      <div style="float: right;">
         <div class="form-check form-switch" @click="cambiarFilter">
-          <label class="form-check-label" for="switch">Búsqueda estrícta</label>
+          <label class="form-check-label" for="swit">Búsqueda estrícta</label>
           <input
             class="form-check-input"
             type="checkbox"
@@ -22,11 +23,11 @@
     <!--Form-->
     <!--Search libre-->
     <div v-if="filter == true" class="col-12">
-      <form @keyup="getSearchUsuariosRoles" class="mt-2">
+      <form @keyup="getSearchDocs" class="mt-2">
         <i class="bi-search"></i>
         <input
           class="border rounded"
-          style="width: 100%"
+          style="width: 100%;"
           v-model="text"
           type="search"
           placeholder="Search"
@@ -35,9 +36,9 @@
     </div>
     <!--Search estricto-->
     <div v-else class="col-12">
-      <form @submit.prevent="getSearchUsuariosRoles" class="mt-4">
+      <form @submit.prevent="getSearchDocs" class="mt-4">
         <div
-          style="float: right"
+          style="float: right;"
           class="btn-group"
           role="group"
           aria-label="Basic mixed styles example"
@@ -63,7 +64,7 @@
         <i class="bi-search">
           <input
             class="border rounded"
-            style="width: 100%"
+            style="width: 100%;"
             v-model="text"
             type="search"
             placeholder="Search"
@@ -71,58 +72,89 @@
         </i>
       </form>
     </div>
+
     <!--Table-->
-    <table class="table table-hover mt-2">
+    <table id="datos" class="table table-hover mt-2">
       <thead>
-        <tr style="background: #ecedef">
-        <th>
-         <img src="../../../assets/sort.png" alt="" width="14">
+        <tr style="background: #ecedef;">
+          <th>
+            <img src="../../../assets/sort.png" alt="" width="14" />
             <button
               @click="sortId"
               class="btn btn-default btn-sm"
-              style="border: 0; font-size: 1.1rem"
+              style="border: 0; font-size: 1.2rem;"
             >
               Id
             </button>
           </th>
           <th>
-            <img src="../../../assets/sort.png" alt="" width="14">
+            <img src="../../../assets/sort.png" alt="" width="14" />
             <button
-              @click="sortUsuario"
+              @click="sortUserId"
               class="btn btn-default btn-sm"
-              style="border: 0; font-size: 1.1rem"
+              style="border: 0; font-size: 1.2rem;"
             >
-              Usuario
+            IdUsuario
+            </button>
+          </th>
+           <th>
+            <img src="../../../assets/sort.png" alt="" width="14" />
+            <button
+              @click="sortDoc_type"
+              class="btn btn-default btn-sm"
+              style="border: 0; font-size: 1.2rem;"
+            >
+              Tipo
             </button>
           </th>
           <th>
-            <img src="../../../assets/sort.png" alt="" width="14">
+            <img src="../../../assets/sort.png" alt="" width="14" />
             <button
-              @click="sortRol"
+              @click="sortDoc_number"
               class="btn btn-default btn-sm"
-              style="border: 0; font-size: 1.1rem"
+              style="border: 0; font-size: 1.2rem;"
             >
-              Rol
+              NumDoc
             </button>
           </th>
           <th>
-            <img src="../../../assets/sort.png" alt="" width="14">
+            <img src="../../../assets/sort.png" alt="" width="14" />
             <button
-              @click="sortCreado"
+              @click="sortFile"
               class="btn btn-default btn-sm"
-              style="border: 0; font-size: 1.1rem"
+              style="border: 0; font-size: 1.2rem;"
+            >
+              Archivo
+            </button>
+          </th>
+          <th>
+            <img src="../../../assets/sort.png" alt="" width="14" />
+            <button
+              @click="sortCreated"
+              class="btn btn-default btn-sm"
+              style="border: 0; font-size: 1.2rem;"
             >
               Creado
             </button>
           </th>
           <th>
-            <img src="../../../assets/sort.png" alt="" width="14">
+            <img src="../../../assets/sort.png" alt="" width="14" />
             <button
               class="btn btn-default btn-sm"
-              style="border: 0; font-size: 1.1rem"
-              @click="sortModificado"
+              style="border: 0; font-size: 1.2rem;"
+              @click="sortUpdated"
             >
               Modificado
+            </button>
+          </th>
+          <th>
+            <img src="../../../assets/sort.png" alt="" width="14" />
+            <button
+              @click="sortState"
+              class="btn btn-default btn-sm"
+              style="border: 0; font-size: 1.2rem;"
+            >
+              Estado
             </button>
           </th>
           <th>Acciones</th>
@@ -130,26 +162,28 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="search in searchUsuariosRoles"
-          :key="search.idusuarios_roles"
-        >
-          <!--<td>{{ search.idusuarios_roles }}</td>-->
-          <td>{{ search.idusuarios_roles }}</td>
-          <td>{{ search.nombre_usuario }}</td>
-          <td>{{ search.nombre_rol }}</td>
-          <td>{{ search.registrado }}</td>
-          <td>{{ search.actualizado }}</td>
+        <tr v-for="search in searchDocs" :key="search.documentid">
+          <td>{{ search.documentid }}</td>
+          <td>{{ search.userid }}</td>
+          <td>{{ search.doc_type }}</td>
+          <td>{{ search.doc_number }}</td>
+          <td><a :href="'/files/download/'+ search.file">{{search.file}}</a></td>       
+          <td>{{ search.created }}</td>
+          <td>{{ search.updated }}</td>
+          <td>{{ search.state }}</td>
           <td>
-            <a :href="'/usuarios-roles/edit/' + search.idusuarios_roles">
-              <i class="bi-pencil" style="font-size: 1.5rem; color: #f7d43a"></i
+            <a :href="'/documentos/edit/' + search.documentid">
+              <i
+                class="bi-pencil"
+                style="font-size: 1.5rem; color: #f7d43a;"
+              ></i
             ></a>
           </td>
           <td>
-            <a :href="'/usuarios-roles/delete/' + search.idusuarios_roles"
+            <a :href="'/documentos/delete/' + search.documentid"
               ><i
                 class="bi-trash-fill"
-                style="font-size: 1.5rem; color: #f7423a"
+                style="font-size: 1.5rem; color: #f7423a;"
               ></i
             ></a>
           </td>
@@ -229,12 +263,11 @@
         </li>
         <!--Total-->
         <li class="page-item disabled">
-          <button class="page-link">
-            Total: {{ this.usuariosRoles.length }}
-          </button>
+          <button class="page-link">Total: {{ this.docs.length }}</button>
         </li>
       </ul>
     </nav>
+
     <!--Messages-->
     <small v-if="success.length > 0" class="text-success">{{ success }} </small>
     <small v-if="err.length > 0" class="text-danger">{{ err }}</small>
@@ -242,21 +275,21 @@
 </template>
 
 <script>
-import headerView from "../../../views/HeaderViewUsers/headerView.vue";
+import headerView from "../../../views/HeaderViewDocs/headerView.vue";
 import axios from "axios";
 export default {
-  name: "usuariosRoles-list",
+  name: "docs-list",
   data() {
     return {
       //list
-      usuariosRoles: [],
+      docs: [],     
       //pagination
       currentPage: 1,
       rows: 5,
       pagination: true,
       //search
       filter: true,
-      searchUsuariosRoles: [],
+      searchDocs: [],
       text: "",
       //Messages
       err: "",
@@ -264,25 +297,30 @@ export default {
     };
   },
   components: {
-    headerView,
+    headerView
   },
   async mounted() {
-    await this.getUsuarios_roles();
+    await this.getDocs();
     this.getDataPages(this.currentPage);
+     
   },
-  methods: {
-    //LISTAR USUARIOS_ROLES POR NOMBRES Y ROLES
-    async getUsuarios_roles() {
+  methods: {    
+    
+    //LIST DOCS
+    async getDocs() {      
       try {
         const token = localStorage.getItem("token");
-        const result = await axios.get("http://localhost:4000/api/data", {
+        const result = await axios.get("http://localhost:4000/api/docs/data", {
           headers: {
             Authorization: JSON.parse(token),
           },
         });
-        console.log(result.data)
-        if (result.data.usersNames_rolesNames.length > 0) {
-          this.usuariosRoles = result.data.usersNames_rolesNames;
+
+        
+        //console.log(result.data.lists.documents[0])        
+        if (result.data.lists.documents[0].length > 0) {         
+          this.docs = result.data.lists.documents[0];       
+
           this.err = false;
         } else {
           console.log("No hay datos que mostrar");
@@ -291,138 +329,189 @@ export default {
         this.err = error.response.data.Message;
         console.log(error.response);
       }
-    },
+    },   
 
-    //SORT ORDENAR COLUMNAS ASCENDENTE Y DESCENDENTE 
+    //FILTRO
     sortId() {
       const asc = (a, b) => {
-        return a.idusuarios_roles - b.idusuarios_roles;
+        return a.documentid - b.documentid;
       };
       const desc = (a, b) => {
-        return b.idusuarios_roles - a.idusuarios_roles;
+        return b.documentid - a.documentid;
       };
 
       if (this.algunValor) {
         this.algunValor = false;
-        return this.searchUsuariosRoles.sort(asc);
+        return this.searchDocs.sort(asc);
       } else {
         this.algunValor = true;
-        return this.searchUsuariosRoles.sort(desc);
+        return this.searchDocs.sort(desc);
       }
     },
-    sortUsuario() {
+
+    sortUserId() {
       const asc = (a, b) => {
-        return a.nombre_usuario.localeCompare(b.nombre_usuario);
+        return a.userid - b.userid;
       };
       const desc = (a, b) => {
-        return b.nombre_usuario.localeCompare(a.nombre_usuario);
+        return b.userid - a.userid;
       };
 
       if (this.algunValor) {
         this.algunValor = false;
-        return this.searchUsuariosRoles.sort(asc);
+        return this.searchDocs.sort(asc);
       } else {
         this.algunValor = true;
-        return this.searchUsuariosRoles.sort(desc);
+        return this.searchDocs.sort(desc);
       }
     },
-    sortRol() {
+    sortDoc_type() {
       const asc = (a, b) => {
-        return a.nombre_rol.localeCompare(b.nombre_rol);
+        return a.doc_type.localeCompare(b.doc_type);
       };
       const desc = (a, b) => {
-        return b.nombre_rol.localeCompare(a.nombre_rol);
+        return b.doc_type.localeCompare(a.doc_type);
       };
 
       if (this.algunValor) {
         this.algunValor = false;
-        return this.searchUsuariosRoles.sort(asc);
+        return this.searchDocs.sort(asc);
       } else {
         this.algunValor = true;
-        return this.searchUsuariosRoles.sort(desc);
+        return this.searchDocs.sort(desc);
       }
     },
-    sortCreado() {
+    sortDoc_number() {
       const asc = (a, b) => {
-        return (
-          new Date(a.registrado).valueOf() - new Date(b.registrado).valueOf()
-        );
+        return a.doc_number.localeCompare(b.doc_number);
       };
       const desc = (a, b) => {
-        return (
-          new Date(b.registrado).valueOf() - new Date(a.registrado).valueOf()
-        );
+        return b.doc_number.localeCompare(a.doc_number);
       };
 
       if (this.algunValor) {
         this.algunValor = false;
-        return this.searchUsuariosRoles.sort(asc);
+        return this.searchDocs.sort(asc);
       } else {
         this.algunValor = true;
-        return this.searchUsuariosRoles.sort(desc);
+        return this.searchDocs.sort(desc);
       }
     },
-    sortModificado() {
+    sortFile() {
       const asc = (a, b) => {
-        return (
-          new Date(a.actualizado).valueOf() - new Date(b.actualizado).valueOf()
-        );
+        return a.file.localeCompare(b.file);
       };
       const desc = (a, b) => {
-        return (
-          new Date(b.actualizado).valueOf() - new Date(a.actualizado).valueOf()
-        );
+        return b.file.localeCompare(a.file);
       };
 
       if (this.algunValor) {
         this.algunValor = false;
-        return this.searchUsuariosRoles.sort(asc);
+        return this.searchDocs.sort(asc);
       } else {
         this.algunValor = true;
-        return this.searchUsuariosRoles.sort(desc);
+        return this.searchDocs.sort(desc);
       }
     },
 
-    //FILTER O SEARCH     
-    getSearchUsuariosRoles() {
+    sortCreated() {
+      const asc = (a, b) => {
+        return new Date(a.created).valueOf() - new Date(b.created).valueOf();
+      };
+      const desc = (a, b) => {
+        return new Date(b.created).valueOf() - new Date(a.created).valueOf();
+      };
+
+      if (this.algunValor) {
+        this.algunValor = false;
+        return this.searchDocs.sort(asc);
+      } else {
+        this.algunValor = true;
+        return this.searchDocs.sort(desc);
+      }
+    },
+    sortUpdated() {
+      const asc = (a, b) => {
+        return new Date(a.updated).valueOf() - new Date(b.updated).valueOf();
+      };
+      const desc = (a, b) => {
+        return new Date(b.updated).valueOf() - new Date(a.updated).valueOf();
+      };
+
+      if (this.algunValor) {
+        this.algunValor = false;
+        return this.searchDocs.sort(asc);
+      } else {
+        this.algunValor = true;
+        return this.searchDocs.sort(desc);
+      }
+    },
+    sortState() {
+      const asc = (a, b) => {
+        return a.state.localeCompare(b.state);
+      };
+      const desc = (a, b) => {
+        return b.state.localeCompare(a.state);
+      };
+
+      if (this.algunValor) {
+        this.algunValor = false;
+        return this.searchDocs.sort(asc);
+      } else {
+        this.algunValor = true;
+        return this.searchDocs.sort(desc);
+      }
+    },
+
+    //SEARCH
+    getSearchDocs() {
       if (this.text.length == 0) {
         this.getDataPages(1);
       } else {
         const filterItems = (query) => {
-          return this.usuariosRoles.filter(
-            (usuario) =>
-              (usuario.idusuarios_roles !== null &&
-                usuario.idusuarios_roles.toString().indexOf(query) > -1) ||
-              (usuario.nombre_usuario !== null &&
-                usuario.nombre_usuario
-                  .toLowerCase()
-                  .indexOf(query.toLowerCase()) > -1) ||
-              (usuario.nombre_rol !== null &&
-                usuario.nombre_rol.toLowerCase().indexOf(query.toLowerCase()) >
+          return this.docs.filter(
+            (doc) =>
+              (doc.documentid !== null &&
+                doc.documentid.toString().indexOf(query) > -1) ||
+              (doc.userid !== null &&
+                doc.userid.toString().indexOf(query) > -1) ||
+              (doc.doc_type !== null &&
+                doc.doc_type.toLowerCase().indexOf(query.toLowerCase()) >
                   -1) ||
-              (usuario.registrado !== null &&
-                usuario.registrado.toLowerCase().indexOf(query.toLowerCase()) >
+              (doc.doc_number !== null &&
+                doc.doc_number.toLowerCase().indexOf(query.toLowerCase()) >
                   -1) ||
-              (usuario.actualizado !== null &&
-                usuario.actualizado.toLowerCase().indexOf(query.toLowerCase()) >
-                  -1)
+              (doc.file !== null &&
+                doc.file.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
+              (doc.created !== null &&
+                doc.created.toLowerCase().indexOf(query.toLowerCase()) >
+                  -1) ||
+              (doc.updated !== null &&
+                doc.updated.toLowerCase().indexOf(query.toLowerCase()) >
+                  -1) ||
+              (doc.state !== null &&
+                doc.state.toString().indexOf(query) > -1)
           );
         };
         if (filterItems(this.text).length > 0) {
-          this.searchUsuariosRoles = filterItems(this.text);
+          this.searchDocs = filterItems(this.text);
           this.pagination = false;
           this.success =
-            "Se encontraron" + this.searchUsuariosRoles.length + "registros";
+            "Se encontraron" +
+            " " +
+            this.searchDocs.length +
+            " " +
+            "registros";
           this.err = false;
         } else {
-          this.searchUsuariosRoles = [];
+          this.searchDocs = [];
           this.pagination = false;
           this.success = false;
           this.err = "No se encontraron resultados";
         }
       }
     },
-    //limpiar el campo search
+    //limpiar el campo del search
     limpiarText() {
       this.text = "";
     },
@@ -435,30 +524,30 @@ export default {
       }
     },
 
-    //PAGINATION 
+    //PAGINATION
     isActive(numPage) {
       return numPage == this.currentPage ? "active" : "";
     },
     //Total de páginas
     totalPages() {
-      return Math.ceil(this.usuariosRoles.length / this.rows);
+      return Math.ceil(this.docs.length / this.rows);
     },
     //obtener el numero de páginas
     getDataPages(numPage) {
       this.text = "";
       this.err = false;
       this.success = false;
-      this.searchUsuariosRoles = [];
+      this.searchDocs = [];
       this.pagination = true;
       this.currentPage = numPage;
-      if (this.searchUsuariosRoles.length > 0) {
+      if (this.searchDocs.length > 0) {
         let init = numPage * this.rows - this.rows;
         let end = numPage * this.rows;
-        this.searchUsuariosRoles.slice(init, end);
+        this.searchDocs.slice(init, end);
       } else {
         let init = numPage * this.rows - this.rows;
         let end = numPage * this.rows;
-        this.searchUsuariosRoles = this.usuariosRoles.slice(init, end);
+        this.searchDocs = this.docs.slice(init, end);
       }
     },
     //primera
@@ -489,9 +578,8 @@ export default {
       }
       this.getDataPages(this.totalPages());
     },
-  },
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>

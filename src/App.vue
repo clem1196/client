@@ -76,6 +76,15 @@
                 >Contabilidad</a
               >
             </li>
+            <li v-if="empleado || auditor || admin" class="nav-item">
+              <a
+                class="nav-link active"
+                aria-current="page"
+                style="color: white"
+                href="/doc_personas"
+                >Mesa de partes</a
+              >
+            </li>
             <li v-if="auditor || admin" class="nav-item">
               <a
                 class="nav-link active"
@@ -119,6 +128,7 @@ export default {
       auditor: false,
       vendedor: false,
       contador: false,
+      empleado: false,
     };
   },
   async mounted() {
@@ -132,8 +142,9 @@ export default {
       //roles
       this.admin = await Helper.isAdministrator();
       this.auditor = await Helper.isAuditor();
-      this.vendedor = await Helper.isSeller();
-      this.contador = await Helper.isAccountant();
+      this.vendedor = await Helper.isSellerLists() || await Helper.isSellerChanges();
+      this.contador = await Helper.isAccountantLists() || await Helper.isAccountantLists();
+      this.empleado = await Helper.isEmployeeLists() || await Helper.isEmployeeChanges();
     }
   },
 };

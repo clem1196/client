@@ -225,7 +225,7 @@
 </template>
 
 <script>
-import headerView from "../../../views/headerView.vue";
+import headerView from "../../../views/HeaderViewUsers/headerView.vue";
 import axios from "axios";
 export default {
   name: "roles-list",
@@ -246,7 +246,7 @@ export default {
       success: "",
     };
   },
-  components: {
+  components: {    
     headerView,
   },
   async mounted() {
