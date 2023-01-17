@@ -120,13 +120,13 @@
       </div>
     </div>
     <!--component usuarios-->
-    <personsList></personsList>
+    <docPersonList></docPersonList>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import personsList from "../docs_persons/docs_personsList.vue";
+import docPersonList from "./docs_personsList.vue";
 export default {
   name: "docs_persons-add",
   props: {
@@ -154,7 +154,7 @@ export default {
     };
   },
 
-  components: { personsList },
+  components: { docPersonList },
   async mounted() {
     this.darclick();
     this.getPersons();

@@ -28,7 +28,23 @@
           <!--modal header-->
           <div class="modal-body bg-light">
             <form @submit.prevent="addDocs">
-              <!--Campo type_doc-->
+             
+              <!--Campo doc_number-->
+              <div class="mb-3">
+                <label for="" class="col-form-label"
+                  >Num_doc:</label
+                >
+                <input
+                  v-model="datos.doc_number"
+                  type="text"
+                  class="form-control"
+                  minlength="6"
+                  required
+                />
+                <small v-if="datos.doc_number.length < 6" class="text-danger"
+                  >Mínimo 6 caracteres</small>
+              </div>
+               <!--Campo type_doc-->
               <div class="mb-3">
                 <label for="" class="col-form-label"
                   >Tipo_doc:</label
@@ -45,21 +61,6 @@
                   </option>
                 </select>
                 
-              </div>
-              <!--Campo doc_number-->
-              <div class="mb-3">
-                <label for="" class="col-form-label"
-                  >Num_doc:</label
-                >
-                <input
-                  v-model="datos.doc_number"
-                  type="text"
-                  class="form-control"
-                  minlength="6"
-                  required
-                />
-                <small v-if="datos.doc_number.length < 6" class="text-danger"
-                  >Mínimo 6 caracteres</small>
               </div>
               <!--Campo file-->
               <div class="mb-3">

@@ -130,13 +130,13 @@
         </div>
       </div>
     </div>
-    <personsList></personsList>
+    <docPersonList></docPersonList>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import personsList from "../docs_persons/docs_personsList.vue";
+import docPersonList from "./docs_personsList.vue";
 export default {
   name: "docs-persons-edit",
   props: {
@@ -170,7 +170,7 @@ export default {
     };
   },
 
-  components: { personsList },
+  components: { docPersonList },
   async mounted() {
     this.getDocs_Persons();
     this.getDocs();

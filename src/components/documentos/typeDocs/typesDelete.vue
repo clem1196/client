@@ -20,14 +20,14 @@
           <div class="modal-header bg-light">
             <h5 class="modal-title">Delete</h5>
 
-            <a href="/Doc_personas" class="btn btn-close"></a>
+            <a href="/personas" class="btn btn-close"></a>
           </div>
           <div class="modal-body">
             {{ title }}
           </div>
           <div class="modal-footer">
-            <button class="btn btn-danger m-3" @click="deleteDocs_Persons">Si</button>
-            <a class="btn btn-light" href="/doc_personas">No</a>
+            <button class="btn btn-danger m-3" @click="deleteTypes">Si</button>
+            <a class="btn btn-light" href="/types">No</a>
           </div>
         </div>
         <div
@@ -42,15 +42,15 @@
         </div>
       </div>
     </div>
-    <docPersonList></docPersonList>
+    <typesList></typesList>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import docPersonList from "./docs_personsList.vue";
+import typesList from "./typesList.vue";
 export default {
-  name: "doc-persons-delete",
+  name: "types-delete",
   props: {
     title: {
       type: String,
@@ -66,7 +66,7 @@ export default {
     };
   },
 
-  components: { docPersonList },
+  components: { typesList },
   async mounted() {   
     this.darclick();
   },
@@ -76,11 +76,11 @@ export default {
       const del = document.getElementById("delete");
       del.click();
     },
-    async deleteDocs_Persons() {
+    async deleteTypes() {
       try {
         const token = localStorage.getItem("token");
         const result = await axios.delete(
-          "http://localhost:4000/api/doc-person/" + this.$route.params.id,
+          "http://localhost:4000/api/types/" + this.$route.params.id,
 
           {
             headers: {
@@ -92,7 +92,7 @@ export default {
         if (result.statusText=="OK") {
           this.message.success = result.data.Message;
           this.message.err = false;
-          location.replace("/doc_personas");
+          location.replace("/types");
         }
       } catch (error) {
         this.message.err = error.response.data.Message;

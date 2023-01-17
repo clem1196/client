@@ -191,6 +191,40 @@ const routes = [
         /* webpackChunkName: "Delete" */ "../components/documentos/pdf/Delete.vue"
       ),
   },
+
+  //types
+  {
+    path: "/types",
+    name: "typesList",
+    component: () =>
+      import(
+        /* webpackChunkName: "typesList" */ "../components/documentos/typeDocs/typesList.vue"
+      ),
+  },
+  {
+    path: "/types/add",
+    name: "typesAdd",
+    component: () =>
+      import(
+        /* webpackChunkName: "typesAdd" */ "../components/documentos/typeDocs/typesAdd.vue"
+      ),
+  },
+  {
+    path: "/types/edit/:id",
+    name: "typesEdit",
+    component: () =>
+      import(
+        /* webpackChunkName: "typesEdit" */ "../components/documentos/typeDocs/typesEdit.vue"
+      ),
+  },
+  {
+    path: "/types/delete/:id",
+    name: "typesDelete",
+    component: () =>
+      import(
+        /* webpackChunkName: "typesDelete" */ "../components/documentos/typeDocs/typesDelete.vue"
+      ),
+  },
   //documentos
   {
     path: "/documentos",
