@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
    <!--Llamamos al componente headerWiev de navegación-->
     <header-view></header-view>
     <!--UPLOAD- MULTIPLE-->
@@ -86,7 +86,6 @@
         </div>
       </div>
     </div>
-
     <!--Files-->
     <files></files>
   </div>
@@ -136,7 +135,6 @@ export default {
           this.noFiles.push(uploadedFiles[i]);
         }
       }
-
       if (this.noFiles.length > 0) {
         this.uploadWarning = `${this.noFiles.length} archivos no válidos, solo se admiten extensiones pdf, jpg, jpeg, doc y docx`;
       }

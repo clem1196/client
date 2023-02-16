@@ -19,18 +19,14 @@
         <div class="modal-content">
           <div class="modal-header bg-light">
             <h5 class="modal-title">Delete</h5>
-
-            <a href="/files" class="btn btn-close"></a>
+            <a :href="myRoute" class="btn btn-close"></a>
           </div>
-
           <div class="modal-body">
-            <div class="alert alert-warning" role="alert">
-              {{ title }}
-            </div>
+            {{ title }}
           </div>
           <div class="modal-footer">
-            <button class="btn btn-danger m-3" @click="deleteFiles">Si</button>
-            <a class="btn btn-light" href="/files">No</a>
+            <button class="btn btn-danger m-3" @click="deleteDocs">Si</button>
+            <a class="btn btn-light" :href="myRoute">No</a>
           </div>
         </div>
         <div
@@ -45,16 +41,15 @@
         </div>
       </div>
     </div>
-    <Files></Files>
+   
   </div>
 </template>
 
 <script>
-//import Helpers from "../../../services/Helpers";
 import axios from "axios";
-import Files from "./Files.vue";
+//import docsList from "./docsList.vue";
 export default {
-  name: "delete-files",
+  name: "delete-documents",
   props: {
     title: {
       type: String,
@@ -67,35 +62,65 @@ export default {
         success: "",
         err: "",
       },
+      myUrl:"",
+      myRoute:""
     };
   },
 
-  components: { Files },
+  components: { 
+    //docsList
+     },
   async mounted() {
+    //this.getPersons();   
+    this.getUrl()
     this.darclick();
   },
+
   methods: {
     darclick() {
       const del = document.getElementById("delete");
       del.click();
     },
-    async deleteFiles() {
+     async getUrl(){
+       if (this.$route.name=="docsDelete") {
+          this.myUrl="http://localhost:4000/api/documentos/"+ this.$route.params.id;
+          this.myRoute="/documentos";
+        }        
+        if (this.$route.name=="personsDelete") {
+          this.myUrl= "http://localhost:4000/api/personas/"+ this.$route.params.id;
+          this.myRoute="/personas";
+        }
+        if (this.$route.name=="typesDelete") {
+          this.myUrl= "http://localhost:4000/api/types/"+ this.$route.params.id;
+          this.myRoute="/types";
+        }
+        if (this.$route.name=="docs_personsDelete") {
+          this.myUrl= "http://localhost:4000/api/doc-person/"+ this.$route.params.id;
+          this.myRoute="/doc_personas"
+        }
+        if (this.$route.name=="Delete") {
+          this.myUrl= "http://localhost:4000/api/files/"+ this.$route.params.name;
+          this.myRoute="/upload"
+        }
+      console.log(this.$route.name, this.myRoute, this.myUrl)
+    },
+    async deleteDocs() {
       try {
-        const token = localStorage.getItem("token");
-        const result = await axios.delete(
-          "http://localhost:4000/api/files/" + this.$route.params.name,
+        const token = localStorage.getItem("token");       
 
+        const result = await axios.delete(
+          this.myUrl, 
           {
-            headers: {
+          headers: {
               Authorization: JSON.parse(token),
             },
           }
         );
-        console.log(result)
-        if (result.statusText=="OK") {
+        console.log(result);
+        if (result.statusText == "OK") {
           this.message.success = result.data.Message;
           this.message.err = false;
-          location.replace("/files");
+          location.replace(this.myRoute);
         }
       } catch (error) {
         this.message.err = error.response.data.Message;

@@ -3,7 +3,7 @@
     <small v-if="datos.message.err.length>0" class="alert alert-danger">
       {{ datos.message.err }}
       <a
-        class="out float-right"
+        class="out float-right m-2"
         href="/documentos"
         b-tooltip.hover
         title="Salir"
@@ -54,9 +54,11 @@ export default {
           document.body.appendChild(fileLink);
           fileLink.click();
           location.replace("/documentos");
+        }   
+      } catch (error) { 
+        if (error.response.status==500) {
+          this.datos.message.err = "El archivo no existe, o ya fue eliminada";
         }       
-      } catch (error) {
-        this.datos.message.err = "Error interno del Servidor";
         console.log(error.response);
       }
     },

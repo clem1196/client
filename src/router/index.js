@@ -162,7 +162,7 @@ const routes = [
     name: "Upload",
     component: () =>
       import(
-        /* webpackChunkName: "Files" */ "../components/documentos/pdf/Upload.vue"
+        /* webpackChunkName: "Files" */ "../components/documentos/files/Upload.vue"
       ),
   },
 
@@ -172,7 +172,7 @@ const routes = [
     name: "Files",
     component: () =>
       import(
-        /* webpackChunkName: "Files" */ "../components/documentos/pdf/Files.vue"
+        /* webpackChunkName: "Files" */ "../components/documentos/files/Files.vue"
       ),
   },
   {
@@ -180,7 +180,7 @@ const routes = [
     name: "Download",
     component: () =>
       import(
-        /* webpackChunkName: "Download" */ "../components/documentos/pdf/Download.vue"
+        /* webpackChunkName: "Download" */ "../components/documentos/files/Download.vue"
       ),
   },
   {
@@ -188,7 +188,7 @@ const routes = [
     name: "Delete",
     component: () =>
       import(
-        /* webpackChunkName: "Delete" */ "../components/documentos/pdf/Delete.vue"
+        /* webpackChunkName: "Delete" */ "../components/documentos/delete.vue"
       ),
   },
 
@@ -198,7 +198,7 @@ const routes = [
     name: "typesList",
     component: () =>
       import(
-        /* webpackChunkName: "typesList" */ "../components/documentos/typeDocs/typesList.vue"
+        /* webpackChunkName: "typesList" */ "../components/documentos/types.vue"
       ),
   },
   {
@@ -206,7 +206,7 @@ const routes = [
     name: "typesAdd",
     component: () =>
       import(
-        /* webpackChunkName: "typesAdd" */ "../components/documentos/typeDocs/typesAdd.vue"
+        /* webpackChunkName: "typesAdd" */ "../components/documentos/types.vue"
       ),
   },
   {
@@ -214,7 +214,7 @@ const routes = [
     name: "typesEdit",
     component: () =>
       import(
-        /* webpackChunkName: "typesEdit" */ "../components/documentos/typeDocs/typesEdit.vue"
+        /* webpackChunkName: "typesEdit" */ "../components/documentos/types.vue"
       ),
   },
   {
@@ -222,7 +222,7 @@ const routes = [
     name: "typesDelete",
     component: () =>
       import(
-        /* webpackChunkName: "typesDelete" */ "../components/documentos/typeDocs/typesDelete.vue"
+        /* webpackChunkName: "typesDelete" */ "../components/documentos/delete.vue"
       ),
   },
   //documentos
@@ -231,15 +231,15 @@ const routes = [
     name: "docsList",
     component: () =>
       import(
-        /* webpackChunkName: "docsList" */ "../components/documentos/docs/docsList.vue"
+        /* webpackChunkName: "docsList" */ "../components/documentos/documents.vue"
       ),
   },
   {
     path: "/documentos/add",
-    name: "docsAdd",
+    name: "docsListAdd",
     component: () =>
       import(
-        /* webpackChunkName: "docAdd" */ "../components/documentos/docs/docsAdd.vue"
+        /* webpackChunkName: "docAdd" */ "../components/documentos/documents.vue"
       ),
   },
   {
@@ -247,7 +247,7 @@ const routes = [
     name: "docsEdit",
     component: () =>
       import(
-        /* webpackChunkName: "docsEdit" */ "../components/documentos/docs/docsEdit.vue"
+        /* webpackChunkName: "docsEdit" */ "../components/documentos/documents.vue"
       ),
   },
   {
@@ -255,7 +255,7 @@ const routes = [
     name: "docsDelete",
     component: () =>
       import(
-        /* webpackChunkName: "docsDelete" */ "../components/documentos/docs/docsDelete.vue"
+        /* webpackChunkName: "docsDelete" */ "../components/documentos/delete.vue"
       ),
   },
 
@@ -265,7 +265,7 @@ const routes = [
     name: "personsList",
     component: () =>
       import(
-        /* webpackChunkName: "personsList" */ "../components/documentos/persons/personsList.vue"
+        /* webpackChunkName: "personsList" */ "../components/documentos/persons.vue"
       ),
   },
   {
@@ -273,7 +273,7 @@ const routes = [
     name: "personsAdd",
     component: () =>
       import(
-        /* webpackChunkName: "personsAdd" */ "../components/documentos/persons/personsAdd.vue"
+        /* webpackChunkName: "personsAdd" */ "../components/documentos/persons.vue"
       ),
   },
   {
@@ -281,7 +281,7 @@ const routes = [
     name: "personsEdit",
     component: () =>
       import(
-        /* webpackChunkName: "personsEdit" */ "../components/documentos/persons/personsEdit.vue"
+        /* webpackChunkName: "personsEdit" */ "../components/documentos/persons.vue"
       ),
   },
   {
@@ -289,7 +289,7 @@ const routes = [
     name: "personsDelete",
     component: () =>
       import(
-        /* webpackChunkName: "personsDelete" */ "../components/documentos/persons/personsDelete.vue"
+        /* webpackChunkName: "personsDelete" */ "../components/documentos/delete.vue"
       ),
   },
 
@@ -299,7 +299,7 @@ const routes = [
   name: "docs_personsList",
   component: () =>
     import(
-      /* webpackChunkName: "docs_personsList" */ "../components/documentos/docs_persons/docs_personsList.vue"
+      /* webpackChunkName: "docs_personsList" */ "../components/documentos/documents_persons.vue"
     ),
 },
 {
@@ -307,7 +307,7 @@ const routes = [
   name: "docs_personsAdd",
   component: () =>
     import(
-      /* webpackChunkName: "docs_personsAdd" */ "../components/documentos/docs_persons/docs_personsAdd.vue"
+      /* webpackChunkName: "docs_personsAdd" */ "../components/documentos/documents_persons.vue"
     ),
 },
 {
@@ -315,7 +315,7 @@ const routes = [
   name: "docs_personsEdit",
   component: () =>
     import(
-      /* webpackChunkName: "docs_personsEdit" */ "../components/documentos/docs_persons/docs_personsEdit.vue"
+      /* webpackChunkName: "docs_personsEdit" */ "../components/documentos/documents_persons.vue"
     ),
 },
 {
@@ -323,7 +323,7 @@ const routes = [
   name: "docs_personsDelete",
   component: () =>
     import(
-      /* webpackChunkName: "docs_personsDelete" */"../components/documentos/docs_persons/docs_personsDelete.vue"
+      /* webpackChunkName: "docs_personsDelete" */"../components/documentos/delete.vue"
     ),
 },
 

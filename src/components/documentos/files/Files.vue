@@ -2,82 +2,90 @@
   <div>
     <!--LIST FILES-->
     <div v-if="files.length > 0" class="card mt-2 bg-light">
-      <div class="container-fluid">
-        <div class="mt-2">
-          <!--Switch-->
-          <div style="float: right;">
-            <div class="form-check form-switch" @click="cambiarFilter">
-              <label class="form-check-label" for="swit"
-                >Búsqueda estrícta</label
-              >
-              <input
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-                id="switch"
-              />
+      <div class="container">
+        <div class="card bg-light mt-4">
+          <div class="container mt-3 bg-light" style="font-size: 0.9rem;">
+            <div class="card-body-sm m-3">
+              <!--Switch-->
+              <div style="col-12">
+                <div class="form-check form-switch">
+                  <label class="form-check-label" for="swit"
+                    >Búsqueda estrícta</label
+                  >
+                  <input
+                    @click="cambiarFilter"
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="switch"
+                  />
+                </div>
+              </div>
+
+              <!--Form-->
+              <!--Search libre-->
+              <div v-if="filter == true" class="col-12">
+                <form @keyup="getSearchFiles" class="mt-2">
+                  <div class="container m-2">
+                    <i class="bi-search"></i>
+                    <input
+                      class="border rounded"
+                      style="width: 93%;"
+                      v-model="text"
+                      type="search"
+                      placeholder="Search"
+                    />
+                  </div>
+                </form>
+              </div>
+              <!--Search estricto-->
+              <div v-else class="col-12">
+                <form @submit.prevent="getSearchFiles" class="mt-4">
+                  <div
+                    class="btn-group center"
+                    role="group"
+                    aria-label="Basic mixed styles example"
+                  >
+                    <button
+                      v-if="text"
+                      type="button"
+                      class="btn btn-secondary btn-sm m-1"
+                      @click="limpiarText"
+                    >
+                      Limpiar
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-sm m-1">
+                      Buscar
+                    </button>
+                    <button
+                      v-if="success.length > 0 || err.length > 0"
+                      @click="getDataPages(1)"
+                      type="button"
+                      class="btn btn-warning btn-sm m-1"
+                    >
+                      Salir
+                    </button>
+                  </div>
+                  <i class="bi-search m-2">
+                    <input
+                      class="border rounded"
+                      style="width: 72%;"
+                      v-model="text"
+                      type="search"
+                      placeholder="Search"
+                    />
+                  </i>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-        <!--Form-->
-        <!--Search libre-->
-        <div v-if="filter == true" class="col-12">
-          <form @keyup="getSearchFiles" class="mt-2">
-            <i class="bi-search"></i>
-            <input
-              class="border rounded"
-              style="width: 100%;"
-              v-model="text"
-              type="search"
-              placeholder="Search"
-            />
-          </form>
-        </div>
-        <!--Search estricto-->
-        <div v-else class="col-12">
-          <form @submit.prevent="getSearchFiles" class="mt-2">
-            <div
-              style="float: right;"
-              class="btn-group"
-              role="group"
-              aria-label="Basic mixed styles example"
-            >
-              <button
-                v-if="success.length > 0 || err.length > 0"
-                @click="getDataPages(1)"
-                type="button"
-                class="btn btn-light"
-              >
-                Salir
-              </button>
-              <button
-                v-if="text"
-                type="button"
-                class="btn btn-secondary"
-                @click="limpiarText"
-              >
-                Limpiar
-              </button>
-              <button type="submit" class="btn btn-primary">Buscar</button>
-            </div>
-            <i class="bi-search">
-              <input
-                class="border rounded"
-                style="width: 100%;"
-                v-model="text"
-                type="search"
-                placeholder="Search"
-              />
-            </i>
-          </form>
-        </div>
-
         <!--Table-->
-        <table id="datos" class="table table-hover mt-2">
+        <table id="datos" class="table table-hover mt-2" style="font-size: 0.9rem;">
           <thead>
             <tr style="background: #ecedef;">
               <th>
-                <img src="../../../assets/sort.png" alt="" width="14" />
+                <img src="../../../assets/sort.png" alt="" width="9" />
                 <button
                   @click="sortName"
                   class="btn btn-default btn-sm"
@@ -87,7 +95,7 @@
                 </button>
               </th>
               <th>
-                <img src="../../../assets/sort.png" alt="" width="14" />
+                <img src="../../../assets/sort.png" alt="" width="9" />
                 <button
                   @click="sortUrl"
                   class="btn btn-default btn-sm"
@@ -117,7 +125,7 @@
         </table>
 
         <!--PAGINATION-->
-        <nav aria-label="Page navigation example">
+        <nav aria-label="Page navigation example" style="font-size: 0.9rem;">
           <ul v-if="pagination" class="pagination justify-content-left">
             <li class="page-item disabled">
               <button class="page-link">Páginas:</button>
