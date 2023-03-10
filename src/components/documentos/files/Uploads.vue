@@ -1,7 +1,5 @@
 <template>
-  <div class="container">
-   <!--Llamamos al componente headerWiev de navegación-->
-    <header-view></header-view>
+  <div class="container">  
     <!--UPLOAD- MULTIPLE-->
     <h5 class="mt-4">Agregar archivos</h5>
     <div class="card mt-3">
@@ -15,7 +13,8 @@
               id="files"
               ref="files"
               multiple
-              v-on:change="handleFilesUpload()"
+              accept=".pdf, application/pdf, .image/*, .jpg, .jpeg, .png"
+              v-on:change="handleFilesUploads()"
             />
           </label>
         </form>
@@ -92,7 +91,7 @@
 </template>
 <script>
 import Files from "./Files.vue";
-import headerView from "../../../views/HeaderViewDocs/headerView.vue";
+//import headerView from "../../../views/HeaderViewDocs/headerView.vue";
 
 import axios from "axios";
 export default {
@@ -108,13 +107,13 @@ export default {
       uploadWarning: "",
     };
   },
-  components: {Files, headerView},
+  components: { Files },
   mounted() {},
   methods: {
     async addFiles() {
       this.$refs.files.click();
     },
-    async handleFilesUpload() {
+    async handleFilesUploads() {
       let uploadedFiles = this.$refs.files.files;
 
       for (let i = 0; i < uploadedFiles.length; i++) {
@@ -124,11 +123,9 @@ export default {
           uploadedFiles[i].type.split("/")[1] == "jpg" ||
           uploadedFiles[i].name.split(".")[1] == "jpg" ||
           uploadedFiles[i].type.split("/")[1] == "jpeg" ||
-          uploadedFiles[i].name.split(".")[1] == "jpeg" ||
-          uploadedFiles[i].type.split("/")[1] == "docx" ||
-          uploadedFiles[i].name.split(".")[1] == "docx" ||
-          uploadedFiles[i].type.split("/")[1] == "doc" ||
-          uploadedFiles[i].name.split(".")[1] == "doc"
+          uploadedFiles[i].name.split(".")[1] == "jpeg" ||         
+          uploadedFiles[i].type.split("/")[1] == "png" ||
+          uploadedFiles[i].name.split(".")[1] == "png"
         ) {
           this.files.push(uploadedFiles[i]);
         } else {
@@ -170,7 +167,7 @@ export default {
         if (fileResult.data.Message == "successfull") {
           this.success = fileResult.data.Message;
           this.err = false;
-          location.replace("/upload");
+          location.replace("/uploads");
         }
       } catch (error) {
         console.log({ error: error.response.data.Message });

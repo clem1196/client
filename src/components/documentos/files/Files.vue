@@ -1,212 +1,219 @@
 <template>
   <div>
     <!--LIST FILES-->
-    <div v-if="files.length > 0" class="card mt-2 bg-light">
-      <div class="container">
-        <div class="card bg-light mt-4">
-          <div class="container mt-3 bg-light" style="font-size: 0.9rem;">
-            <div class="card-body-sm m-3">
-              <!--Switch-->
-              <div style="col-12">
-                <div class="form-check form-switch">
-                  <label class="form-check-label" for="swit"
-                    >Búsqueda estrícta</label
-                  >
+
+    <div v-if="files.length > 0" class="container">
+      <div class="card bg-light">
+        <div class="container mt-2 bg-light" style="font-size: 0.8rem;">
+          <div class="card-body-sm">
+            <!--Switch-->
+            <div style="col-12">
+              <div class="form-check form-switch">
+                <label class="form-check-label" for="swit"
+                  >Búsqueda estrícta</label
+                >
+                <input
+                  @click="cambiarFilter"
+                  class="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  id="switch"
+                />
+              </div>
+            </div>
+
+            <!--Form-->
+            <!--Search libre-->
+            <div v-if="filter == true" class="col-12">
+              <form @keyup="getSearchFiles" class="mt-2">
+                <div class="container m-2">
+                  <i class="bi-search"></i>
                   <input
-                    @click="cambiarFilter"
-                    class="form-check-input"
-                    type="checkbox"
-                    role="switch"
-                    id="switch"
+                    class="border rounded"
+                    style="width: 93%;"
+                    v-model="text"
+                    type="search"
+                    placeholder="Search"
                   />
                 </div>
-              </div>
-
-              <!--Form-->
-              <!--Search libre-->
-              <div v-if="filter == true" class="col-12">
-                <form @keyup="getSearchFiles" class="mt-2">
-                  <div class="container m-2">
-                    <i class="bi-search"></i>
-                    <input
-                      class="border rounded"
-                      style="width: 93%;"
-                      v-model="text"
-                      type="search"
-                      placeholder="Search"
-                    />
-                  </div>
-                </form>
-              </div>
-              <!--Search estricto-->
-              <div v-else class="col-12">
-                <form @submit.prevent="getSearchFiles" class="mt-4">
-                  <div
-                    class="btn-group center"
-                    role="group"
-                    aria-label="Basic mixed styles example"
+              </form>
+            </div>
+            <!--Search estricto-->
+            <div v-else class="col-12">
+              <form @submit.prevent="getSearchFiles" class="mt-2">
+                <div
+                  class="btn-group center"
+                  role="group"
+                  aria-label="Basic mixed styles example"
+                >
+                  <button
+                    v-if="text"
+                    type="button"
+                    class="btn btn-secondary btn-sm m-2"
+                    @click="limpiarText"
                   >
-                    <button
-                      v-if="text"
-                      type="button"
-                      class="btn btn-secondary btn-sm m-1"
-                      @click="limpiarText"
-                    >
-                      Limpiar
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-sm m-1">
-                      Buscar
-                    </button>
-                    <button
-                      v-if="success.length > 0 || err.length > 0"
-                      @click="getDataPages(1)"
-                      type="button"
-                      class="btn btn-warning btn-sm m-1"
-                    >
-                      Salir
-                    </button>
-                  </div>
-                  <i class="bi-search m-2">
-                    <input
-                      class="border rounded"
-                      style="width: 72%;"
-                      v-model="text"
-                      type="search"
-                      placeholder="Search"
-                    />
-                  </i>
-                </form>
-              </div>
+                    Limpiar
+                  </button>
+                  <button type="submit" class="btn btn-primary btn-sm m-1">
+                    Buscar
+                  </button>
+                  <button
+                    v-if="success.length > 0 || err.length > 0"
+                    @click="getDataPages(1)"
+                    type="button"
+                    class="btn btn-warning btn-sm m-1"
+                  >
+                    Salir
+                  </button>
+                </div>
+                <i class="bi-search m-2">
+                  <input
+                    class="border rounded"
+                    style="width: 72%;"
+                    v-model="text"
+                    type="search"
+                    placeholder="Search"
+                  />
+                </i>
+              </form>
             </div>
           </div>
         </div>
-        <!--Table-->
-        <table id="datos" class="table table-hover mt-2" style="font-size: 0.9rem;">
-          <thead>
-            <tr style="background: #ecedef;">
-              <th>
+      </div>
+      <!--Table-->
+      <table
+        id="datos"
+        class="table table-hover mt-1"
+        style="font-size: 0.8rem;"
+      >
+        <thead style="border: 0; font-size: 1rem;">
+          <tr style="background: #ecedef;">
+            <th>
+              <img src="../../../assets/sort.png" alt="" width="9" />
+              <button @click="sortName" class="btn btn-default btn-sm">
+                Nombre
+              </button>
+            </th>
+            <!--<th>
                 <img src="../../../assets/sort.png" alt="" width="9" />
-                <button
-                  @click="sortName"
-                  class="btn btn-default btn-sm"
-                  style="border: 0; font-size: 1.2rem;"
-                >
-                  Nombre
-                </button>
-              </th>
-              <th>
-                <img src="../../../assets/sort.png" alt="" width="9" />
-                <button
-                  @click="sortUrl"
-                  class="btn btn-default btn-sm"
-                  style="border: 0; font-size: 1.2rem;"
-                >
+                <button @click="sortUrl" class="btn btn-default btn-sm">
                   Link
                 </button>
-              </th>
-              <th>Acciones</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="f in searchFiles" :key="f.name">
-              <td>{{ f.name }}</td>
-              <td>{{ f.url }}</td>
-              <td>
-                <a :href="'/files/delete/' + f.name"
-                  ><i
-                    class="bi-trash-fill"
-                    style="font-size: 1.5rem; color: #f7423a;"
-                  ></i
-                ></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </th>-->
+            <th>
+              <img src="../../../assets/sort.png" alt="" width="9" />
+              <button @click="sortCreated" class="btn btn-default btn-sm">
+                Creado
+              </button>
+            </th>
+            <th>
+              <button class="btn btn-default btn-sm">
+                Accion
+              </button>
+            </th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="search in searchFiles" :key="search.name">
+            <td>{{ search.name }}</td>
+            <!-- <td>{{ search.url }}</td>-->
+            <td>{{ search.created }}</td>
 
-        <!--PAGINATION-->
-        <nav aria-label="Page navigation example" style="font-size: 0.9rem;">
-          <ul v-if="pagination" class="pagination justify-content-left">
-            <li class="page-item disabled">
-              <button class="page-link">Páginas:</button>
-            </li>
-            <!--Primera página-->
-            <li v-if="currentPage >= 2" @click="getFirstPage" class="page-item">
-              <button type="button" class="page-link">Primera</button>
-            </li>
-            <li v-else @click="getFirstPage" class="page-item disabled">
-              <button type="button" class="page-link">Primera</button>
-            </li>
-            <!--Atras-->
-            <li v-if="currentPage >= 2" @click="getPrevious" class="page-item">
-              <button type="button" class="page-link">
-                <i class="bi-chevron-left"></i>
-              </button>
-            </li>
-            <li v-else @click="getPrevious" class="page-item disabled">
-              <button type="button" class="page-link">
-                <i class="bi-chevron-left"></i>
-              </button>
-            </li>
-            <!--Pages-->
-            <li
-              v-for="pag in totalPages()"
-              :key="pag"
-              @click="getDataPages(pag)"
-              class="page-item"
-              :class="isActive(pag)"
-            >
-              <button
-                v-if="currentPage - 1 < pag && pag < currentPage + 3"
-                type="button"
-                class="page-link"
-              >
-                {{ pag }}
-              </button>
-            </li>
-            <!--Siguiente-->
-            <li
-              v-if="currentPage < totalPages()"
-              @click="getNext"
-              class="page-item"
-            >
-              <button
-                v-if="currentPage < totalPages()"
-                type="button"
-                class="page-link"
-              >
-                <i class="bi-chevron-right"></i>
-              </button>
-            </li>
-            <li v-else @click="getNext" class="page-item disabled">
-              <button type="button" class="page-link">
-                <i class="bi-chevron-right"></i>
-              </button>
-            </li>
-            <!--Última página-->
-            <li
-              v-if="currentPage < totalPages()"
-              @click="getLastPage"
-              class="page-item"
-            >
-              <button type="button" class="page-link">Última</button>
-            </li>
-            <li v-else @click="getLastPage" class="page-item disabled">
-              <button type="button" class="page-link">Última</button>
-            </li>
-            <!--Total-->
-            <li class="page-item disabled">
-              <button class="page-link">Total: {{ this.files.length }}</button>
-            </li>
-          </ul>
-        </nav>
+            <td>
+              <a :href="'/files/delete/' + search.name"
+                ><i
+                  class="bi-trash-fill"
+                  style="font-size: 1rem; color: #f7423a;"
+                ></i
+              ></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-        <!--Messages-->
-        <small v-if="success.length > 0" class="text-success"
-          >{{ success }}
-        </small>
-        <small v-if="err.length > 0" class="text-danger">{{ err }}</small>
-      </div>
+      <!--PAGINATION-->
+      <nav aria-label="Page navigation example" style="font-size: 0.8rem;">
+        <ul v-if="pagination" class="pagination justify-content-left">
+          <li class="page-item disabled">
+            <button class="page-link">Páginas:</button>
+          </li>
+          <!--Primera página-->
+          <li v-if="currentPage >= 2" @click="getFirstPage" class="page-item">
+            <button type="button" class="page-link">Primera</button>
+          </li>
+          <li v-else @click="getFirstPage" class="page-item disabled">
+            <button type="button" class="page-link">Primera</button>
+          </li>
+          <!--Atras-->
+          <li v-if="currentPage >= 2" @click="getPrevious" class="page-item">
+            <button type="button" class="page-link">
+              <i class="bi-chevron-left"></i>
+            </button>
+          </li>
+          <li v-else @click="getPrevious" class="page-item disabled">
+            <button type="button" class="page-link">
+              <i class="bi-chevron-left"></i>
+            </button>
+          </li>
+          <!--Pages-->
+          <li
+            v-for="pag in totalPages()"
+            :key="pag"
+            @click="getDataPages(pag)"
+            class="page-item"
+            :class="isActive(pag)"
+          >
+            <button
+              v-if="currentPage - 1 < pag && pag < currentPage + 3"
+              type="button"
+              class="page-link"
+            >
+              {{ pag }}
+            </button>
+          </li>
+          <!--Siguiente-->
+          <li
+            v-if="currentPage < totalPages()"
+            @click="getNext"
+            class="page-item"
+          >
+            <button
+              v-if="currentPage < totalPages()"
+              type="button"
+              class="page-link"
+            >
+              <i class="bi-chevron-right"></i>
+            </button>
+          </li>
+          <li v-else @click="getNext" class="page-item disabled">
+            <button type="button" class="page-link">
+              <i class="bi-chevron-right"></i>
+            </button>
+          </li>
+          <!--Última página-->
+          <li
+            v-if="currentPage < totalPages()"
+            @click="getLastPage"
+            class="page-item"
+          >
+            <button type="button" class="page-link">Última</button>
+          </li>
+          <li v-else @click="getLastPage" class="page-item disabled">
+            <button type="button" class="page-link">Última</button>
+          </li>
+          <!--Total-->
+          <li class="page-item disabled">
+            <button class="page-link">Total: {{ this.files.length }}</button>
+          </li>
+        </ul>
+      </nav>
+
+      <!--Messages-->
+      <small v-if="success.length > 0" class="text-success"
+        >{{ success }}
+      </small>
+      <small v-if="err.length > 0" class="text-danger">{{ err }}</small>
     </div>
     <div v-else class="mt-4">
       <p class="alert alert-warning text-center">
@@ -216,9 +223,7 @@
   </div>
 </template>
 <script>
-//import VueyeTable from "vueye-table";
 import axios from "axios";
-//import headerView from "../../../views/HeaderViewDocs/headerView.vue";
 export default {
   name: "files-list",
   data() {
@@ -256,15 +261,14 @@ export default {
           },
         });
         if (result.data.length > 0) this.files = result.data;
-        //console.log(this.files);
+        console.log(result.data);
       } catch (error) {
-        this.err = "No hay archivos o no tiene permiso";
-        console.log("No hay archivos, o no tiene permiso");
+        this.err = error.response;
+        console.log(error.response.data.Message);
       }
     },
 
-    //DOCUMENTOS
-
+    //Sort
     sortName() {
       const asc = (a, b) => {
         return a.name.localeCompare(b.name);
@@ -274,11 +278,9 @@ export default {
       };
 
       if (this.algunValor) {
-        console.log(this.getDataPages(1));
         this.algunValor = false;
         return this.searchFiles.sort(asc);
       } else {
-        console.log("No estoy");
         this.algunValor = true;
         return this.searchFiles.sort(desc);
       }
@@ -299,6 +301,21 @@ export default {
         return this.searchFiles.sort(desc);
       }
     },
+    sortCreated() {
+      const asc = (a, b) => {
+        return new Date(a.created).valueOf() - new Date(b.created).valueOf();
+      };
+      const desc = (a, b) => {
+        return new Date(b.created).valueOf() - new Date(a.created).valueOf();
+      };
+      if (this.algunValor) {
+        this.algunValor = false;
+        return this.searchFiles.sort(asc);
+      } else {
+        this.algunValor = true;
+        return this.searchFiles.sort(desc);
+      }
+    },
 
     //SEARCH
     getSearchFiles() {
@@ -311,7 +328,9 @@ export default {
               (search.name !== null &&
                 search.name.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
               (search.url !== null &&
-                search.url.toLowerCase().indexOf(query.toLowerCase()) > -1)
+                search.url.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
+              (search.created !== null &&
+                search.created.toLowerCase().indexOf(query.toLowerCase()) > -1)
           );
         };
         if (filterItems(this.text).length > 0) {

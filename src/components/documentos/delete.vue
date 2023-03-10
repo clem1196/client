@@ -82,32 +82,21 @@ export default {
       del.click();
     },
      async getUrl(){
-       if (this.$route.name=="docsDelete") {
+      console.log(this.$route.name)
+       if (this.$route.name=="documentosDelete") {
           this.myUrl="http://localhost:4000/api/documentos/"+ this.$route.params.id;
           this.myRoute="/documentos";
         }        
-        if (this.$route.name=="personsDelete") {
-          this.myUrl= "http://localhost:4000/api/personas/"+ this.$route.params.id;
-          this.myRoute="/personas";
-        }
-        if (this.$route.name=="typesDelete") {
-          this.myUrl= "http://localhost:4000/api/types/"+ this.$route.params.id;
-          this.myRoute="/types";
-        }
-        if (this.$route.name=="docs_personsDelete") {
-          this.myUrl= "http://localhost:4000/api/doc-person/"+ this.$route.params.id;
-          this.myRoute="/doc_personas"
-        }
-        if (this.$route.name=="Delete") {
+       
+        if (this.$route.name=="filesDelete") {
           this.myUrl= "http://localhost:4000/api/files/"+ this.$route.params.name;
-          this.myRoute="/upload"
+          this.myRoute="/files"
         }
       console.log(this.$route.name, this.myRoute, this.myUrl)
     },
     async deleteDocs() {
       try {
-        const token = localStorage.getItem("token");       
-
+        const token = localStorage.getItem("token");
         const result = await axios.delete(
           this.myUrl, 
           {

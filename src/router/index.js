@@ -158,11 +158,11 @@ const routes = [
   },
   //archivo/prueba
   {
-    path: "/upload",
-    name: "Upload",
+    path: "/uploads",
+    name: "Uploads",
     component: () =>
       import(
-        /* webpackChunkName: "Files" */ "../components/documentos/files/Upload.vue"
+        /* webpackChunkName: "Uploads" */ "../components/documentos/files/Uploads.vue"
       ),
   },
 
@@ -185,151 +185,48 @@ const routes = [
   },
   {
     path: "/files/delete/:name",
-    name: "Delete",
+    name: "filesDelete",
     component: () =>
       import(
-        /* webpackChunkName: "Delete" */ "../components/documentos/delete.vue"
+        /* webpackChunkName: "filesDelete" */ "../components/documentos/delete.vue"
       ),
   },
 
-  //types
-  {
-    path: "/types",
-    name: "typesList",
-    component: () =>
-      import(
-        /* webpackChunkName: "typesList" */ "../components/documentos/types.vue"
-      ),
-  },
-  {
-    path: "/types/add",
-    name: "typesAdd",
-    component: () =>
-      import(
-        /* webpackChunkName: "typesAdd" */ "../components/documentos/types.vue"
-      ),
-  },
-  {
-    path: "/types/edit/:id",
-    name: "typesEdit",
-    component: () =>
-      import(
-        /* webpackChunkName: "typesEdit" */ "../components/documentos/types.vue"
-      ),
-  },
-  {
-    path: "/types/delete/:id",
-    name: "typesDelete",
-    component: () =>
-      import(
-        /* webpackChunkName: "typesDelete" */ "../components/documentos/delete.vue"
-      ),
-  },
-  //documentos
+  
+  //personas
   {
     path: "/documentos",
-    name: "docsList",
+    name: "documentosList",
     component: () =>
       import(
-        /* webpackChunkName: "docsList" */ "../components/documentos/documents.vue"
+        /* webpackChunkName: "documentosList" */ "../views/Docs/DocsView.vue"
       ),
   },
   {
     path: "/documentos/add",
-    name: "docsListAdd",
+    name: "documentosAdd",
     component: () =>
       import(
-        /* webpackChunkName: "docAdd" */ "../components/documentos/documents.vue"
+        /* webpackChunkName: "documentosAdd" */ "../components/documentos/documents.vue"
       ),
   },
   {
     path: "/documentos/edit/:id",
-    name: "docsEdit",
+    name: "documentosEdit",
     component: () =>
       import(
-        /* webpackChunkName: "docsEdit" */ "../components/documentos/documents.vue"
+        /* webpackChunkName: "documentosEdit" */ "../components/documentos/documents.vue"
       ),
   },
   {
     path: "/documentos/delete/:id",
-    name: "docsDelete",
+    name: "documentosDelete",
     component: () =>
       import(
-        /* webpackChunkName: "docsDelete" */ "../components/documentos/delete.vue"
+        /* webpackChunkName: "documentosDelete" */ "../components/documentos/delete.vue"
       ),
   },
-
-  //personas
-  {
-    path: "/personas",
-    name: "personsList",
-    component: () =>
-      import(
-        /* webpackChunkName: "personsList" */ "../components/documentos/persons.vue"
-      ),
-  },
-  {
-    path: "/personas/add",
-    name: "personsAdd",
-    component: () =>
-      import(
-        /* webpackChunkName: "personsAdd" */ "../components/documentos/persons.vue"
-      ),
-  },
-  {
-    path: "/personas/edit/:id",
-    name: "personsEdit",
-    component: () =>
-      import(
-        /* webpackChunkName: "personsEdit" */ "../components/documentos/persons.vue"
-      ),
-  },
-  {
-    path: "/personas/delete/:id",
-    name: "personsDelete",
-    component: () =>
-      import(
-        /* webpackChunkName: "personsDelete" */ "../components/documentos/delete.vue"
-      ),
-  },
-
-//docs_persons
-{
-  path: "/doc_personas",
-  name: "docs_personsList",
-  component: () =>
-    import(
-      /* webpackChunkName: "docs_personsList" */ "../components/documentos/documents_persons.vue"
-    ),
-},
-{
-  path: "/doc_personas/add",
-  name: "docs_personsAdd",
-  component: () =>
-    import(
-      /* webpackChunkName: "docs_personsAdd" */ "../components/documentos/documents_persons.vue"
-    ),
-},
-{
-  path: "/doc_personas/edit/:id",
-  name: "docs_personsEdit",
-  component: () =>
-    import(
-      /* webpackChunkName: "docs_personsEdit" */ "../components/documentos/documents_persons.vue"
-    ),
-},
-{
-  path: "/doc_personas/delete/:id",
-  name: "docs_personsDelete",
-  component: () =>
-    import(
-      /* webpackChunkName: "docs_personsDelete" */"../components/documentos/delete.vue"
-    ),
-},
-
-
-  //erros
-
+  //errors
   {
     path: "/error",
     name: "errorAcces",

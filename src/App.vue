@@ -81,7 +81,7 @@
                 class="nav-link active"
                 aria-current="page"
                 style="color: white"
-                href="/doc_personas"
+                href="/documentos"
                 >Mesa de partes</a
               >
             </li>
