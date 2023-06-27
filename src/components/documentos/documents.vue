@@ -1,319 +1,261 @@
 <template>
-  <div class="container-fluid mt-1">   
-    <!--DOCUMENTS UPLOAD, ADD, EDIT-->
+  <div class="container-fluid">
+    <!--DOCUMENTS ADD, EDIT-->
     <div class="row">
-      <!--Upload singular-->
-      <div class="col-md-12">
-        <div class="card mt-2">
-          <div class="card-header m-2" style="font-size: 0.9rem;">
-            <form enctype="multipart/form-data">
-              <label>Files: </label>
-              <input
-                class="m-2"
-                type="file"
-                name="uploaded_files"
-                id="file"
-                ref="file"
-                accept=".pdf, application/pdf, .image/*, .jpg, .jpeg, .png"
-                @change="handleFilesUpload"
-              />
-              <small v-if="files.length > 0" class="m-2">
-                <button class="btn btn-secondary" @click="submitFiles()">
-                  Aceptar
-                </button>
-                <a href="/documentos" class="btn btn-light btn-sm m-1"
-                  >Cancelar</a
-                >
-              </small>
-              <small
-                v-if="successUpload.length > 0"
-                class="alert alert-danger alert-sm m-2"
-                role="alert"
-                >{{ successUpload }}!
-              </small>
-              <small
-                v-if="errUpload.length > 0"
-                class="alert alert-danger alert-sm m-2"
-                role="alert"
-                >{{ errUpload }}!
-              </small>
-              <small v-if="errUpload.length > 0">
-                <a href="/documentos" class="btn btn-secondary btn-sm m-2"
-                  >Cancelar</a
-                >
-              </small>
-            </form>
-          </div>
-        </div>
-      </div>
       <!--Add, Edit-->
-      <div class="col">
+      <div class="col-12">
         <!--form-->
-        <div class="card" style="background: #b39ddb; color: #3e2723;">
-          <form
-            @submit.prevent="changeDocuments"
-            class="row g-1 m-2"
-            style="font-size: 0.9rem;"
-          >
+        <div class="card-form">
+          <form @submit.prevent="changeDocuments" class="form-document">
             <!--Campo doc_number-->
-            <div class="col-md-5">
-              <label for="inputdoc_number" class="form-label-sm">Doc:</label>
-              <input
-                v-model="datos.doc_number"
-                id="inputdoc_number"
-                type="text"
-                class="form-control form-control-sm"
-                maxlength="100"
-                minlength="6"
-                required
-              />
-              <span>
+            <div class="row">
+              <div class="label-form-size">
+                <label for="inputdoc_number" class="form-label-sm">
+                  Doc:
+                </label>
+              </div>
+              <div class="input-form-size">
+                <input
+                  v-model="datos.doc_number"
+                  name="inputNameDoc_number"
+                  id="inputdoc_number"
+                  type="text"
+                  class="form-control form-control-sm"
+                  maxlength="100"
+                  minlength="6"
+                  required
+                />
+              </div>
+              <div class="validation-form-size">
                 <small
                   v-if="
                     datos.doc_number === '' ||
                     datos.doc_number == undefined ||
                     datos.doc_number.length < 6
                   "
-                  class="text-danger"
-                  style="font-size: 0.7rem;"
-                  >Requerido</small
+                  class="check-field-false"
+                  >Mínimo 06 caracteres</small
                 >
-                <small
-                  v-else
-                  class="bi-check-lg"
-                  style="font-size: 1.2rem; color: #006064;"
-                ></small>
-              </span>
+                <small v-else class="bi-check-lg check-field-true"></small>
+              </div>
             </div>
             <!--Campo doc_type-->
-            <div class="col-md-2">
-              <label for="inputdoc_type" class="form-label-sm">Tipo:</label>
-              <select
-                v-model="datos.doc_type"
-                class="form-select form-select-sm"
-                id="inputdoc_type"
-              >
-                <option selected :value="datos.doc_type">{{
-                  datos.doc_type
-                }}</option>
-                <option value="AJ_Poder_Judicial">AJ_Poder_Judicial</option>
-                <option value="AJ_Fiscalía">AJ_Fiscalía</option>
-                <option value="AJ_PNP">AJ_PNP</option>
-                <option value="AJ_Otras_Autoridades"
-                  >AJ_Otras_Autoridades</option
+            <div class="row">
+              <div class="label-form-size">
+                <label for="inputdoc_type" class="form-label-sm">Tipo: </label>
+              </div>
+              <div class="input-form-size">
+                <select
+                  v-model="datos.doc_type"
+                  class="form-select form-select-sm"
+                  name="inputNameDoc_type"
+                  id="inputdoc_type"
                 >
-                <option value="AJ_Beneficio">AJ_Beneficio</option>
-                <option value="AJ_Pena_Cumplida">AJ_Pena_Cumplida</option>
-                <option value="AJ_otros">AJ_otros</option>
-                <option value="Anulacion">Anulacion</option>
-                <option value="Sentencia">Sentencia</option>
-                <option value="Detención">Detención</option>
-                <option value="Revocatoria">Revocatoria</option>
-                <option value="Traslado">Traslado</option>
-                <option value="Resolución">Resolución</option>
-                <option value="Otros">Otros</option>
-              </select>
-              <span>
-                <small
-                  v-if="datos.doc_type === '' || datos.doc_type == undefined"
-                  style="font-size: 0.7rem; color: #ffff66;"
-                  >Opcional</small
-                >
-                <small
-                  v-else
-                  class="bi-check-lg text-success"
-                  style="font-size: 1.2rem;"
-                ></small>
-              </span>
+                  <option selected :value="datos.doc_type">
+                    {{ datos.doc_type }}
+                  </option>
+                  <option value=""></option>
+                  <option value="AJ_Poder_Judicial">AJ_Poder_Judicial</option>
+                  <option value="AJ_Fiscalía">AJ_Fiscalía</option>
+                  <option value="AJ_PNP">AJ_PNP</option>
+                  <option value="AJ_Otras_Autoridades">
+                    AJ_Otras_Autoridades
+                  </option>
+                  <option value="AJ_Beneficio">AJ_Beneficio</option>
+                  <option value="AJ_Pena_Cumplida">AJ_Pena_Cumplida</option>
+                  <option value="AJ_otros">AJ_otros</option>
+                  <option value="Anulacion">Anulacion</option>
+                  <option value="Sentencia">Sentencia</option>
+                  <option value="Detención">Detención</option>
+                  <option value="Revocatoria">Revocatoria</option>
+                  <option value="Traslado">Traslado</option>
+                  <option value="Resolución">Resolución</option>
+                  <option value="Otros">Otros</option>
+                </select>
+              </div>
+              <div class="validation-form-size">
+                <span>
+                  <small
+                    v-if="datos.doc_type === '' || datos.doc_type == undefined"
+                    class="check-field-false"
+                    >Opcional</small
+                  >
+                  <small v-else class="bi-check-lg check-field-true"></small>
+                </span>
+              </div>
             </div>
             <!--Campo file-->
-            <div class="col-md-5">
-              <label for="inputfile" class="form-label-sm">File:</label>
-             <input
-                v-model="datos.file"
-                id="inputdoc_number"
-                type="text"
-                class="form-control form-control-sm"
-                maxlength="2083"                
-                required
-              />
-              <span>
-                <small
-                  v-if="datos.file == '' || datos.file == undefined"
-                  style="font-size: 0.7rem; color: #ffff66;"
-                  >Opcional</small
-                >
-                <small
-                  v-else
-                  class="bi-check-lg text-success"
-                  style="font-size: 1.2rem;"
-                ></small>
-              </span>
+            <div class="row">
+              <div class="label-form-size">
+                <label for="inputfile" class="form-label-sm">File:</label>
+              </div>
+              <div class="input-form-size">
+                <input
+                  v-model="datos.file"
+                  name="inputNameFile"
+                  id="inputfile"
+                  type="text"
+                  class="form-control form-control-sm"
+                  maxlength="2083"
+                  required
+                />
+              </div>
+              <div class="validation-form-size">
+                <span>
+                  <small
+                    v-if="datos.file == '' || datos.file == undefined"
+                    class="check-field-false"
+                    >Opcional</small
+                  >
+                  <small v-else class="bi-check-lg check-field-true"></small>
+                </span>
+              </div>
             </div>
-            <!-- <div class="col-md-5">
-              <label for="inputfile" class="form-label-sm">File:</label>
-              <select
-                v-model="datos.file"
-                class="form-select form-select-sm"
-                id="inputfile"
-              >
-                <option selected :value="datos.file">{{ datos.file }}</option>
-              </select>
-              <span>
-                <small
-                  v-if="datos.file == '' || datos.file == undefined"
-                  style="font-size: 0.7rem; color: #ffff66;"
-                  >Opcional</small
-                >
-                <small
-                  v-else
-                  class="bi-check-lg text-success"
-                  style="font-size: 1.2rem;"
-                ></small>
-              </span>
-            </div>-->
             <!--Campo firstSurname-->
-            <div class="col-md-3">
-              <label for="inputfirstSurname" class="form-label-sm"
-                >Ap. paterno:</label
-              >
-              <input
-                v-model="datos.firstSurname"
-                id="inputfirstSurname"
-                type="text"
-                class="form-control form-control-sm"
-                maxlength="45"
-              />
-              <span>
-                <small
-                  v-if="
-                    datos.firstSurname === '' || datos.firstSurname == undefined
-                  "
-                  style="font-size: 0.7rem; color: #ffff66;"
-                  >Opcional</small
+            <div class="row">
+              <div class="label-form-size">
+                <label for="inputfirstSurname" class="form-label-sm"
+                  >Ap. paterno:</label
                 >
-                <small
-                  v-else
-                  class="bi-check-lg text-success"
-                  style="font-size: 1.2rem;"
-                ></small>
-              </span>
+              </div>
+              <div class="input-form-size">
+                <input
+                  v-model="datos.firstSurname"
+                  id="inputfirstSurname"
+                  name="inputNameFirstSurname"
+                  type="text"
+                  class="form-control form-control-sm"
+                  maxlength="45"
+                />
+              </div>
+              <div class="validation-form-size">
+                <span>
+                  <small
+                    v-if="
+                      datos.firstSurname === '' ||
+                      datos.firstSurname == undefined
+                    "
+                    class="check-field-false"
+                    >Opcional</small
+                  >
+                  <small v-else class="bi-check-lg check-field-true"></small>
+                </span>
+              </div>
             </div>
             <!--Campo lastSurname-->
-            <div class="col-md-3">
-              <label for="inputlastSurname" class="form-label-sm"
-                >Ap. Materno:</label
-              >
-              <input
-                v-model="datos.lastSurname"
-                id="inputlastSurname"
-                type="text"
-                class="form-control form-control-sm"
-                maxlength="45"
-              />
-              <span>
-                <small
-                  v-if="
-                    datos.lastSurname === '' || datos.lastSurname == undefined
-                  "
-                  style="font-size: 0.7rem; color: #ffff66;"
-                  >Opcional</small
+            <div class="row">
+              <div class="label-form-size">
+                <label for="inputlastSurname" class="form-label-sm"
+                  >Ap. Materno:</label
                 >
-                <small
-                  v-else
-                  class="bi-check-lg text-success"
-                  style="font-size: 1.2rem;"
-                ></small>
-              </span>
+              </div>
+              <div class="input-form-size">
+                <input
+                  v-model="datos.lastSurname"
+                  name="inputNameLastSurName"
+                  id="inputlastSurname"
+                  type="text"
+                  class="form-control form-control-sm"
+                  maxlength="45"
+                />
+              </div>
+              <div class="validation-form-size">
+                <span>
+                  <small
+                    v-if="
+                      datos.lastSurname === '' || datos.lastSurname == undefined
+                    "
+                    class="check-field-false"
+                    >Opcional</small
+                  >
+                  <small v-else class="bi-check-lg check-field-true"></small>
+                </span>
+              </div>
             </div>
             <!--Campo name-->
-            <div class="col-md-5">
-              <label for="inputname" class="form-label-sm">Nombres:</label>
-              <input
-                v-model="datos.name"
-                id="inputname"
-                type="text"
-                class="form-control form-control-sm"
-                required
-                minlength="2"
-                maxlength="45"
-              />
-              <span>
-                <small
-                  v-if="datos.name.length < 2"
-                  class="text-danger"
-                  style="font-size: 0.7rem;"
-                  >Requerido</small
-                >
-                <small
-                  v-if="datos.name.length > 44"
-                  class="text-danger"
-                  style="font-size: 0.7rem;"
-                  >No se acepta mas caracteres</small
-                >
-                <small
-                  v-if="1 < datos.name.length && datos.name.length < 45"
-                  class="bi-check-lg text-success"
-                  style="font-size: 1.2rem;"
-                ></small>
-              </span>
+            <div class="row">
+              <div class="label-form-size">
+                <label for="inputname" class="form-label-sm">Nombres:</label>
+              </div>
+              <div class="input-form-size">
+                <input
+                  v-model="datos.name"
+                  id="inputname"
+                  name="inputNameName"
+                  type="text"
+                  class="form-control form-control-sm"
+                  required
+                  minlength="2"
+                  maxlength="45"
+                />
+              </div>
+              <div class="validation-form-size">
+                <span>
+                  <small v-if="datos.name.length < 2" class="check-field-false"
+                    >Requerido</small
+                  >
+                  <small v-if="datos.name.length > 44" class="check-field-false"
+                    >No se acepta mas caracteres</small
+                  >
+                  <small
+                    v-if="1 < datos.name.length && datos.name.length < 45"
+                    class="bi-check-lg check-field-true"
+                  ></small>
+                </span>
+              </div>
             </div>
             <!--Campo State-->
-            <div v-if="id != undefined" class="col-md-2">
-              <label for="inputstate" class="form-label-sm">Estado</label>
-              <select
-                v-model="datos.state"
-                class="form-select form-select-sm"
-                id="inputstate"
-              >
-                <option value=""></option>
-                <option value="Pendiente">Activo</option>
-                <option value="Atendido">Pasivo</option>
-              </select>
-              <span>
-                <small
-                  v-if="datos.state == '' || datos.state == undefined"
-                  style="font-size: 0.7rem; color: #ffff66;"
-                  >Opcional</small
+            <div v-if="id != undefined" class="row">
+              <div class="label-form-size">
+                <label for="inputstate" class="form-label-sm">Estado</label>
+              </div>
+              <div class="input-form-size">
+                <select
+                  v-model="datos.state"
+                  class="form-select form-select-sm"
+                  name="inputNameState"
+                  id="inputstate"
                 >
-                <small
-                  v-else
-                  class="bi-check-lg text-success"
-                  style="font-size: 1.2rem;"
-                ></small>
-              </span>
+                  <option value=""></option>
+                  <option value="Activo">Activo</option>
+                  <option value="Pasivo">Pasivo</option>
+                </select>
+              </div>
+              <div class="validation-form-size">
+                <span>
+                  <small
+                    v-if="datos.state == 'Activo' || datos.state == 'Pasivo'"
+                    class="bi-check-lg check-field-true"
+                  ></small>
+                  <small v-else class="check-field-false">Opcional</small>
+                </span>
+              </div>
             </div>
             <!--botones guardar y cancelar-->
-            <div
-              v-if="id != undefined"
-              class="card-footer-sm mt-2 m-2"
-              style="background: #e1bee7;"
-            >
-              <button type="submit" class="btn btn-light btn-sm m-3">
-                Actualizar
-              </button>
-              <a class="btn btn-sm" href="/documentos" style="color: white;"
-                >Cancelar</a
-              >
+            <div v-if="id != undefined" class="m-4">
+              <div class="row">
+                <div class="col-auto">
+                  <button type="submit" class="btn-form-doc">Actualizar</button>
+                </div>
+                <div class="col-auto">
+                  <a class="btn-form-doc cancel" href="/documentos">Cancelar</a>
+                </div>
+              </div>
             </div>
-            <div
-              v-else
-              class="card-footer-sm mt-2 m-2"
-              style="background: #e1bee7;"
-            >
-              <button type="submit" class="btn btn-light btn-sm m-3">
-                Guardar
-              </button>
-              <button
-                class="btn btn-sm"
-                @click="limpiarCampos"
-                style="color: white;"
-              >
-                Limpiar
-              </button>
-              <a class="btn btn-sm" href="/documentos" style="color: white;"
-                >Cancelar</a
-              >
+            <div v-else class="m-4">
+              <div class="row">
+                <div class="col-auto">
+                  <button type="submit" class="btn-form-doc">Guardar</button>
+                </div>
+                <div class="col-auto">
+                  <button class="btn-form-doc clean" @click="limpiarCampos">
+                    Limpiar
+                  </button>
+                </div>
+                <div class="col-auto">
+                  <a class="btn-form-doc cancel" href="/documentos">Cancelar</a>
+                </div>
+              </div>
             </div>
           </form>
           <!--Message success-->
@@ -332,287 +274,295 @@
             {{ warningChange }}
           </div>
         </div>
-      </div>
-      <div class="col">
-      <files-list></files-list>
-      </div>
-    </div>
-
-    <!--DOCUMENTS LIST-->
-
-    <div v-if="documents.length>0">
-      <div class="card mt-2" style="background: #ecedef;">
-        <div class="row g-0 m-2">
-          <!--Switch-->
-          <div class="col-md-2">
-            <div class="form-check form-switch" style="font-size: 0.9rem;">
-              <label
-                class="form-check-label"
-                for="swit"
-                style="font-size: 0.8rem;"
-                >Clásico</label
-              >
-              <input
-                @click="cambiarFilter"
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-                id="switch"
-              />
-            </div>
-          </div>
-
-          <!--Form-->
-          <!--Search libre-->
-          <div v-if="filter == true" class="col-md-10">
-            <form @keyup="getSearchDocs">
-              <div class="container" style="font-size: 0.9rem;">
-                <i class="bi-search"></i>
-                <input
-                  class="form-control form-control-sm"
-                  style="width: 98%; font-size: 0.8rem;"
-                  v-model="text"
-                  type="search"
-                  placeholder="Search"
-                />
-              </div>
-            </form>
-          </div>
-          <!--Search clásico-->
-          <div v-else class="col-md-10">
-            <form @submit.prevent="getSearchDocs">
-              <div class="row" style="font-size: 0.9rem;">
-                <div class="col-md-1">
-                  <button type="submit" class="btn btn-primary btn-sm">
-                    Buscar
-                  </button>
-                </div>
-                <div class="col-md-1">
-                  <i class="bi-search"></i>                  
-                </div>
-                <div class="col-md-8">                 
+        <!--DOCUMENTS LIST-->
+        <div v-if="documents.length > 0" class="mt-3">
+          <div class="card-search">
+            <div class="row row-search">
+              <!--Switch-->
+              <div class="col-auto">
+                <div class="form-check form-switch">
+                  <label class="form-check-label" for="swit">Clásica</label>
                   <input
-                    class="form-control form-control-sm"
-                    style="font-size: 0.8rem;"
-                    v-model="text"
-                    type="search"
-                    placeholder="Search"
+                    @click="cambiarFilter"
+                    name="inputNameSwitch"
+                    class="form-check-input"
+                    type="checkbox"
+                    role="roleSwitch"
+                    id="swit"
                   />
                 </div>
               </div>
-            </form>
+
+              <!--Form-->
+              <div class="col-auto">
+                <!--Search libre-->
+                <form v-if="filter == true" @keyup="getSearchDocs">
+                  <div class="row m-2">
+                    <div class="col-auto">
+                      <i class="bi-search"></i>
+                      <input
+                        v-model="text"
+                        id="inputFreeId"
+                        name="inputFree"
+                        class="form-control form-control-sm"
+                        type="search"
+                        placeholder=""
+                      />
+                    </div>
+                  </div>
+                </form>
+
+                <!--Search Clasic-->
+                <form v-else @submit.prevent="getSearchDocs">
+                  <div class="row">
+                    <div class="col-auto">
+                      <button type="submit" class="btn-form-doc">Buscar</button>
+                    </div>
+                    <div class="col-auto">
+                      <button
+                        v-if="successSearch.length > 0 || errSearch.length > 0"
+                        @click="getDataPages(1)"
+                        type="button"
+                        class="btn-form-doc cancel"
+                      >
+                        Salir
+                      </button>
+                      <button
+                        v-else
+                        disabled
+                        type="button"
+                        class="btn-form-doc search-out"
+                      >
+                        Salir
+                      </button>
+                    </div>
+                    <div class="col-auto mt-1">
+                      <i class="bi-search"></i>
+                      <input
+                        v-model="text"
+                        id="inputSearchDocs"
+                        name="inputClasicDocs"
+                        class="form-control form-control-sm"
+                        type="search"
+                        placeholder=""
+                      />
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
+          <!--Table-->
+          <table id="datos" class="table table-hover">
+            <thead>
+              <tr class="thead-tr">
+                <th>
+                  <i class="bi-filter"></i>
+                  <button @click="sortId" class="btn btn-sm th-font-size">
+                    Id
+                  </button>
+                </th>
+                <th>
+                  <i class="bi-filter"></i>
+                  <button
+                    @click="sortDoc_number"
+                    class="btn btn-sm th-font-size"
+                  >
+                    Doc
+                  </button>
+                </th>
+                <th>
+                  <i class="bi-filter"></i>
+                  <button @click="sortDoc_type" class="btn btn-sm th-font-size">
+                    Tipo
+                  </button>
+                </th>
+                <th>
+                  <i class="bi-filter"></i>
+                  <button @click="sortFullname" class="btn btn-sm th-font-size">
+                    Nombre
+                  </button>
+                </th>
+                <th>
+                  <i class="bi-filter"></i>
+                  <button @click="sortFile" class="btn btn-sm th-font-size">
+                    File
+                  </button>
+                </th>
+                <th>
+                  <i class="bi-filter"></i>
+                  <button @click="sortCreated" class="btn btn-sm th-font-size">
+                    Creado
+                  </button>
+                </th>
+                <th>
+                  <i class="bi-filter"></i>
+                  <button class="btn btn-sm th-font-size" @click="sortUpdated">
+                    Modificado
+                  </button>
+                </th>
+                <th>
+                  <i class="bi-filter"></i>
+                  <button @click="sortState" class="btn btn-sm th-font-size">
+                    Estado
+                  </button>
+                </th>
+                <th>
+                  <button class="btn btn-sm th-font-size">Action</button>
+                </th>                
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="tbody-tr"
+                v-for="search in searchDocs"
+                :key="search.documentid"
+              >
+                <td>{{ search.documentid }}</td>
+                <td>{{ search.doc_number }}</td>
+                <td>{{ search.doc_type }}</td>
+                <!--<td>{{ search.firstSurname }}</td>
+                <td>{{ search.lastSurname }}</td>
+                <td>{{ search.name }}</td>-->
+                <td>{{ search.fullname }}</td>
+                <td class="text-center">
+                  <!--solo ejemplo google drive-->
+                  <a target="_blank" :href="search.file"
+                    ><i class="bi-link size-link" title="Ver/Descargar"></i
+                  ></a>
+                </td>
+                <td v-if="search.created">
+                  {{ new Date(search.created).toLocaleString() }}
+                </td>
+                <td v-else></td>
+                <td v-if="search.updated">
+                  {{ new Date(search.updated).toLocaleString() }}
+                </td>
+                <td v-else></td>
+                <td class="text-center">{{ search.state }}</td>
+                <td>
+                  <a
+                    :href="'/documentos/edit/' + search.documentid"
+                    title="Edit"
+                  >
+                    <i class="bi-pencil size-pencil"></i
+                  ></a>
+                  |
+                  <a
+                    :href="'/documentos/delete/' + search.documentid"
+                    title="Delete"
+                    ><i class="bi-trash-fill size-trash"></i
+                  ></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <!--PAGINATION-->
+          <nav
+            aria-label="Page navigation example"
+            class="font-size-pagination"
+          >
+            <ul v-if="pagination" class="pagination justify-content-left">
+              <li class="page-item disabled">
+                <button class="page-link">Páginas:</button>
+              </li>
+              <!--Primera página-->
+              <li
+                v-if="currentPage >= 2"
+                @click="getFirstPage"
+                class="page-item"
+              >
+                <button type="button" class="page-link">Primera</button>
+              </li>
+              <li v-else @click="getFirstPage" class="page-item disabled">
+                <button type="button" class="page-link">Primera</button>
+              </li>
+              <!--Atras-->
+              <li
+                v-if="currentPage >= 2"
+                @click="getPrevious"
+                class="page-item"
+              >
+                <button type="button" class="page-link">
+                  <i class="bi-chevron-left"></i>
+                </button>
+              </li>
+              <li v-else @click="getPrevious" class="page-item disabled">
+                <button type="button" class="page-link">
+                  <i class="bi-chevron-left"></i>
+                </button>
+              </li>
+              <!--Pages-->
+              <li
+                v-for="pag in totalPages()"
+                :key="pag"
+                @click="getDataPages(pag)"
+                class="page-item"
+                :class="isActive(pag)"
+              >
+                <button
+                  v-if="currentPage - 1 < pag && pag < currentPage + 3"
+                  type="button"
+                  class="page-link"
+                >
+                  {{ pag }}
+                </button>
+              </li>
+              <!--Siguiente-->
+              <li
+                v-if="currentPage < totalPages()"
+                @click="getNext"
+                class="page-item"
+              >
+                <button
+                  v-if="currentPage < totalPages()"
+                  type="button"
+                  class="page-link"
+                >
+                  <i class="bi-chevron-right"></i>
+                </button>
+              </li>
+              <li v-else @click="getNext" class="page-item disabled">
+                <button type="button" class="page-link">
+                  <i class="bi-chevron-right"></i>
+                </button>
+              </li>
+              <!--Última página-->
+              <li
+                v-if="currentPage < totalPages()"
+                @click="getLastPage"
+                class="page-item"
+              >
+                <button type="button" class="page-link">Última</button>
+              </li>
+              <li v-else @click="getLastPage" class="page-item disabled">
+                <button type="button" class="page-link">Última</button>
+              </li>
+              <!--Total-->
+              <li class="page-item disabled">
+                <button class="page-link">
+                  Total: {{ this.documents.length }}
+                </button>
+              </li>
+            </ul>
+          </nav>
+          <!--Messages-->
+          <small v-if="successSearch" class="text-center text-success">
+            {{ successSearch }}
+          </small>
+          <small v-if="errSearch" class="text-center text-danger">
+            {{ errSearch }}
+          </small>
+        </div>
+        <div v-else class="alert alert-warning mt-3 text-center">
+          Aún no hay registros que mostrar
         </div>
       </div>
-      <!--Table-->
-      <table id="datos" class="table table-hover">
-        <thead>
-          <tr style="background: #ecedef; font-size: 1.2rem;">
-            <th>
-              <img src="../../assets/sort.png" alt="" width="9" />
-              <button @click="sortId" class="btn btn-default btn-sm">
-                Id
-              </button>
-            </th>
-            <th>
-              <img src="../../assets/sort.png" alt="" width="9" />
-              <button @click="sortDoc_number" class="btn btn-default btn-sm">
-                Doc
-              </button>
-            </th>
-            <th>
-              <img src="../../assets/sort.png" alt="" width="9" />
-              <button @click="sortDoc_type" class="btn btn-default btn-sm">
-                Tipo_doc
-              </button>
-            </th>
-            <!-- <th>
-            <img src="../../assets/sort.png" alt="" width="9" />
-            <button @click="sortFirstSurname" class="btn btn-default btn-sm">
-              A. Paterno
-            </button>
-          </th>
-          <th>
-            <img src="../../assets/sort.png" alt="" width="9" />
-            <button @click="sortLastSurname" class="btn btn-default btn-sm">
-              A. Materno
-            </button>
-          </th>
-          <th>
-            <img src="../../assets/sort.png" alt="" width="9" />
-            <button @click="sortName" class="btn btn-default btn-sm">
-              Nombres
-            </button>
-          </th>-->
-            <th>
-              <img src="../../assets/sort.png" alt="" width="9" />
-              <button @click="sortFullname" class="btn btn-default btn-sm">
-                Nombre completo
-              </button>
-            </th>
-            <th>
-              <img src="../../assets/sort.png" alt="" width="9" />
-              <button @click="sortFile" class="btn btn-default btn-sm">
-                File
-              </button>
-            </th>
-            <th>
-              <img src="../../assets/sort.png" alt="" width="9" />
-              <button @click="sortCreated" class="btn btn-default btn-sm">
-                Creado
-              </button>
-            </th>
-            <th>
-              <img src="../../assets/sort.png" alt="" width="9" />
-              <button class="btn btn-default btn-sm" @click="sortUpdated">
-                Modificado
-              </button>
-            </th>
-            <th>
-              <img src="../../assets/sort.png" alt="" width="9" />
-              <button @click="sortState" class="btn btn-default btn-sm">
-                Estado
-              </button>
-            </th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="search in searchDocs"
-            :key="search.documentid"
-            style="font-size: 0.9rem;"
-          >
-            <td>{{ search.documentid }}</td>
-            <td>{{ search.doc_number }}</td>
-            <td>{{ search.doc_type }}</td>
-            <!--<td>{{ search.firstSurname }}</td>
-          <td>{{ search.lastSurname }}</td>
-          <td>{{ search.name }}</td>-->
-            <td>{{ search.fullname }}</td>
-            <td>
-            <!--solo ejemplo google drive-->
-            <a target="_blank" :href="search.file">Ver/Descargar</a>                       
-            </td>
-            <td v-if="search.created" >{{new Date(search.created).toLocaleString()}}</td>
-            <td v-else></td>
-            <td v-if="search.updated" >{{new Date(search.updated).toLocaleString()}}</td> 
-            <td v-else></td>           
-            <td>{{search.state}}</td>
-            <td>
-              <a :href="'/documentos/edit/' + search.documentid">
-                <i
-                  class="bi-pencil"
-                  style="font-size: 1.2rem; color: #f7d43a;"
-                ></i
-              ></a>
-            </td>
-            <td>
-              <a :href="'/documentos/delete/' + search.documentid"
-                ><i
-                  class="bi-trash-fill"
-                  style="font-size: 1.2rem; color: #f7423a;"
-                ></i
-              ></a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!--PAGINATION-->
-      <nav aria-label="Page navigation example" style="font-size: 0.9rem;">
-        <ul v-if="pagination" class="pagination justify-content-left">
-          <li class="page-item disabled">
-            <button class="page-link">Páginas:</button>
-          </li>
-          <!--Primera página-->
-          <li v-if="currentPage >= 2" @click="getFirstPage" class="page-item">
-            <button type="button" class="page-link">Primera</button>
-          </li>
-          <li v-else @click="getFirstPage" class="page-item disabled">
-            <button type="button" class="page-link">Primera</button>
-          </li>
-          <!--Atras-->
-          <li v-if="currentPage >= 2" @click="getPrevious" class="page-item">
-            <button type="button" class="page-link">
-              <i class="bi-chevron-left"></i>
-            </button>
-          </li>
-          <li v-else @click="getPrevious" class="page-item disabled">
-            <button type="button" class="page-link">
-              <i class="bi-chevron-left"></i>
-            </button>
-          </li>
-          <!--Pages-->
-          <li
-            v-for="pag in totalPages()"
-            :key="pag"
-            @click="getDataPages(pag)"
-            class="page-item"
-            :class="isActive(pag)"
-          >
-            <button
-              v-if="currentPage - 1 < pag && pag < currentPage + 3"
-              type="button"
-              class="page-link"
-            >
-              {{ pag }}
-            </button>
-          </li>
-          <!--Siguiente-->
-          <li
-            v-if="currentPage < totalPages()"
-            @click="getNext"
-            class="page-item"
-          >
-            <button
-              v-if="currentPage < totalPages()"
-              type="button"
-              class="page-link"
-            >
-              <i class="bi-chevron-right"></i>
-            </button>
-          </li>
-          <li v-else @click="getNext" class="page-item disabled">
-            <button type="button" class="page-link">
-              <i class="bi-chevron-right"></i>
-            </button>
-          </li>
-          <!--Última página-->
-          <li
-            v-if="currentPage < totalPages()"
-            @click="getLastPage"
-            class="page-item"
-          >
-            <button type="button" class="page-link">Última</button>
-          </li>
-          <li v-else @click="getLastPage" class="page-item disabled">
-            <button type="button" class="page-link">Última</button>
-          </li>
-          <!--Total-->
-          <li class="page-item disabled">
-            <button class="page-link">
-              Total: {{ this.documents.length }}
-            </button>
-          </li>
-        </ul>
-      </nav>
-      <!--Messages-->
-      <small v-if="successSearch" class="text-center text-success">
-        {{ successSearch }}
-      </small>
-      <small v-if="errSearch" class="text-center text-danger">
-        {{ errSearch }}
-      </small>
-    </div>
-    <div v-else class="alert alert-warning mt-3 text-center" style="font-size:0.9rem">
-    Aún no hay registros que mostrar
     </div>
   </div>
 </template>
 
 <script>
-import FilesList from "./files/Files.vue";
 import axios from "axios";
 export default {
   name: "documents-list",
@@ -636,16 +586,15 @@ export default {
         state: "",
       },
       id: this.$route.params.id,
-      //archivos permitidos,
-      files: [],
       //archivos para llenar el campo file
       fileSelect: [],
+
       //DOCUMENTS LIST
       //list
       documents: [],
       //pagination
       currentPage: 1,
-      rows: 5,
+      rows: 3,
       pagination: true,
       //search
       filter: true,
@@ -662,14 +611,9 @@ export default {
       //error de busqueda
       errSearch: "",
       successSearch: "",
-      //error de carga de archivos
-      errUpload: "",
-      successUpload: "",
     };
   },
-  components: {
-    FilesList
-  },
+  components: {},
   async mounted() {
     await this.getDocuments();
     //await this.getFiles();
@@ -677,84 +621,6 @@ export default {
     //let myTextInput = document.getElementById("myFiles");
   },
   methods: {
-    //UPLOAD FILES
-    //Manejador de carga de archivos
-    async handleFilesUpload() {
-      const uploadedFiles = this.$refs.file.files;
-      console.log(uploadedFiles);
-      if (
-        uploadedFiles[0].type.split("/")[1] == "pdf" ||
-        uploadedFiles[0].name.split(".")[1] == "pdf" ||
-        uploadedFiles[0].type.split("/")[1] == "jpg" ||
-        uploadedFiles[0].name.split(".")[1] == "jpg" ||
-        uploadedFiles[0].type.split("/")[1] == "jpeg" ||
-        uploadedFiles[0].name.split(".")[1] == "jpeg" ||
-        uploadedFiles[0].type.split("/")[1] == "png" ||
-        uploadedFiles[0].name.split(".")[1] == "png"
-      ) {
-        console.log(uploadedFiles);
-        this.files.push(uploadedFiles[0]);
-        this.successUpload = "OK";
-      } else {
-        this.errUpload = "Formato no válido";
-      }
-      console.log(this.files);
-    },
-
-    async submitFiles() {
-      console.log(this.files);
-      const token = localStorage.getItem("token");
-      let form = new FormData();
-      for (let i = 0; i < this.files.length; i++) {
-        form.append("uploaded_files", this.files[i]);
-      }
-      try {
-        //console.log(this.$refs.files.files);
-        const fileResult = await axios({
-          method: "POST",
-          url: "http://localhost:4000/api/uploads",
-          data: form,
-          headers: {
-            Authorization: JSON.parse(token),
-            "Content-type": "multipart/form-data",
-          },
-        });
-        console.log(fileResult);
-        if (fileResult.data.Message == "successfull") {
-          this.successUpload = fileResult.data.Message;
-          this.errUpload = false;
-          location.replace("/documentos");
-        }
-      } catch (error) {
-        console.log({ error: error.response.data.Message });
-        this.errUpload = error.response.data.Message;
-      }
-    },
-    //Files
-    /*async getFiles() {
-      try {
-        const token = localStorage.getItem("token");
-        const result = await axios.get("http://localhost:4000/api/files", {
-          headers: {
-            Authorization: JSON.parse(token),
-          },
-        });
-        console.log(result.data);
-        if (result.statusText == "OK") {
-          this.fileSelect = result.data.sort(
-            (a, b) =>
-              new Date(b.created).valueOf() - new Date(a.created).valueOf()
-          );
-          this.datos.file = this.fileSelect[0].url;
-          this.errList = false;
-        }
-        //console.log(this.fileSelect[0].url);
-      } catch (error) {
-        this.errList = error.response.data.Message;
-        console.log(error.response.data.Message);
-      }
-    },*/
-
     //DOCUMENTS LIST
     async getDocuments() {
       try {
@@ -762,7 +628,7 @@ export default {
         let myObject = {
           method: "GET",
           url: "http://localhost:4000/api/documentos",
-          data: this.datos,
+
           headers: {
             Authorization: JSON.parse(token),
           },
@@ -771,14 +637,16 @@ export default {
           myObject = {
             method: "GET",
             url: "http://localhost:4000/api/documentos/" + this.id,
-            data: this.datos,
             headers: {
               Authorization: JSON.parse(token),
             },
           };
         }
         const result = await axios(myObject);
+        //console.log(result.data.Documentos);
         if (result.statusText == "OK") {
+          //se obtiene la lista de documentos
+          this.documents = result.data.Documentos;
           //llena campos de documentos a editar
           if (this.id != undefined) {
             this.datos.doc_number = result.data.Documentos[0].doc_number;
@@ -788,24 +656,21 @@ export default {
             this.datos.name = result.data.Documentos[0].name;
             this.datos.file = result.data.Documentos[0].file;
             this.datos.state = result.data.Documentos[0].state;
+          } else {
+            //llena campos del ultimo documento
+            this.datos.doc_number = result.data.Ultimo_documento[0].doc_number;
+            this.datos.doc_type = result.data.Ultimo_documento[0].doc_type;
+            //this.datos.file = result.data.Ultimo_documento[0].file;
+            this.errList = false;
+            //console.log(this.lastDocument);
           }
-          //se obtiene la lista de documentos
-          this.documents = result.data.Documentos;
-          //llena campos del ultimo documento
-          this.datos.doc_number = result.data.Ultimo_documento[0].doc_number;
-          this.datos.doc_type = result.data.Ultimo_documento[0].doc_type;
-          //this.datos.file = result.data.Ultimo_documento[0].file;
-
-          this.errList = false;
-          console.log(this.documents.length);
-          //console.log(this.lastDocument);
         }
       } catch (error) {
         this.errList = error.response.data.Message;
         console.log(error.response.data.Message);
       }
     },
-    //DOCUEMENTOS ADD EDIT
+    //DOCUMENTOS ADD EDIT
     async changeDocuments() {
       try {
         const token = localStorage.getItem("token");
@@ -845,7 +710,6 @@ export default {
         console.log(error.response);
       }
     },
-
     //activar desactivar llenado de campos del ultimo documento
     limpiarCampos() {
       this.datos.doc_number = "";
@@ -856,7 +720,6 @@ export default {
       this.datos.file = "";
       this.datos.state = "";
     },
-
     //FILTRO
     sortId() {
       const asc = (a, b) => {
@@ -1155,4 +1018,177 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.card-form {
+  position: relative;
+  border: 0.01px solid #eae4eb;
+  border-radius: 0.25rem;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  flex-direction: column;
+  align-items: center;
+}
+.form-document {
+  
+  margin-bottom: 0%;
+  margin-top: 1%;
+  margin-left: 2%;
+  font-size: 0.8rem;
+}
+.form-control-sm {
+  min-height: calc(1.5em + 0.5rem + 2px);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.2rem;
+  font-size: 0.8rem;
+}
+.form-select-sm {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  font-size: 0.8rem;
+  border-radius: 0.2rem;
+}
+.label-form-size {
+  flex: 0 0 auto;
+  width: 10%;
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+  padding-left: 1%;
+  padding-right: 0.5%;
+}
+.input-form-size {
+  flex: 0 0 auto;
+  width: 78%;
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+  padding-left: 0.5%;
+  padding-right: 0.5%;
+}
+.validation-form-size {
+  flex: 0 0 auto;
+  width: 11%;
+  padding-left: 0%;
+}
+.check-field-true {
+  font-size: 1.2rem;
+  color: #00acc1;
+}
+.check-field-false {
+  color: #ab47bc;
+  font-size: 0.73rem;
+}
+
+.btn-form-doc {
+  color: white;
+  border-radius: 0.25rem;
+  background-color: #00acc1;
+  font-size: 0.85rem;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+}
+.btn-form-doc.clean {
+  color: white;
+  background-color: #ab47bc;
+}
+.btn-form-doc.cancel {
+  color: #ab47bc;
+  background-color: transparent;
+  text-decoration: none;
+}
+.card-search {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  background-color: #e0f7fa;
+  border-radius: 0.25rem;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+.btn-form-doc.search-out {
+  color: #ab47bc;
+  background-color: transparent;
+  text-decoration: none;
+}
+.btn-form-doc.search-out:disabled {
+  color: #a29ea2;
+  background-color: transparent;
+  text-decoration: none;
+  cursor: auto;
+}
+.bi-search {
+  color: #191919;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.font-size-pagination {
+  font-size: 0.8rem;
+}
+.thead-tr {
+  background: #00acc1;
+  text-align: center;
+}
+.th-font-size {
+  font-size: 0.9rem;
+  color: white;
+}
+/*Table tbody*/
+.tbody-tr {
+  font-size: small;
+  background-color: none;
+  text-align: center;
+}
+.size-link {
+  font-size: 1.3rem;
+  color: #ab47bc;
+}
+.size-pencil {
+  font-size: 1rem;
+  color: #f7d43a;
+}
+.size-trash {
+  font-size: 1rem;
+  color: #ba68c8;
+}
+.row-search {
+  padding-left: 20px;
+  padding-top: 6px;
+  align-items: center;
+  padding-bottom: 6px;
+}
+.col-auto {
+  flex: 0 0 auto;
+  width: auto;
+  position: relative;
+}
+.form-check {
+  display: block;
+  min-height: 1.5rem;
+  padding-left: 1.5em;
+  margin-bottom: none;
+}
+
+.form-check-input:checked {
+  background-color: #ab47bc;
+  border-color: #ab47bc;
+}
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: #ab47bc;
+  border-color: #ab47bc;
+}
+.page-link {
+  color: #ba68c8;
+}
+</style>

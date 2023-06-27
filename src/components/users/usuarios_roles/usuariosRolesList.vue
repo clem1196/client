@@ -25,6 +25,8 @@
       <form @keyup="getSearchUsuariosRoles" class="mt-2">
         <i class="bi-search"></i>
         <input
+        id="inputSearchUsersRoles1"
+          name="inputUsersRoles1"
           class="border rounded"
           style="width: 100%"
           v-model="text"
@@ -62,6 +64,8 @@
         </div>
         <i class="bi-search">
           <input
+          id="inputSearchUsersRoles"
+          name="inputUsersRoles"
             class="border rounded"
             style="width: 100%"
             v-model="text"
@@ -280,7 +284,7 @@ export default {
             Authorization: JSON.parse(token),
           },
         });
-        console.log(result.data)
+        //console.log(result.data)
         if (result.data.usersNames_rolesNames.length > 0) {
           this.usuariosRoles = result.data.usersNames_rolesNames;
           this.err = false;

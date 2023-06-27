@@ -1,6 +1,6 @@
 <template>
-  <div class="container-fluid">
-    <nav class="navbar navbar-expand-lg navbar-light" style="background: #1976D2 ;">
+  
+    <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
         <button
           class="navbar-toggler"
@@ -11,110 +11,59 @@
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span class="bi-list"></span>
         </button>
         <div
           v-if="!token"
           class="collapse navbar-collapse"
           id="navbarTogglerDemo01"
         >
-          <a class="navbar-brand" style="color: white" href="/"
+          <a class="navbar-brand" href="/"
             ><i class="bi-house-door-fill"></i> Home</a
           >
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav">
             <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                style="color: white"
-                href="/about"
-                >About</a
-              >
+              <a class="nav-link" href="/about">About</a>
             </li>
           </ul>
-          <div>
-            <span class="nav-link" style="color: yellow">
-              <i class="bi-person-fill">Aún no ha iniciado sesión!!</i>
+          <div class="d-flex">
+            <span class="welcome-user">
+              <i class="bi-person-fill"></i> Aún no ha iniciado sesión!!
             </span>
-          </div>
-          <div>
-            <a class="btn btn-light" href="/login">
-              <i class="bi-people-fill"></i> Iniciar Sesión
+
+            <a class="btn-signIn" href="/login" type="button">
+              <i class="bi-people-fill"></i> LogIn
             </a>
           </div>
         </div>
-
         <div v-else class="collapse navbar-collapse" id="navbarTogglerDemo01">
-          <a class="navbar-brand" style="color: white" href="/">
-            <i class="bi-house-door-fill"></i> Home</a
+          <a class="navbar-brand" href="/"
+            ><i class="bi-house-door-fill"></i> Home</a
           >
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav">
             <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                style="color: white"
-                href="/about"
-                >About</a
-              >
+              <a class="nav-link" href="/about">About</a>
             </li>
-            <li v-if="vendedor || auditor || admin" class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                style="color: white"
-                href="/ventas"
-                >Ventas</a
-              >
-            </li>
-            <li v-if="contador || auditor || admin" class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                style="color: white"
-                href="/contabilidad"
-                >Contabilidad</a
-              >
-            </li>
-            <li v-if="empleado || auditor || admin" class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                style="color: white"
-                href="/documentos"
-                >Mesa de partes</a
-              >
-            </li>
-            <li v-if="auditor || admin" class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                style="color: white"
-                href="/usuarios-roles"
-                >Usuarios</a
-              >
+            <li class="nav-item">
+              <a class="nav-link" href="/documentos">Modules</a>
             </li>
           </ul>
-          <div>
-            <span class="nav-link" style="color: yellow">
-              <i class="bi-person-fill">Hola {{ user }}!!</i>
+          <div class="d-flex">
+            <span class="welcome-user">
+              <i class="bi-person-fill"></i> Welcome {{ user }}!!
             </span>
-          </div>
-          <div>
-            <a class="btn btn-light btn-sm" href="/login">
-              <i class="bi-people-fill"></i> Cambiar
+            <a class="btn-signIn" href="/login" type="button">
+              <i class="bi-people-fill"></i> Change
             </a>
-          </div>
-          <div class="m-2">
-            <a class="btn btn-light" href="logout">
-              <i class="bi-power">Salir</i>
+            <a class="btn-signIn" href="/logout" type="button">
+              <i class="bi-power"></i> LogOut
             </a>
           </div>
         </div>
       </div>
     </nav>
     <router-view />
-  </div>
+ 
 </template>
 
 <script>
@@ -142,13 +91,143 @@ export default {
       //roles
       this.admin = await Helper.isAdministrator();
       this.auditor = await Helper.isAuditor();
-      this.vendedor = await Helper.isSellerLists() || await Helper.isSellerChanges();
-      this.contador = await Helper.isAccountantLists() || await Helper.isAccountantLists();
-      this.empleado = await Helper.isEmployeeLists() || await Helper.isEmployeeChanges();
+      this.vendedor =
+        (await Helper.isSellerLists()) || (await Helper.isSellerChanges());
+      this.contador =
+        (await Helper.isAccountantLists()) ||
+        (await Helper.isAccountantLists());
+      this.empleado =
+        (await Helper.isEmployeeLists()) || (await Helper.isEmployeeChanges());
     }
   },
 };
 </script>
 
-<style>
+<style scoped>
+.navbar-expand-lg {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  min-width: 600px;
+  background: #9025ae;
+}
+
+.navbar {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.navbar-brand {
+  padding-left: 8px;
+  padding-right: 8px;
+  color: white;
+  border-radius: 0.25rem;
+  text-align: center;
+}
+.navbar-brand:hover {
+  padding-left: 8px;
+  padding-right: 8px;
+  background-color: #b370bd;
+  border-radius: 0.25rem;
+}
+.navbar-collapse {
+  margin-top: 8px;
+  margin-bottom: 2px;
+}
+.navbar.navbar-expand-lg {
+  background:  #6039f7;
+}
+.navbar-toggler {
+  font-size: 1.8rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  color: #b370bd;
+  background: white;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.navbar-toggler:hover {
+  font-size: 1.8rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  color: white;
+  background: #e1bee7;
+}
+.navbar-toggler:focus {
+  box-shadow: 3px 3px 3px 0px;
+  color: #e1bee7;
+  background: white;
+}
+.navbar-nav {
+  display: flex;
+
+  padding-left: 0;
+  list-style: none;
+
+  margin-right: auto;
+}
+
+.nav-link {
+  padding-left: 8px;
+  padding-right: 8px;
+  color: white;
+  border-radius: 0.25rem;
+  height: 40px;
+  width: 80px;
+  vertical-align: auto;
+}
+.nav-link:hover {
+  padding-left: 8px;
+  padding-right: 8px;
+  background-color: #b370bd;
+  border-radius: 0.25rem;
+  
+  height: 40px;
+  width: 80px;
+}
+.nav-link:focus {
+  box-shadow: 0px 0px 3px 0px;
+  color: #e1bee7;
+  background: white;
+}
+.d-flex {
+  display: flex !important;
+  align-items: center;
+  justify-content: none;
+  align-content: center;
+  flex-direction: row;
+  padding-left: 8px;
+}
+.welcome-user {
+  padding-right: 8px;
+  color: #e1bee7;
+  font-size: 16px;
+  font-style: oblique;
+}
+.btn-signIn {
+  background-color:#00acc1 ;
+  border-radius: 0.25rem;
+  width: 82px;
+  height: 34px;
+  color: white;
+  text-align: center;
+  font-size: 15px;
+  line-height: 30px;
+  margin: 4px;
+  text-decoration: none;
+}
+.btn-signIn:hover {
+  background-color: #b370bd;
+  border-radius: 0.25rem;
+  width: 82px;
+  height: 34px;
+  color: white;
+  text-align: center;
+  font-size: 15px;
+  line-height: 30px;
+  margin: 4px;
+}
 </style>

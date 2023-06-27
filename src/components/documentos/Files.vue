@@ -1,82 +1,143 @@
 <template>
   <div>
-    <!--LIST FILES-->
+    <!--UPLOADS-->
+    <div class="card-header">
+      <form enctype="multipart/form-data">
+        <label
+          >Files:
+          <input
+            type="file"
+            name="files"
+            id="files"
+            ref="files"
+            multiple
+            accept=".pdf, application/pdf, .image/*, .jpg, .jpeg, .png"
+            @change="handleFilesUploads"
+          />
+        </label>
+        <small
+          v-if="filesUpload.length > 0 || noFilesUpload.length > 0"
+          class="small-btn"
+        >
+          <small v-if="filesUpload.length < 13">
+            <button
+              class="btn btn-acept btn-sm"
+              @click="submitFiles"
+              type="button"
+            >
+              Aceptar
+            </button>
+            <a href="#" class="btn btn-cancel btn-sm" @click="cancelCharge"> Cancelar </a>
+          </small>
+          <small v-else class="alert alert-danger">
+            Solo se admiten hasta 12 archivos, quite algunos para continuar...
+            <a href="#"  @click="cancelCharge">Cancelar</a>
+          </small>
+        </small>
+      </form>
+    </div>
+    <div class="files-container">
+      <div>
+        <li
+          v-for="(file, key) in filesUpload"
+          :key="file.name"
+          class="file-listing"
+        >
+          {{ file.name }}
+          <span class="remove-file btn btn-sm" @click="removeFile(key)"
+            >Eliminar</span
+          >
+        </li>
+      </div>
 
-    <div v-if="files.length > 0" class="container">
-      <div class="card bg-light">
-        <div class="container mt-2 bg-light" style="font-size: 0.8rem;">
-          <div class="card-body-sm">
-            <!--Switch-->
-            <div style="col-12">
-              <div class="form-check form-switch">
-                <label class="form-check-label" for="swit"
-                  >Búsqueda estrícta</label
-                >
+      <div v-if="noFilesUpload.length > 0">
+        <div class="alert alert-warning">
+          <i class="bi-exclamation-triangle-fill"></i>
+          Los siguientes Archivos no se cargarán, tienen formato no válidos:
+        </div>
+        <li
+          v-for="nofile in noFilesUpload"
+          :key="nofile.name"
+          class="file-listing"
+        >
+          {{ nofile.name }}
+        </li>
+      </div>
+    </div>
+
+    <!--LIST FILES-->
+    <div v-if="files.length > 0" class="m-2">
+      <div class="card">
+        <div class="container mt-2" style="font-size: 0.8rem">
+          <!--Switch-->
+          <div style="col-12">
+            <div class="form-check form-switch">
+              <label class="form-check-label" for="switchFiles">Clásica</label>
+              <input
+                @click="cambiarFilter"
+                class="form-check-input"
+                name="inputSwith"
+                type="checkbox"
+                id="switchFiles"
+              />
+            </div>
+          </div>
+
+          <!--Form-->
+          <!--Search libre-->
+          <div v-if="filter == true" class="col-12">
+            <form @keyup="getSearchFiles" class="mt-2">
+              <div class="container m-2">
+                <i class="bi-search"></i>
                 <input
-                  @click="cambiarFilter"
-                  class="form-check-input"
-                  type="checkbox"
-                  role="switch"
-                  id="switch"
+                  id="inputFree"
+                  name="searchFree"
+                  style="width: 93%"
+                  class="form-control form-control-sm"
+                  v-model="text"
+                  type="search"
+                  placeholder="Search"
                 />
               </div>
-            </div>
-
-            <!--Form-->
-            <!--Search libre-->
-            <div v-if="filter == true" class="col-12">
-              <form @keyup="getSearchFiles" class="mt-2">
-                <div class="container m-2">
-                  <i class="bi-search"></i>
-                  <input
-                    class="border rounded"
-                    style="width: 93%;"
-                    v-model="text"
-                    type="search"
-                    placeholder="Search"
-                  />
-                </div>
-              </form>
-            </div>
-            <!--Search estricto-->
-            <div v-else class="col-12">
-              <form @submit.prevent="getSearchFiles" class="mt-2">
-                <div
-                  class="btn-group center"
-                  role="group"
-                  aria-label="Basic mixed styles example"
+            </form>
+          </div>
+          <!--Search clásico-->
+          <div v-else class="col-12">
+            <form @submit.prevent="getSearchFiles" class="mt-2">
+              <div
+                class="btn-group center"
+                role="group"
+                aria-label="Basic mixed styles example"
+              >
+                <button
+                  type="submit"
+                  class="btn btn-sm m-1"
+                  style="background: #ba68c8; color: white; border: rounded"
                 >
-                  <button
-                    v-if="text"
-                    type="button"
-                    class="btn btn-secondary btn-sm m-2"
-                    @click="limpiarText"
-                  >
-                    Limpiar
-                  </button>
-                  <button type="submit" class="btn btn-primary btn-sm m-1">
-                    Buscar
-                  </button>
-                  <button
-                    v-if="success.length > 0 || err.length > 0"
-                    @click="getDataPages(1)"
-                    type="button"
-                    class="btn btn-warning btn-sm m-1"
-                  >
-                    Salir
-                  </button>
-                </div>
-                <i class="bi-search m-2">
-                  <input
-                    class="border rounded"
-                    style="width: 72%;"
-                    v-model="text"
-                    type="search"
-                    placeholder="Search"
-                  />
-                </i>
-              </form>
-            </div>
+                  Buscar
+                </button>
+                <button
+                  v-if="success.length > 0 || err.length > 0"
+                  @click="getDataPages(1)"
+                  type="button"
+                  class="btn btn-sm m-1"
+                  style="background: #e1bee7; color: white"
+                >
+                  Salir
+                </button>
+              </div>
+              <i class="bi-search m-2">
+                <input
+                  id="searchInput"
+                  name="searchClasic"
+                  class="form-control form-control-sm"
+                  style="width: 72%"
+                  v-model="text"
+                  type="search"
+                  placeholder="Search"
+                />
+              </i>
+            </form>
           </div>
         </div>
       </div>
@@ -84,13 +145,17 @@
       <table
         id="datos"
         class="table table-hover mt-1"
-        style="font-size: 0.8rem;"
+        style="font-size: 0.75rem"
       >
-        <thead style="border: 0; font-size: 1rem;">
-          <tr style="background: #ecedef;">
+        <thead style="border: 0; font-size: 1rem">
+          <tr style="background: #f3e5f5">
             <th>
-              <img src="../../../assets/sort.png" alt="" width="9" />
-              <button @click="sortName" class="btn btn-default btn-sm">
+              <img src="../../assets/sort.png" alt="" width="9" />
+              <button
+                @click="sortName"
+                class="btn btn-sm"
+                style="color: #212f3c"
+              >
                 Nombre
               </button>
             </th>
@@ -101,15 +166,17 @@
                 </button>
               </th>-->
             <th>
-              <img src="../../../assets/sort.png" alt="" width="9" />
-              <button @click="sortCreated" class="btn btn-default btn-sm">
+              <img src="../../assets/sort.png" alt="" width="9" />
+              <button
+                @click="sortCreated"
+                class="btn btn-sm"
+                style="color: #212f3c"
+              >
                 Creado
               </button>
             </th>
             <th>
-              <button class="btn btn-default btn-sm">
-                Accion
-              </button>
+              <button class="btn btn-sm" style="color: #212f3c">Accion</button>
             </th>
             <th></th>
           </tr>
@@ -120,11 +187,11 @@
             <!-- <td>{{ search.url }}</td>-->
             <td>{{ search.created }}</td>
 
-            <td>
-              <a :href="'/files/delete/' + search.name"
+            <td class="text-center">
+              <a :href="'/files/delete/' + search.name" title="Delete"
                 ><i
                   class="bi-trash-fill"
-                  style="font-size: 1rem; color: #f7423a;"
+                  style="font-size: 1rem; color: #ba68c8"
                 ></i
               ></a>
             </td>
@@ -133,7 +200,7 @@
       </table>
 
       <!--PAGINATION-->
-      <nav aria-label="Page navigation example" style="font-size: 0.8rem;">
+      <nav aria-label="Page navigation example" style="font-size: 0.8rem">
         <ul v-if="pagination" class="pagination justify-content-left">
           <li class="page-item disabled">
             <button class="page-link">Páginas:</button>
@@ -217,7 +284,7 @@
     </div>
     <div v-else class="mt-4">
       <p class="alert alert-warning text-center">
-        Aqui se muestran los archivos subidos, aún no ha subido ninguno
+        <!-- Aqui se muestran los archivos subidos, aún no ha subido ninguno-->
       </p>
     </div>
   </div>
@@ -228,10 +295,14 @@ export default {
   name: "files-list",
   data() {
     return {
+      //archivos permitidos,
       files: [],
+      //archivos no permitidos,
+      noFilesUpload: [],
+      filesUpload: [],
       //pagination
       currentPage: 1,
-      rows: 5,
+      rows: 8,
       pagination: true,
       //search
       filter: true,
@@ -239,11 +310,10 @@ export default {
       text: "",
       //Messages
       err: "",
-      success: "",
+      success: "",     
     };
   },
   components: {},
-
   async mounted() {
     await this.listFiles();
     this.getDataPages(this.currentPage);
@@ -251,6 +321,58 @@ export default {
     //this.downloadFile()
   },
   methods: {
+    //UPLOAD FILES
+    //Manejador de carga de archivos
+    async handleFilesUploads() {
+      const uploadedFiles = this.$refs.files.files;
+      for (let i = 0; i < uploadedFiles.length; i++) {
+        if (
+          uploadedFiles[i].type.split("/")[1] == "pdf" ||
+          uploadedFiles[i].name.split(".")[1] == "pdf" ||
+          uploadedFiles[i].type.split("/")[1] == "jpg" ||
+          uploadedFiles[i].name.split(".")[1] == "jpg" ||
+          uploadedFiles[i].type.split("/")[1] == "jpeg" ||
+          uploadedFiles[i].name.split(".")[1] == "jpeg" ||
+          uploadedFiles[i].type.split("/")[1] == "png" ||
+          uploadedFiles[i].name.split(".")[1] == "png"
+        ) {
+          this.filesUpload.push(uploadedFiles[i]);
+        } else {
+          this.noFilesUpload.push(uploadedFiles[i]);
+        }
+      }
+
+      //console.log(this.files);
+    },
+    async submitFiles() {
+      console.log(this.filesUpload);
+      const token = localStorage.getItem("token");
+      let form = new FormData();
+      for (let i = 0; i < this.filesUpload.length; i++) {
+        form.append("files", this.filesUpload[i]);
+      }
+      try {
+        //console.log(this.$refs.files.files);
+        const fileResult = await axios({
+          method: "POST",
+          url: "http://localhost:4000/api/uploads",
+          data: form,
+          headers: {
+            Authorization: JSON.parse(token),
+            "Content-type": "multipart/form-data",
+          },
+        });
+        console.log(fileResult);
+        if (fileResult.data.Message == "successfull") {
+          this.successUpload = fileResult.data.Message;
+          this.errUpload = false;
+          location.replace("/documentos");
+        }
+      } catch (error) {
+        console.log({ error: error.response.data.Message });
+        this.errUpload = error.response.data.Message;
+      }
+    },
     //FILES
     async listFiles() {
       try {
@@ -261,11 +383,19 @@ export default {
           },
         });
         if (result.data.length > 0) this.files = result.data;
-        console.log(result.data);
+        //console.log(result.data);
       } catch (error) {
         this.err = error.response;
         console.log(error.response.data.Message);
       }
+    },
+    async cancelCharge() {
+      this.filesUpload.splice(0, this.filesUpload.length+1)
+      this.noFilesUpload.splice(0, this.noFilesUpload.length+1)
+    },
+    async removeFile(key) {
+      this.filesUpload.splice(key, 1);
+      this.err = false;
     },
 
     //Sort
@@ -421,4 +551,59 @@ export default {
   },
 };
 </script>
-<style></style>
+<style scoped>
+.form-check-input:checked {
+  background-color: #ab47bc;
+  border-color: #ab47bc;
+}
+
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: #ab47bc;
+  border-color: #ab47bc;
+}
+.page-link {
+  color: #ba68c8;
+}
+.card {
+  background: #f3e5f5;
+}
+.card-header {
+  margin: 0.6em;
+  margin-top: 12px;
+  background-color: #f3e5f5;
+  font-size: 14px;
+}
+.small-btn {
+  padding-left: 25px;
+}
+.btn-acept {
+  background: #ab47bc;
+  color: white;
+  margin: 2px;
+}
+.btn-cancel {
+  color: #ab47bc;
+  padding-left: 16px;
+}
+.remove-file {
+  color: #ab47bc;
+}
+.alert {
+  padding: 0.3rem 0.9rem;
+  font-size: 13px;
+}
+/*contentc*/
+.files-container {
+  font-size: 12px;
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+.nofiles-container {
+  margin-top: 5px;
+  font-size: 12px;
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+</style>

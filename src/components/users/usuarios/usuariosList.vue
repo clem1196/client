@@ -15,7 +15,7 @@
             class="form-check-input"
             type="checkbox"
             role="switch"
-            id="switch"
+            id="switchUsers"
           />
         </div>
       </div>
@@ -26,6 +26,8 @@
       <form @keyup="getSearchUsuarios" class="mt-2">
         <i class="bi-search"></i>
         <input
+        id="inputSearchUsers"
+        name="inputUsers"
           class="border rounded"
           style="width: 100%"
           v-model="text"
@@ -63,6 +65,8 @@
         </div>
         <i class="bi-search">
           <input
+          id="inputSearchUsers1"
+          name="inputUsers1"
             class="border rounded"
             style="width: 100%"
             v-model="text"

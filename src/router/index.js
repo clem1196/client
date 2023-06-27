@@ -156,23 +156,13 @@ const routes = [
         /* webpackChunkName: "usuariosRolesDelete" */ "../components/users/usuarios_roles/usuariosRolesDelete.vue"
       ),
   },
-  //archivo/prueba
-  {
-    path: "/uploads",
-    name: "Uploads",
-    component: () =>
-      import(
-        /* webpackChunkName: "Uploads" */ "../components/documentos/files/Uploads.vue"
-      ),
-  },
-
   //archivo/files
   {
     path: "/files",
     name: "Files",
     component: () =>
       import(
-        /* webpackChunkName: "Files" */ "../components/documentos/files/Files.vue"
+        /* webpackChunkName: "Files" */ "../components/documentos/Files.vue"
       ),
   },
   {
@@ -180,7 +170,7 @@ const routes = [
     name: "Download",
     component: () =>
       import(
-        /* webpackChunkName: "Download" */ "../components/documentos/files/Download.vue"
+        /* webpackChunkName: "Download" */ "../components/documentos/Download.vue"
       ),
   },
   {
@@ -188,7 +178,7 @@ const routes = [
     name: "filesDelete",
     component: () =>
       import(
-        /* webpackChunkName: "filesDelete" */ "../components/documentos/delete.vue"
+        /* webpackChunkName: "filesDelete" */ "../components/documentos/Delete.vue"
       ),
   },
 
@@ -207,7 +197,7 @@ const routes = [
     name: "documentosAdd",
     component: () =>
       import(
-        /* webpackChunkName: "documentosAdd" */ "../components/documentos/documents.vue"
+        /* webpackChunkName: "documentosAdd" */ "../components/documentos/Documents.vue"
       ),
   },
   {
@@ -215,7 +205,7 @@ const routes = [
     name: "documentosEdit",
     component: () =>
       import(
-        /* webpackChunkName: "documentosEdit" */ "../components/documentos/documents.vue"
+        /* webpackChunkName: "documentosEdit" */ "../components/documentos/Documents.vue"
       ),
   },
   {
@@ -223,7 +213,16 @@ const routes = [
     name: "documentosDelete",
     component: () =>
       import(
-        /* webpackChunkName: "documentosDelete" */ "../components/documentos/delete.vue"
+        /* webpackChunkName: "documentosDelete" */ "../components/documentos/Delete.vue"
+      ),
+  },
+  //dashboard
+  {
+    path: "/dashboard/",
+    name: "Dashboard",
+    component: () =>
+      import(
+        /* webpackChunkName: "Dashboard" */ "../components/dashboard/DashBoardAdmin.vue"
       ),
   },
   //errors
