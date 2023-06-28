@@ -144,8 +144,8 @@ export default {
   font-size: 1.8rem;
   border: 1px solid transparent;
   border-radius: 0.25rem;
-  color: #b370bd;
-  background: white;
+  color: white;
+  background:#00acc1;
   margin-top: 4px;
   margin-bottom: 4px;
 }

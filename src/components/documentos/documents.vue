@@ -1040,6 +1040,7 @@ export default {
   padding: 0.25rem 0.5rem;
   border-radius: 0.2rem;
   font-size: 0.8rem;
+  padding-left: 1.5rem;
 }
 .form-select-sm {
   padding-top: 0.25rem;
@@ -1123,11 +1124,11 @@ export default {
   cursor: auto;
 }
 .bi-search {
-  color: #191919;
+  color: #626f6f;
   position: absolute;
   width: 20px;
   height: 20px;
-  left: 18px;
+  left: 20px;
   top: 50%;
   transform: translateY(-50%);
 }

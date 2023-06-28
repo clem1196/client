@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="container-fluid mt-4">
+    <div class="card card-title">Upload files</div>
     <!--UPLOADS-->
     <div class="card-header">
       <form enctype="multipart/form-data">
@@ -27,11 +28,13 @@
             >
               Aceptar
             </button>
-            <a href="#" class="btn btn-cancel btn-sm" @click="cancelCharge"> Cancelar </a>
+            <a href="#" class="btn btn-cancel btn-sm" @click="cancelCharge">
+              Cancelar
+            </a>
           </small>
           <small v-else class="alert alert-danger">
             Solo se admiten hasta 12 archivos, quite algunos para continuar...
-            <a href="#"  @click="cancelCharge">Cancelar</a>
+            <a href="#" @click="cancelCharge">Cancelar</a>
           </small>
         </small>
       </form>
@@ -67,132 +70,112 @@
 
     <!--LIST FILES-->
     <div v-if="files.length > 0" class="m-2">
-      <div class="card">
-        <div class="container mt-2" style="font-size: 0.8rem">
+      <!--Form-->
+      <div class="card-search">
+        <div class="row row-search">
           <!--Switch-->
-          <div style="col-12">
+          <div class="col-auto">
             <div class="form-check form-switch">
-              <label class="form-check-label" for="switchFiles">Clásica</label>
+              <label class="form-check-label" for="swit">Clásica</label>
               <input
                 @click="cambiarFilter"
+                name="inputNameSwitch"
                 class="form-check-input"
-                name="inputSwith"
                 type="checkbox"
-                id="switchFiles"
+                role="roleSwitch"
+                id="swit"
               />
             </div>
           </div>
 
           <!--Form-->
-          <!--Search libre-->
-          <div v-if="filter == true" class="col-12">
-            <form @keyup="getSearchFiles" class="mt-2">
-              <div class="container m-2">
-                <i class="bi-search"></i>
-                <input
-                  id="inputFree"
-                  name="searchFree"
-                  style="width: 93%"
-                  class="form-control form-control-sm"
-                  v-model="text"
-                  type="search"
-                  placeholder="Search"
-                />
+          <div class="col-auto">
+            <!--Search libre-->
+            <form v-if="filter == true" @keyup="getSearchFiles">
+              <div class="row m-2">
+                <div class="col-auto">
+                  <i class="bi-search"></i>
+                  <input
+                    v-model="text"
+                    id="inputFreeId"
+                    name="inputFree"
+                    class="form-control form-control-sm"
+                    type="search"
+                    placeholder=""
+                  />
+                </div>
               </div>
             </form>
-          </div>
-          <!--Search clásico-->
-          <div v-else class="col-12">
-            <form @submit.prevent="getSearchFiles" class="mt-2">
-              <div
-                class="btn-group center"
-                role="group"
-                aria-label="Basic mixed styles example"
-              >
-                <button
-                  type="submit"
-                  class="btn btn-sm m-1"
-                  style="background: #ba68c8; color: white; border: rounded"
-                >
-                  Buscar
-                </button>
-                <button
-                  v-if="success.length > 0 || err.length > 0"
-                  @click="getDataPages(1)"
-                  type="button"
-                  class="btn btn-sm m-1"
-                  style="background: #e1bee7; color: white"
-                >
-                  Salir
-                </button>
+
+            <!--Search Clasic-->
+            <form v-else @submit.prevent="getSearchFiles">
+              <div class="row">
+                <div class="col-auto">
+                  <button type="submit" class="btn-form-doc">Buscar</button>
+                </div>
+                <div class="col-auto">
+                  <button
+                    v-if="success.length > 0 || err.length > 0"
+                    @click="getDataPages(1)"
+                    type="button"
+                    class="btn-form-doc cancel"
+                  >
+                    Salir
+                  </button>
+                  <button
+                    v-else
+                    disabled
+                    type="button"
+                    class="btn-form-doc search-out"
+                  >
+                    Salir
+                  </button>
+                </div>
+                <div class="col-auto mt-1">
+                  <i class="bi-search"></i>
+                  <input
+                    v-model="text"
+                    id="inputSearchDocs"
+                    name="inputClasicDocs"
+                    class="form-control form-control-sm"
+                    type="search"
+                    placeholder=""
+                  />
+                </div>
               </div>
-              <i class="bi-search m-2">
-                <input
-                  id="searchInput"
-                  name="searchClasic"
-                  class="form-control form-control-sm"
-                  style="width: 72%"
-                  v-model="text"
-                  type="search"
-                  placeholder="Search"
-                />
-              </i>
             </form>
           </div>
         </div>
       </div>
       <!--Table-->
-      <table
-        id="datos"
-        class="table table-hover mt-1"
-        style="font-size: 0.75rem"
-      >
-        <thead style="border: 0; font-size: 1rem">
-          <tr style="background: #f3e5f5">
+      <table id="datos" class="table table-hover">
+        <thead>
+          <tr class="thead-tr">
             <th>
-              <img src="../../assets/sort.png" alt="" width="9" />
-              <button
-                @click="sortName"
-                class="btn btn-sm"
-                style="color: #212f3c"
-              >
+              <i class="bi-filter"></i>
+              <button @click="sortName" class="btn btn-sm th-font-size">
                 Nombre
               </button>
             </th>
-            <!--<th>
-                <img src="../../../assets/sort.png" alt="" width="9" />
-                <button @click="sortUrl" class="btn btn-default btn-sm">
-                  Link
-                </button>
-              </th>-->
             <th>
-              <img src="../../assets/sort.png" alt="" width="9" />
-              <button
-                @click="sortCreated"
-                class="btn btn-sm"
-                style="color: #212f3c"
-              >
+              <i class="bi-filter"></i>
+              <button @click="sortCreated" class="btn btn-sm th-font-size">
                 Creado
               </button>
             </th>
             <th>
-              <button class="btn btn-sm" style="color: #212f3c">Accion</button>
+              <button class="btn btn-sm th-font-size">Action</button>
             </th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="search in searchFiles" :key="search.name">
+          <tr v-for="search in searchFiles" :key="search.name" class="tbody-tr">
             <td>{{ search.name }}</td>
             <!-- <td>{{ search.url }}</td>-->
             <td>{{ search.created }}</td>
-
-            <td class="text-center">
+            <td>
               <a :href="'/files/delete/' + search.name" title="Delete"
-                ><i
-                  class="bi-trash-fill"
-                  style="font-size: 1rem; color: #ba68c8"
-                ></i
+                ><i class="bi-trash-fill size-trash"></i
               ></a>
             </td>
           </tr>
@@ -200,7 +183,7 @@
       </table>
 
       <!--PAGINATION-->
-      <nav aria-label="Page navigation example" style="font-size: 0.8rem">
+      <nav aria-label="Page navigation example" class="font-size-pagination">
         <ul v-if="pagination" class="pagination justify-content-left">
           <li class="page-item disabled">
             <button class="page-link">Páginas:</button>
@@ -310,7 +293,7 @@ export default {
       text: "",
       //Messages
       err: "",
-      success: "",     
+      success: "",
     };
   },
   components: {},
@@ -390,8 +373,8 @@ export default {
       }
     },
     async cancelCharge() {
-      this.filesUpload.splice(0, this.filesUpload.length+1)
-      this.noFilesUpload.splice(0, this.noFilesUpload.length+1)
+      this.filesUpload.splice(0, this.filesUpload.length + 1);
+      this.noFilesUpload.splice(0, this.noFilesUpload.length + 1);
     },
     async removeFile(key) {
       this.filesUpload.splice(key, 1);
@@ -563,16 +546,10 @@ export default {
   background-color: #ab47bc;
   border-color: #ab47bc;
 }
-.page-link {
-  color: #ba68c8;
-}
-.card {
-  background: #f3e5f5;
-}
 .card-header {
   margin: 0.6em;
   margin-top: 12px;
-  background-color: #f3e5f5;
+  background-color: none;
   font-size: 14px;
 }
 .small-btn {
@@ -605,5 +582,157 @@ export default {
   font-size: 12px;
   padding-left: 20px;
   margin-bottom: 20px;
+}
+
+/*General*/
+
+.card.card-title {
+  background: none;
+  color: black;
+  padding: 1%;
+  font-size: large;
+  text-align: center;
+}
+.btn-form-users {
+  color: white;
+  border-radius: 0.25rem;
+  background-color: default;
+  font-size: 0.85rem;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+  text-decoration: none;
+}
+.btn-form-users.new {
+  color: white;
+  background-color: #00acc1;
+}
+.btn-form-users.assingRole {
+  color: white;
+  background-color: #ab47bc;
+}
+
+.form-control-sm {
+  min-height: calc(1.5em + 0.5rem + 2px);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.2rem;
+  font-size: 0.8rem;
+  padding-left: 1.5rem;
+}
+
+.btn-form-doc {
+  color: white;
+  border-radius: 0.25rem;
+  background-color: #00acc1;
+  font-size: 0.85rem;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+}
+.btn-form-doc.clean {
+  color: white;
+  background-color: #ab47bc;
+}
+.btn-form-doc.cancel {
+  color: #ab47bc;
+  background-color: transparent;
+  text-decoration: none;
+}
+.card-search {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  background-color: #e0f7fa;
+  border-radius: 0.25rem;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+.btn-form-doc.search-out {
+  color: #ab47bc;
+  background-color: transparent;
+  text-decoration: none;
+}
+.btn-form-doc.search-out:disabled {
+  color: #a29ea2;
+  background-color: transparent;
+  text-decoration: none;
+  cursor: auto;
+}
+.bi-search {
+  color: #626f6f;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.font-size-pagination {
+  font-size: 0.8rem;
+}
+.thead-tr {
+  background: #00acc1;
+  text-align: center;
+}
+.th-font-size {
+  font-size: 0.9rem;
+  color: white;
+}
+/*Table tbody*/
+.tbody-tr {
+  font-size: small;
+  background-color: none;
+  text-align: center;
+}
+
+.size-pencil {
+  font-size: 1rem;
+  color: #f7d43a;
+}
+.size-trash {
+  font-size: 1rem;
+  color: #ba68c8;
+}
+.row-search {
+  padding-left: 20px;
+  padding-top: 6px;
+  align-items: center;
+  padding-bottom: 6px;
+}
+.col-auto {
+  flex: 0 0 auto;
+  width: auto;
+  position: relative;
+}
+.form-check {
+  display: block;
+  min-height: 1.5rem;
+  padding-left: 1.5em;
+  margin-bottom: none;
+}
+
+.form-check-input:checked {
+  background-color: #ab47bc;
+  border-color: #ab47bc;
+}
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: #ab47bc;
+  border-color: #ab47bc;
+}
+.page-link {
+  color: #ba68c8;
 }
 </style>

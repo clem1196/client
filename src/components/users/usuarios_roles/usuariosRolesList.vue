@@ -1,140 +1,145 @@
 <template>
   <div class="container-fluid mt-4">
-    <!--Llamamos al componente headerWiev de navegación-->
-    <header-view></header-view>
-    <div class="mt-2">
+    <div class="card card-title">
+      Roles de Usuarios      
+    </div>    
       <!--Add-->
-      <a class="btn btn-primary" href="/usuarios/add">Crear nuevo</a>
-      <a class="btn btn-primary m-3" href="/usuarios-roles/add">Asignar rol </a>
-      <!--Switch-->
-      <div style="float: right" class="m-4">
-        <div class="form-check form-switch" @click="cambiarFilter">
-          <label class="form-check-label" for="switch">Búsqueda estrícta</label>
-          <input
-            class="form-check-input"
-            type="checkbox"
-            role="switch"
-            id="switch"
-          />
+      <a class="btn-form-users new" href="/usuarios/add">Crear nuevo</a>
+      <a class="btn-form-users assingRole m-3" href="/usuarios-roles/add">Asignar rol </a>
+        
+    <!--Form-->
+    <div class="card-search">
+      <div class="row row-search">
+        <!--Switch-->
+        <div class="col-auto">
+          <div class="form-check form-switch">
+            <label class="form-check-label" for="swit">Clásica</label>
+            <input
+              @click="cambiarFilter"
+              name="inputNameSwitch"
+              class="form-check-input"
+              type="checkbox"
+              role="roleSwitch"
+              id="swit"
+            />
+          </div>
+        </div>
+
+        <!--Form-->
+        <div class="col-auto">
+          <!--Search libre-->
+          <form v-if="filter == true" @keyup="getSearchUsuariosRoles">
+            <div class="row m-2">
+              <div class="col-auto">
+                <i class="bi-search"></i>
+                <input
+                  v-model="text"
+                  id="inputFreeId"
+                  name="inputFree"
+                  class="form-control form-control-sm"
+                  type="search"
+                  placeholder=""
+                />
+              </div>
+            </div>
+          </form>
+
+          <!--Search Clasic-->
+          <form v-else @submit.prevent="getSearchUsuariosRoles">
+            <div class="row">
+              <div class="col-auto">
+                <button type="submit" class="btn-form-doc">Buscar</button>
+              </div>
+              <div class="col-auto">
+                <button
+                  v-if="success.length > 0 || err.length > 0"
+                  @click="getDataPages(1)"
+                  type="button"
+                  class="btn-form-doc cancel"
+                >
+                  Salir
+                </button>
+                <button
+                  v-else
+                  disabled
+                  type="button"
+                  class="btn-form-doc search-out"
+                >
+                  Salir
+                </button>
+              </div>
+              <div class="col-auto mt-1">
+                <i class="bi-search"></i>
+                <input
+                  v-model="text"
+                  id="inputSearchDocs"
+                  name="inputClasicDocs"
+                  class="form-control form-control-sm"
+                  type="search"
+                  placeholder=""
+                />
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-    <!--Form-->
-    <!--Search libre-->
-    <div v-if="filter == true" class="col-12">
-      <form @keyup="getSearchUsuariosRoles" class="mt-2">
-        <i class="bi-search"></i>
-        <input
-        id="inputSearchUsersRoles1"
-          name="inputUsersRoles1"
-          class="border rounded"
-          style="width: 100%"
-          v-model="text"
-          type="search"
-          placeholder="Search"
-        />
-      </form>
-    </div>
-    <!--Search estricto-->
-    <div v-else class="col-12">
-      <form @submit.prevent="getSearchUsuariosRoles" class="mt-4">
-        <div
-          style="float: right"
-          class="btn-group"
-          role="group"
-          aria-label="Basic mixed styles example"
-        >
-          <button
-            v-if="success.length > 0 || err.length > 0"
-            @click="getDataPages(1)"
-            type="button"
-            class="btn btn-light"
-          >
-            Salir
-          </button>
-          <button
-            v-if="text"
-            type="button"
-            class="btn btn-secondary"
-            @click="limpiarText"
-          >
-            Limpiar
-          </button>
-          <button type="submit" class="btn btn-primary">Buscar</button>
-        </div>
-        <i class="bi-search">
-          <input
-          id="inputSearchUsersRoles"
-          name="inputUsersRoles"
-            class="border rounded"
-            style="width: 100%"
-            v-model="text"
-            type="search"
-            placeholder="Search"
-          />
-        </i>
-      </form>
-    </div>
     <!--Table-->
-    <table class="table table-hover mt-2">
+    <table class="table table-hover">
       <thead>
-        <tr style="background: #ecedef">
+        <tr class="thead-tr">
         <th>
-         <img src="../../../assets/sort.png" alt="" width="14">
+        <i class="bi-filter"></i>
             <button
               @click="sortId"
-              class="btn btn-default btn-sm"
-              style="border: 0; font-size: 1.1rem"
+              class="btn btn-sm th-font-size"
+              
             >
               Id
             </button>
           </th>
           <th>
-            <img src="../../../assets/sort.png" alt="" width="14">
+            <i class="bi-filter"></i>
             <button
               @click="sortUsuario"
-              class="btn btn-default btn-sm"
-              style="border: 0; font-size: 1.1rem"
+              class="btn btn-sm th-font-size"
             >
               Usuario
             </button>
           </th>
           <th>
-            <img src="../../../assets/sort.png" alt="" width="14">
+            <i class="bi-filter"></i>
             <button
               @click="sortRol"
-              class="btn btn-default btn-sm"
-              style="border: 0; font-size: 1.1rem"
+              class="btn btn-sm th-font-size"
             >
               Rol
             </button>
           </th>
           <th>
-            <img src="../../../assets/sort.png" alt="" width="14">
+            <i class="bi-filter"></i>
             <button
               @click="sortCreado"
-              class="btn btn-default btn-sm"
-              style="border: 0; font-size: 1.1rem"
+              class="btn btn-sm th-font-size"
             >
               Creado
             </button>
           </th>
           <th>
-            <img src="../../../assets/sort.png" alt="" width="14">
-            <button
-              class="btn btn-default btn-sm"
-              style="border: 0; font-size: 1.1rem"
+            <i class="bi-filter"></i>
+            <button             
               @click="sortModificado"
+              class="btn btn-sm th-font-size"
             >
               Modificado
             </button>
           </th>
-          <th>Acciones</th>
-          <th></th>
+          <th><button class="btn btn-sm th-font-size">Action</button></th>
+          
         </tr>
       </thead>
       <tbody>
-        <tr
+        <tr class="tbody-tr"
           v-for="search in searchUsuariosRoles"
           :key="search.idusuarios_roles"
         >
@@ -142,19 +147,26 @@
           <td>{{ search.idusuarios_roles }}</td>
           <td>{{ search.nombre_usuario }}</td>
           <td>{{ search.nombre_rol }}</td>
-          <td>{{ search.registrado }}</td>
-          <td>{{ search.actualizado }}</td>
-          <td>
-            <a :href="'/usuarios-roles/edit/' + search.idusuarios_roles">
-              <i class="bi-pencil" style="font-size: 1.5rem; color: #f7d43a"></i
-            ></a>
+          <td v-if="search.registrado">
+            {{ new Date(search.registrado).toLocaleString() }}
           </td>
+          <td v-else></td>
+          <td v-if="search.actualizado">
+            {{ new Date(search.actualizado).toLocaleString() }}
+          </td>
+          <td v-else></td>         
           <td>
-            <a :href="'/usuarios-roles/delete/' + search.idusuarios_roles"
-              ><i
-                class="bi-trash-fill"
-                style="font-size: 1.5rem; color: #f7423a"
-              ></i
+            <a
+              :href="'/usuarios-roles/edit/' + search.idusuarios_roles"
+              title="Edit"
+            >
+              <i class="bi-pencil size-pencil"></i
+            ></a>
+            |
+            <a
+              :href="'/usuarios-roles/delete/' + search.idusuarios_roles"
+              title="Delete"
+              ><i class="bi-trash-fill size-trash"></i
             ></a>
           </td>
         </tr>
@@ -162,7 +174,7 @@
     </table>
 
     <!--PAGINATION-->
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation example" class="font-size-pagination">
       <ul v-if="pagination" class="pagination justify-content-left">
         <li class="page-item disabled">
           <button class="page-link">Páginas:</button>
@@ -246,7 +258,6 @@
 </template>
 
 <script>
-import headerView from "../../../views/HeaderViewUsers/headerView.vue";
 import axios from "axios";
 export default {
   name: "usuariosRoles-list",
@@ -263,12 +274,12 @@ export default {
       searchUsuariosRoles: [],
       text: "",
       //Messages
-      err: "",
       success: "",
+      err: "",
     };
   },
   components: {
-    headerView,
+    
   },
   async mounted() {
     await this.getUsuarios_roles();
@@ -287,12 +298,12 @@ export default {
         //console.log(result.data)
         if (result.data.usersNames_rolesNames.length > 0) {
           this.usuariosRoles = result.data.usersNames_rolesNames;
-          this.err = false;
+          this.errSearch = false;
         } else {
           console.log("No hay datos que mostrar");
         }
       } catch (error) {
-        this.err = error.response.data.Message;
+        this.errSearch = error.response.data.Message;
         console.log(error.response);
       }
     },
@@ -416,7 +427,7 @@ export default {
           this.searchUsuariosRoles = filterItems(this.text);
           this.pagination = false;
           this.success =
-            "Se encontraron" + this.searchUsuariosRoles.length + "registros";
+            "Se encontraron" + " " + this.searchUsuariosRoles.length + " "  +"registros";
           this.err = false;
         } else {
           this.searchUsuariosRoles = [];
@@ -497,5 +508,156 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.card.card-title{
+  background: none ;
+  color: black;
+  padding: 1%;
+  font-size:large;
+  text-align: center;
+  
+}
+.btn-form-users {
+  color: white;
+  border-radius: 0.25rem;
+  background-color: default;
+  font-size: 0.85rem;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+text-decoration: none;
+}
+.btn-form-users.new {
+  color: white;  
+  background-color: #00acc1;
+ 
+}
+.btn-form-users.assingRole {
+  color: white;  
+  background-color: #ab47bc;
+ 
+}
+
+.form-control-sm {
+  min-height: calc(1.5em + 0.5rem + 2px);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.2rem;
+  font-size: 0.8rem;
+  padding-left: 1.5rem;
+}
+
+.btn-form-doc {
+  color: white;
+  border-radius: 0.25rem;
+  background-color: #00acc1;
+  font-size: 0.85rem;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+}
+.btn-form-doc.clean {
+  color: white;
+  background-color: #ab47bc;
+}
+.btn-form-doc.cancel {
+  color: #ab47bc;
+  background-color: transparent;
+  text-decoration: none;
+}
+.card-search {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  background-color: #e0f7fa;
+  border-radius: 0.25rem;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+.btn-form-doc.search-out {
+  color: #ab47bc;
+  background-color: transparent;
+  text-decoration: none;
+}
+.btn-form-doc.search-out:disabled {
+  color: #a29ea2;
+  background-color: transparent;
+  text-decoration: none;
+  cursor: auto;
+}
+.bi-search {
+  color: #626f6f;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.font-size-pagination {
+  font-size: 0.8rem;
+}
+.thead-tr {
+  background: #00acc1;
+  text-align: center;
+}
+.th-font-size {
+  font-size: 0.9rem;
+  color: white;
+}
+/*Table tbody*/
+.tbody-tr {
+  font-size: small;
+  background-color: none;
+  text-align: center;
+}
+
+.size-pencil {
+  font-size: 1rem;
+  color: #f7d43a;
+}
+.size-trash {
+  font-size: 1rem;
+  color: #ba68c8;
+}
+.row-search {
+  padding-left: 20px;
+  padding-top: 6px;
+  align-items: center;
+  padding-bottom: 6px;
+}
+.col-auto {
+  flex: 0 0 auto;
+  width: auto;
+  position: relative;
+}
+.form-check {
+  display: block;
+  min-height: 1.5rem;
+  padding-left: 1.5em;
+  margin-bottom: none;
+}
+
+.form-check-input:checked {
+  background-color: #ab47bc;
+  border-color: #ab47bc;
+}
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: #ab47bc;
+  border-color: #ab47bc;
+}
+.page-link {
+  color: #ba68c8;}
 </style>

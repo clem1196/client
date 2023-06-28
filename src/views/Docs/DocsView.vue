@@ -384,5 +384,7 @@ export default {
   align-content: center;
   margin-top: 0.1rem;
   margin-bottom: 12px;
+  display: flex;
+  flex-wrap: nowrap;
 }
 </style>
