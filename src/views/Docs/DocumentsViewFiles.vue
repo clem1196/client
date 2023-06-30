@@ -194,7 +194,7 @@
             <documents></documents>
           </div>
           <!--<div class="tab-pane fade show active" id="data-files">-->
-          <div class="tab-pane fade" id="data-files">
+          <div class="tab-pane fade show active" id="data-files">
             <files></files>
           </div>
           <!--accounting content-->
@@ -331,60 +331,6 @@ export default {
 };
 </script>
 
-<style scoped>
-.col-10 {
-  flex: 0 0 auto;
-  width: 84%;
-}
-.col-2 {
-  flex: 0 0 auto;
-  width: 16%;
-  background: #b8c8ca ;
-  min-width: min-content;
-  min-height: min-content;
-}
-.btn-modules {
-  color: white;
-  margin-top: 6px;
-  background-color: #00ACC1;
-  border: 1px solid #00ACC1;
-  padding: 0.25rem 2.75rem;
-  font-size: 0.95rem;
-  border-radius: 0.25rem;
-  text-align: left;
-  padding-left: 12px;
-}
-.btn-modules:hover {
-  color: #9c27b0;
-  background: #f3e5f5;
-  border: 1px solid white;
-}
-.nav-link-tab {
-  color: #9c27b0;
-  background: white;
-  border: 0;
-  border-radius: 0.25rem;
-  width: 70%;
-  margin-top: 3%;
-}
-.nav-link-tab.active {
-  color: white;
-  background-color: #ab47bc;
-  width: 70%;
-  margin-top: 3%;
-}
+<style >
 
-.nav-link-tab:hover {
-  color: #9c27b0;
-  background: #f3e5f5;
-  border: 1px solid white;
-}
-.flex-column {
-  flex-direction: column;
-  align-content: center;
-  margin-top: 0.1rem;
-  margin-bottom: 12px;
-  display: flex;
-  flex-wrap: nowrap;
-}
 </style>

@@ -105,7 +105,7 @@
                   <small
                     v-if="datos.file == '' || datos.file == undefined"
                     class="check-field-false"
-                    >Opcional</small
+                    >Requerido</small
                   >
                   <small v-else class="bi-check-lg check-field-true"></small>
                 </span>
@@ -617,8 +617,7 @@ export default {
   async mounted() {
     await this.getDocuments();
     //await this.getFiles();
-    this.getDataPages(this.currentPage);
-    //let myTextInput = document.getElementById("myFiles");
+    this.getDataPages(this.currentPage);    
   },
   methods: {
     //DOCUMENTS LIST
@@ -1018,178 +1017,6 @@ export default {
 };
 </script>
 
-<style scoped>
-.card-form {
-  position: relative;
-  border: 0.01px solid #eae4eb;
-  border-radius: 0.25rem;
-  margin-top: 1.5rem;
-  font-size: 0.8rem;
-  flex-direction: column;
-  align-items: center;
-}
-.form-document {
-  
-  margin-bottom: 0%;
-  margin-top: 1%;
-  margin-left: 2%;
-  font-size: 0.8rem;
-}
-.form-control-sm {
-  min-height: calc(1.5em + 0.5rem + 2px);
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.2rem;
-  font-size: 0.8rem;
-  padding-left: 1.5rem;
-}
-.form-select-sm {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-  padding-left: 0.5rem;
-  font-size: 0.8rem;
-  border-radius: 0.2rem;
-}
-.label-form-size {
-  flex: 0 0 auto;
-  width: 10%;
-  padding-top: 0.5%;
-  padding-bottom: 0.5%;
-  padding-left: 1%;
-  padding-right: 0.5%;
-}
-.input-form-size {
-  flex: 0 0 auto;
-  width: 78%;
-  padding-top: 0.5%;
-  padding-bottom: 0.5%;
-  padding-left: 0.5%;
-  padding-right: 0.5%;
-}
-.validation-form-size {
-  flex: 0 0 auto;
-  width: 11%;
-  padding-left: 0%;
-}
-.check-field-true {
-  font-size: 1.2rem;
-  color: #00acc1;
-}
-.check-field-false {
-  color: #ab47bc;
-  font-size: 0.73rem;
-}
-
-.btn-form-doc {
-  color: white;
-  border-radius: 0.25rem;
-  background-color: #00acc1;
-  font-size: 0.85rem;
-  display: inline-block;
-  font-weight: 400;
-  line-height: 1.5;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  border: 1px solid transparent;
-  padding: 0.375rem 0.75rem;
-}
-.btn-form-doc.clean {
-  color: white;
-  background-color: #ab47bc;
-}
-.btn-form-doc.cancel {
-  color: #ab47bc;
-  background-color: transparent;
-  text-decoration: none;
-}
-.card-search {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  border: none;
-  background-color: #e0f7fa;
-  border-radius: 0.25rem;
-  margin-top: 0.5rem;
-  font-size: 0.8rem;
-}
-.btn-form-doc.search-out {
-  color: #ab47bc;
-  background-color: transparent;
-  text-decoration: none;
-}
-.btn-form-doc.search-out:disabled {
-  color: #a29ea2;
-  background-color: transparent;
-  text-decoration: none;
-  cursor: auto;
-}
-.bi-search {
-  color: #626f6f;
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-.font-size-pagination {
-  font-size: 0.8rem;
-}
-.thead-tr {
-  background: #00acc1;
-  text-align: center;
-}
-.th-font-size {
-  font-size: 0.9rem;
-  color: white;
-}
-/*Table tbody*/
-.tbody-tr {
-  font-size: small;
-  background-color: none;
-  text-align: center;
-}
-.size-link {
-  font-size: 1.3rem;
-  color: #ab47bc;
-}
-.size-pencil {
-  font-size: 1rem;
-  color: #f7d43a;
-}
-.size-trash {
-  font-size: 1rem;
-  color: #ba68c8;
-}
-.row-search {
-  padding-left: 20px;
-  padding-top: 6px;
-  align-items: center;
-  padding-bottom: 6px;
-}
-.col-auto {
-  flex: 0 0 auto;
-  width: auto;
-  position: relative;
-}
-.form-check {
-  display: block;
-  min-height: 1.5rem;
-  padding-left: 1.5em;
-  margin-bottom: none;
-}
-
-.form-check-input:checked {
-  background-color: #ab47bc;
-  border-color: #ab47bc;
-}
-.page-item.active .page-link {
-  z-index: 3;
-  color: #fff;
-  background-color: #ab47bc;
-  border-color: #ab47bc;
-}
-.page-link {
-  color: #ba68c8;
-}
+<style>
+@import url("/src/services/style.css");
 </style>

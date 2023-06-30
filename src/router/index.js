@@ -189,7 +189,7 @@ const routes = [
     name: "documentosList",
     component: () =>
       import(
-        /* webpackChunkName: "documentosList" */ "../views/Docs/DocsView.vue"
+        /* webpackChunkName: "documentosList" */ "../views/Docs/DocumentsViewDocs.vue"
       ),
   },
   {
