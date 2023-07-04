@@ -63,7 +63,7 @@ if (token) {
       return false;
     }
   };
-  //contador
+  //empleado
   const isEmployeeLists = async () => {
     if (
       listRoles.find(
@@ -104,7 +104,7 @@ if (token) {
       return false;
     }
   };
-  //contador
+  //empleado
   const isEmployeeChanges = async () => {
     if (
       listRoles.find(
@@ -123,15 +123,17 @@ if (token) {
     if ((await isAdministrator()) || (await isAuditor())) {
       path.push("/usuarios-roles");
     } else if (await isSellerLists()||await isSellerChanges()) {
-      path.push("/ventas");
+      path.push("/products");
+      path.push("/stock");
     } else if (await isAccountantLists()||await isAccountantChanges()) {
-      path.push("/contabilidad");
+      path.push("/obligations");
+      path.push("/debts");     
     } else if (await isEmployeeLists()||await isEmployeeChanges()) {
       path.push("/documentos");
     } else {
       path.push("/");
     }
-    return path[0];
+    return path;
   };
   //obtener el nombre del usuario desde el token
   const obtenerNombreUsuario = async () => {

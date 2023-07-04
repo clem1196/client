@@ -1,5 +1,7 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid mt-3">
+    <div class="card card-title">Documents</div>
+
     <!--DOCUMENTS ADD, EDIT-->
     <div class="row">
       <!--Add, Edit-->
@@ -280,15 +282,15 @@
             <div class="row row-search">
               <!--Switch-->
               <div class="col-auto">
-                <div class="form-check form-switch">
-                  <label class="form-check-label" for="swit">Clásica</label>
+                <div class="form-check form-switch" title="Modo clásico">
+                  <label class="form-check-label" for="switDocList"></label>
                   <input
                     @click="cambiarFilter"
                     name="inputNameSwitch"
                     class="form-check-input"
                     type="checkbox"
                     role="roleSwitch"
-                    id="swit"
+                    id="switDocList"
                   />
                 </div>
               </div>
@@ -304,7 +306,7 @@
                         v-model="text"
                         id="inputFreeId"
                         name="inputFree"
-                        class="form-control form-control-sm"
+                        class="form-control form-control-sm search"
                         type="search"
                         placeholder=""
                       />
@@ -342,7 +344,7 @@
                         v-model="text"
                         id="inputSearchDocs"
                         name="inputClasicDocs"
-                        class="form-control form-control-sm"
+                        class="form-control form-control-sm search"
                         type="search"
                         placeholder=""
                       />
@@ -409,7 +411,7 @@
                 </th>
                 <th>
                   <button class="btn btn-sm th-font-size">Action</button>
-                </th>                
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -617,7 +619,7 @@ export default {
   async mounted() {
     await this.getDocuments();
     //await this.getFiles();
-    this.getDataPages(this.currentPage);    
+    this.getDataPages(this.currentPage);
   },
   methods: {
     //DOCUMENTS LIST

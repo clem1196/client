@@ -12,14 +12,14 @@
         <!--Switch-->
         <div class="col-auto">
           <div class="form-check form-switch">
-            <label class="form-check-label" for="swit">Clásica</label>
+            <label class="form-check-label" for="switRolesList">Clásica</label>
             <input
               @click="cambiarFilter"
               name="inputNameSwitch"
               class="form-check-input"
               type="checkbox"
               role="roleSwitch"
-              id="swit"
+              id="switRolesList"
             />
           </div>
         </div>
@@ -35,7 +35,7 @@
                   v-model="text"
                   id="inputFreeId"
                   name="inputFree"
-                  class="form-control form-control-sm"
+                  class="form-control form-control-sm search"
                   type="search"
                   placeholder=""
                 />
@@ -73,7 +73,7 @@
                   v-model="text"
                   id="inputSearchDocs"
                   name="inputClasicDocs"
-                  class="form-control form-control-sm"
+                  class="form-control form-control-sm search"
                   type="search"
                   placeholder=""
                 />

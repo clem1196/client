@@ -27,22 +27,38 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "logOut" */ "../components/users/logOut.vue"),
   },
-  //compras
+  //contabilidad
   {
-    path: "/contabilidad",
-    name: "pagosPendientesList",
+    path: "/debts",
+    name: "DebtsList",
     component: () =>
       import(
-        /* webpackChunkName: "pagosPendientesList" */ "../components/contabilidad/pagosPendientesList.vue"
+        /* webpackChunkName: "DebtsList" */ "../views/ComponentsView.vue"
+      ),
+  },
+  {
+    path: "/obligations",
+    name: "ObligationsList",
+    component: () =>
+      import(
+        /* webpackChunkName: "ObligationsList" */ "../views/ComponentsView.vue"
       ),
   },
   //ventas
   {
-    path: "/ventas",
-    name: "ventasList",
+    path: "/products",
+    name: "ProductsList",
     component: () =>
       import(
-        /* webpackChunkName: "ventasList" */ "../components/ventas/ventasList.vue"
+        /* webpackChunkName: "ProductsList" */ "../views/ComponentsView.vue"
+      ),
+  },
+  {
+    path: "/stock",
+    name: "StockList",
+    component: () =>
+      import(
+        /* webpackChunkName: "StockList" */ "../views/ComponentsView.vue"
       ),
   },
   //usuarios
@@ -51,7 +67,7 @@ const routes = [
     name: "usuariosList",
     component: () =>
       import(
-        /* webpackChunkName: "usauriosList" */ "../components/users/usuarios/usuariosList.vue"
+        /* webpackChunkName: "usauriosList" */ "../views/ComponentsView.vue"
       ),
   },
   {
@@ -86,7 +102,7 @@ const routes = [
     name: "rolesList",
     component: () =>
       import(
-        /* webpackChunkName: "rolesList" */ "../components/users/roles/rolesList.vue"
+        /* webpackChunkName: "rolesList" */ "../views/ComponentsView.vue"
       ),
   },
   {
@@ -120,7 +136,7 @@ const routes = [
     name: "usuariosRolesList",
     component: () =>
       import(
-        /* webpackChunkName: "usuariosRolesList" */ "../components/users/usuarios_roles/usuariosRolesList.vue"
+        /* webpackChunkName: "usuariosRolesList" */ "../views/ComponentsView.vue"
       ),
   },
   {
@@ -162,7 +178,7 @@ const routes = [
     name: "Files",
     component: () =>
       import(
-        /* webpackChunkName: "Files" */ "../components/documentos/Files.vue"
+        /* webpackChunkName: "Files" */ "../views/ComponentsView.vue"
       ),
   },
   {
@@ -183,13 +199,13 @@ const routes = [
   },
 
   
-  //personas
+  //documents
   {
     path: "/documentos",
     name: "documentosList",
     component: () =>
       import(
-        /* webpackChunkName: "documentosList" */ "../views/Docs/DocumentsViewDocs.vue"
+        /* webpackChunkName: "documentosList" */ "../views/ComponentsView.vue"
       ),
   },
   {
@@ -197,7 +213,7 @@ const routes = [
     name: "documentosAdd",
     component: () =>
       import(
-        /* webpackChunkName: "documentosAdd" */ "../components/documentos/Documents.vue"
+        /* webpackChunkName: "documentosAdd" */ "../views/ComponentsView.vue"
       ),
   },
   {
@@ -205,7 +221,7 @@ const routes = [
     name: "documentosEdit",
     component: () =>
       import(
-        /* webpackChunkName: "documentosEdit" */ "../components/documentos/Documents.vue"
+        /* webpackChunkName: "documentosEdit" */ "../views/ComponentsView.vue"
       ),
   },
   {

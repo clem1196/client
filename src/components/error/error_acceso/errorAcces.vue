@@ -41,7 +41,7 @@ export default {
  },
  async mounted(){
      const getPath=await GetUrls.getUrls();
-     this.path=getPath;
+     this.path=getPath[0];
  }
 }
 </script>

@@ -1,12 +1,18 @@
 <template>
   <div class="container-fluid">
-    <div class="row" v-if="token" id="rowDocsView" @mouseenter="changeSizeCol_10">
+    <div
+      class="row"
+      v-if="token"
+      id="rowDocsView"
+      @mouseenter="changeSizeCol_10"
+    >
       <div class="col-2">
         <div class="nav flex-column">
           <!--Documents-->
-          <button v-if="administrator||employee"
+          <button
+            v-if="administrator || employee"
             class="btn-modules"
-            id="btndocuments"           
+            id="btndocuments"
             data-bs-toggle="collapse"
             data-bs-target="#tab-documents"
           >
@@ -45,9 +51,9 @@
           </div>
           <!--Accounting-->
           <button
-          v-if="administrator||counter"
+            v-if="administrator || counter"
             class="btn-modules"
-            id="btnaccounting"          
+            id="btnaccounting"
             data-bs-toggle="collapse"
             data-bs-target="#tab-accounting"
           >
@@ -65,31 +71,30 @@
                 id="btnPayments"
                 class="nav-link-tab"
                 data-bs-toggle="pill"
-                data-bs-target="#data-payments"
-                type="button"
-                aria-selected="false"
-              >
-                Payments
-              </button>
-              <button
-                @click="btnActive"
-                id="btnDebts"
-                class="nav-link-tab"
-                data-bs-toggle="pill"
                 data-bs-target="#data-debts"
                 type="button"
                 aria-selected="false"
               >
                 Debts
               </button>
+              <button
+                @click="btnActive"
+                id="btnDebts"
+                class="nav-link-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#data-obligations"
+                type="button"
+                aria-selected="false"
+              >
+                Obligations
+              </button>
             </div>
           </div>
           <!--Sales-->
           <button
-          v-if="administrator||seller"
+            v-if="administrator || seller"
             class="btn-modules"
             id="btndocuments"
-           
             data-bs-toggle="collapse"
             data-bs-target="#tab-sales"
           >
@@ -128,10 +133,9 @@
           </div>
           <!--Users-->
           <button
-          v-if="administrator||auditor"
+            v-if="administrator || auditor"
             class="btn-modules"
             id="btnusers"
-           
             data-bs-toggle="collapse"
             data-bs-target="#tab-users"
           >
@@ -182,8 +186,7 @@
         </div>
       </div>
       <!--MAIN CONTENT-->
-      <div class="col-10" id="col-10" >
-        
+      <div class="col-10" id="col-10">
         <div class="tab-content">
           <!--home content-->
           <div class="tab-pane fade" id="data-home">
@@ -194,22 +197,22 @@
             <documents></documents>
           </div>
           <!--<div class="tab-pane fade show active" id="data-files">-->
-          <div class="tab-pane fade show active" id="data-files">
+          <div class="tab-pane fade" id="data-files">
             <files></files>
           </div>
           <!--accounting content-->
-          <div class="tab-pane fade" id="data-payments">
-            <Payments></Payments>
-          </div>
           <div class="tab-pane fade" id="data-debts">
-            <h2>This is Debts</h2>
+            <Debts></Debts>
+          </div>
+          <div class="tab-pane fade" id="data-obligations">
+            <Obligations></Obligations>
           </div>
           <!--sales content-->
           <div class="tab-pane fade" id="data-products">
             <Products></Products>
           </div>
           <div class="tab-pane fade" id="data-stocks">
-            <h2>This is Stocks</h2>
+            <Stocks></Stocks>
           </div>
           <!--users content-->
           <div class="tab-pane fade" id="data-users_roles">
@@ -228,20 +231,22 @@
 </template>
 
 <script>
-import Helper from "../../services/Helpers";
+import Helper from "../services/Helpers";
 //components home
-import HomeView from "../HomeView.vue";
+import HomeView from "./HomeView.vue";
 //components documents
-import Files from "../../components/documentos/Files.vue";
-import Documents from "../../components/documentos/Documents.vue";
-// Components sales
-import Products from "../../components/ventas/ventasList.vue";
+import Files from "../components/documentos/Files.vue";
+import Documents from "../components/documentos/Documents.vue";
 // Components accounting
-import Payments from "../../components/contabilidad/pagosPendientesList.vue";
+import Debts from "../components/accounting/debtsList.vue";
+import Obligations from "../components/accounting/obligationsList.vue";
+// Components sales
+import Products from "../components/sales/productsList.vue";
+import Stocks from "../components/sales/stockList.vue";
 //components users
-import Roles from "../../components/users/roles/rolesList.vue";
-import Users from "../../components/users/usuarios/usuariosList.vue";
-import UsersRoles from "../../components/users/usuarios_roles/usuariosRolesList.vue";
+import Roles from "../components/users/roles/rolesList.vue";
+import Users from "../components/users/usuarios/usuariosList.vue";
+import UsersRoles from "../components/users/usuarios_roles/usuariosRolesList.vue";
 
 export default {
   data() {
@@ -276,19 +281,62 @@ export default {
     }
     //reset buttons
 
-    //this.changeSizeCol_10()
+    this.changePageActive();
   },
   components: {
-    Documents,
     HomeView,
-    Files,
+    Documents,    
+    Files,   
+    Debts,
+    Obligations,
+    Products,
+    Stocks,
     UsersRoles,
     Users,
-    Roles,
-    Payments,
-    Products,
+    Roles
   },
   methods: {
+    changePageActive() {
+      console.log(this.$route.path);
+      //let tabPaneHome=document.getElementById("data-home")
+      //let tabPaneAbout=document.getElementById("data-about")
+      let tabPaneDoc = document.getElementById("data-document");
+      let tabPaneFiles = document.getElementById("data-files");
+      let tabPanePayments = document.getElementById("data-debts");
+      let tabPaneDebts = document.getElementById("data-obligations");
+      let tabPaneProducts = document.getElementById("data-products");
+      let tabPaneStocks = document.getElementById("data-stocks");
+      let tabPaneUsers_Roles = document.getElementById("data-users_roles");
+      let tabPaneUsers = document.getElementById("data-users");
+      let tabPaneRoles = document.getElementById("data-roles");
+      if (this.$route.path === "/documentos") {
+        tabPaneDoc.classList.value = "tab-pane fade show active";
+      }
+      if (this.$route.path === "/files") {
+        tabPaneFiles.classList.value = "tab-pane fade show active";
+      }
+      if (this.$route.path === "/debts") {
+        tabPanePayments.classList.value = "tab-pane fade show active";
+      }
+      if (this.$route.path === "/obligations") {
+        tabPaneDebts.classList.value = "tab-pane fade show active";
+      }
+      if (this.$route.path === "/products") {
+        tabPaneProducts.classList.value = "tab-pane fade show active";
+      }
+      if (this.$route.path === "/stocks") {
+        tabPaneStocks.classList.value = "tab-pane fade show active";
+      }
+      if (this.$route.path === "/usuarios-roles") {
+        tabPaneUsers_Roles.classList.value = "tab-pane fade show active";
+      }
+      if (this.$route.path === "/usuarios") {
+        tabPaneUsers.classList.value = "tab-pane fade show active";
+      }
+      if (this.$route.path === "/roles") {
+        tabPaneRoles.classList.value = "tab-pane fade show active";
+      }
+    },
     btnActive() {
       let navBtnActive = document.getElementsByClassName("nav-link-tab active");
       let navBtn = document.getElementsByClassName("nav-link-tab");
@@ -305,32 +353,26 @@ export default {
       for (let index = 0; index < navBtn.length; index++) {
         if (btnIdActive.length === 1 && navBtn[index].id === btnIdActive[0]) {
           navBtn[index].classList.value = "nav-link-tab active";
-        }    
+        }
       }
       console.log(navBtnActive);
       console.log(navBtnActive[0]);
       console.log(btnIdActive);
     },
-    changeSizeCol_10(){
-     
-      let widthRow=document.getElementById("rowDocsView")    
-      let widthCol10=document.getElementById("col-10")
-      
-      console.log(widthRow.offsetWidth)
-      console.log(widthCol10.offsetWidth)
-      if (widthRow.offsetWidth<1004||widthCol10.offsetWidth<837) {     
-        widthCol10.style="width:64%; display:flex;";
-        
-      }else{
-        widthCol10.style="width:84%;";
+    changeSizeCol_10() {
+      let widthRow = document.getElementById("rowDocsView");
+      let widthCol10 = document.getElementById("col-10");
+
+      console.log(widthRow.offsetWidth);
+      console.log(widthCol10.offsetWidth);
+      if (widthRow.offsetWidth < 1004 || widthCol10.offsetWidth < 837) {
+        widthCol10.style = "width:64%; display:flex;";
+      } else {
+        widthCol10.style = "width:84%;";
       }
-    
-      
-    }
+    },
   },
 };
 </script>
 
-<style >
-
-</style>
+<style></style>

@@ -1,0 +1,24 @@
+<template>
+  <div class="container-fluid mt-3">
+    <div class="card card-title">{{title}}</div>    
+  </div>
+</template>
+<script>
+export default {
+  name: "sales-list",
+  props: {
+    title: {
+      type: String,
+      default: "Products list",
+    },
+  },
+  data() {
+    return {
+      
+    };
+  },
+};
+</script>
+<style>
+@import  url("/src/services/style.css");
+</style>
