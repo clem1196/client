@@ -1,12 +1,11 @@
 <template>
-  <div class="container-fluid">
-    <div
-      class="row"
-      v-if="token"
-      id="rowDocsView"
-      @mouseenter="changeSizeCol_10"
-    >
-      <div class="col-2">
+  <div
+    class="container-fluid"
+    id="containerFluid"
+    @mouseenter="changeTextBtn"
+  >
+    <div class="row" v-if="token" id="rowDocsView">
+      <div class="col-2 panel-right">
         <div class="nav flex-column">
           <!--Documents-->
           <button
@@ -15,8 +14,9 @@
             id="btndocuments"
             data-bs-toggle="collapse"
             data-bs-target="#tab-documents"
+            title="Documents"
           >
-            <i class="bi-file-earmark-plus-fill"></i>
+            <i class="bi-folder2"></i>
             Documents
           </button>
           <div class="collapse" id="tab-documents">
@@ -33,7 +33,9 @@
                 data-bs-target="#data-document"
                 type="button"
                 aria-selected="false"
+                title="Docs"
               >
+                <i class="bi-file-earmark"></i>
                 Docs
               </button>
               <button
@@ -44,8 +46,10 @@
                 data-bs-target="#data-files"
                 type="button"
                 aria-selected="false"
+                title="Uploads"
               >
-                Files
+                <i class="bi-cloud-arrow-up-fill"></i>
+                Uploads
               </button>
             </div>
           </div>
@@ -56,8 +60,9 @@
             id="btnaccounting"
             data-bs-toggle="collapse"
             data-bs-target="#tab-accounting"
+            title="Accountings"
           >
-            <i class="bi-briefcase-fill"></i>
+            <i class="bi-book"></i>
             Accountings
           </button>
           <div class="collapse" id="tab-accounting">
@@ -74,7 +79,9 @@
                 data-bs-target="#data-debts"
                 type="button"
                 aria-selected="false"
+                title="Debts"
               >
+                <i class="bi-currency-dollar"></i>
                 Debts
               </button>
               <button
@@ -85,7 +92,9 @@
                 data-bs-target="#data-obligations"
                 type="button"
                 aria-selected="false"
+                title="Obligations"
               >
+                <i class="bi-bank"></i>
                 Obligations
               </button>
             </div>
@@ -97,8 +106,9 @@
             id="btndocuments"
             data-bs-toggle="collapse"
             data-bs-target="#tab-sales"
+            title="Sales"
           >
-            <i class="bi-cash-stack"></i>
+            <i class="bi-shop"></i>
             Sales
           </button>
           <div class="collapse" id="tab-sales">
@@ -115,7 +125,9 @@
                 data-bs-target="#data-products"
                 type="button"
                 aria-selected="false"
+                title="Products"
               >
+                <i class="bi-cart4"></i>
                 Products
               </button>
               <button
@@ -126,7 +138,9 @@
                 data-bs-target="#data-stocks"
                 type="button"
                 aria-selected="false"
+                title="Stock"
               >
+                <i class="bi-list-ol"></i>
                 Stock
               </button>
             </div>
@@ -138,6 +152,7 @@
             id="btnusers"
             data-bs-toggle="collapse"
             data-bs-target="#tab-users"
+            title="Users"
           >
             <i class="bi-people-fill"></i>
             Users
@@ -156,8 +171,10 @@
                 data-bs-target="#data-users_roles"
                 type="button"
                 aria-selected="false"
+                title="Users with roles"
               >
-                Users-Roles
+                <i class="bi-person-lines-fill"></i>
+                User-Role
               </button>
               <button
                 @click="btnActive"
@@ -167,8 +184,10 @@
                 data-bs-target="#data-users"
                 type="button"
                 aria-selected="false"
+                title="User"
               >
-                Users
+                <i class="bi-person"></i>
+                User
               </button>
               <button
                 @click="btnActive"
@@ -178,8 +197,10 @@
                 data-bs-target="#data-roles"
                 type="button"
                 aria-selected="false"
+                title="Role"
               >
-                Roles
+                <i class="bi-person-workspace"></i>
+                Role
               </button>
             </div>
           </div>
@@ -258,6 +279,8 @@ export default {
       seller: false,
       counter: false,
       employee: false,
+      //size windows
+      sizeWindow: 0,
     };
   },
   async mounted() {
@@ -285,19 +308,19 @@ export default {
   },
   components: {
     HomeView,
-    Documents,    
-    Files,   
+    Documents,
+    Files,
     Debts,
     Obligations,
     Products,
     Stocks,
     UsersRoles,
     Users,
-    Roles
+    Roles,
   },
   methods: {
     changePageActive() {
-      console.log(this.$route.path);
+      //console.log(this.$route.path);
       //let tabPaneHome=document.getElementById("data-home")
       //let tabPaneAbout=document.getElementById("data-about")
       let tabPaneDoc = document.getElementById("data-document");
@@ -359,16 +382,37 @@ export default {
       console.log(navBtnActive[0]);
       console.log(btnIdActive);
     },
-    changeSizeCol_10() {
-      let widthRow = document.getElementById("rowDocsView");
-      let widthCol10 = document.getElementById("col-10");
-
-      console.log(widthRow.offsetWidth);
-      console.log(widthCol10.offsetWidth);
-      if (widthRow.offsetWidth < 1004 || widthCol10.offsetWidth < 837) {
-        widthCol10.style = "width:64%; display:flex;";
-      } else {
-        widthCol10.style = "width:84%;";
+    changeTextBtn() {
+      let widthWindow = document.getElementById("containerFluid");
+      this.sizeWindow = widthWindow.offsetWidth;
+      console.log(this.sizeWindow);
+      //class btn-modules
+      let btnModules = document.getElementsByClassName("btn-modules");
+      for (let index = 0; index < btnModules.length; index++) {
+        if (this.sizeWindow < 800) {
+          btnModules[index].innerHTML =
+            btnModules[index].innerHTML.split("i>")[0] + "i>";
+        } else {
+          btnModules[index].innerHTML =
+            btnModules[index].innerHTML.split("i>")[0] +
+            "i>" +
+            " " +
+            btnModules[index].title;
+        }
+      }
+      //class nav-link-tab
+      let btnNavLinkTab = document.getElementsByClassName("nav-link-tab");
+      for (let index = 0; index < btnNavLinkTab.length; index++) {
+        if (this.sizeWindow < 800) {
+          btnNavLinkTab[index].innerHTML =
+            btnNavLinkTab[index].innerHTML.split("i>")[0] + "i>";
+        } else {
+          btnNavLinkTab[index].innerHTML =
+            btnNavLinkTab[index].innerHTML.split("i>")[0] +
+            "i>" +
+            " " +
+            btnNavLinkTab[index].title;
+        }
       }
     },
   },

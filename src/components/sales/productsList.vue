@@ -20,5 +20,5 @@ export default {
 };
 </script>
 <style>
-@import  url("/src/services/style.css");
+
 </style>

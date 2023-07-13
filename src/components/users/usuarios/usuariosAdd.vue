@@ -18,15 +18,15 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <!--modal header-->
-          <div class="modal-header" style="background: #5dade2">
-            <h5 class="modal-title" id="addModalLabel" style="color: white">
+          <div class="modal-header headUserForm">
+            <h5 class="modal-title" id="addModalLabel">
               {{ title }}
             </h5>
 
             <a href="/usuarios-roles" class="btn btn-close"></a>
           </div>
           <!--modal header-->
-          <div class="modal-body bg-light">
+          <div class="modal-body">
             <form @submit.prevent="addUser">
               <!--Campo nombre_usaurio-->
               <div class="mb-3">
@@ -42,7 +42,7 @@
                 />
                 <small
                   v-if="datos.nombre_usuario.length < 3"
-                  class="text-danger"
+                  class="text-alert-form"
                   >Mínimo 3 caracteres</small
                 >
               </div>
@@ -59,7 +59,9 @@
                   minlength="6"
                   maxlength="16"
                 />
-                <small v-if="datos.contraseña.length < 6" class="text-danger"
+                <small
+                  v-if="datos.contraseña.length < 6"
+                  class="text-alert-form"
                   >Mínimo 6 caracteres</small
                 >
                 <p>{{ this.datos.contraseña }}</p>
@@ -77,7 +79,7 @@
                 />
                 <div
                   v-if="datos.contraseña !== datos.repite_contraseña"
-                  class="text-danger"
+                  class="text-alert-form"
                 >
                   Las contraseñas no coinciden!.
                 </div>
@@ -85,7 +87,7 @@
               </div>
 
               <!--botones guardar y cancelar-->
-              <div class="modal-footer-sm" style="background: #5dade2">
+              <div class="modal-footer-sm footUserForm">
                 <button
                   v-if="
                     datos.nombre_usuario.length > 2 &&
@@ -93,14 +95,14 @@
                     datos.repite_contraseña.length > 5
                   "
                   type="submit"
-                  class="btn btn-light m-3"
+                  class="btn btnUserForm"
                 >
                   Guardar
                 </button>
-                <button v-else disabled type="submit" class="btn btn-light m-3">
+                <button v-else disabled type="submit" class="btn btnUserForm">
                   Guardar
                 </button>
-                <a class="btn" href="/usuarios-roles" style="color: white"
+                <a class="btn btnUserForm-cancel" href="/usuarios-roles"
                   >Cancelar</a
                 >
               </div>
@@ -130,67 +132,64 @@
 import axios from "axios";
 import usuariosList from "./usuariosList.vue";
 export default {
-name: "usuarios-list",
-props:{
-    title:{
-        type: String,
-        default: "Agregar usuarios"
-    }
-},
-data(){
+  name: "usuarios-list",
+  props: {
+    title: {
+      type: String,
+      default: "Agregar usuarios",
+    },
+  },
+  data() {
+    return {
+      //datos originales que se recibe del servidor
+      datos: {
+        nombre_usuario: "",
+        contraseña: "",
+        repite_contraseña: "",
+      },
 
-    return{
-        //datos originales que se recibe del servidor
-        datos:{
-            nombre_usuario: "",
-            contraseña: "",
-            repite_contraseña:""
-        },
-        
-        //recibe del servidor o del catch
-        message:{
-            success:"",
-            err:""
-        }
-    }
-},
+      //recibe del servidor o del catch
+      message: {
+        success: "",
+        err: "",
+      },
+    };
+  },
 
-components:{usuariosList},
-async mounted(){
-this.darclick();
-},
+  components: { usuariosList },
+  async mounted() {
+    this.darclick();
+  },
 
-methods:{
-    darclick(){
-        const add = document.getElementById("add");
-        add.click();
+  methods: {
+    darclick() {
+      const add = document.getElementById("add");
+      add.click();
     },
 
-    async addUser(){
-        try {
-            const token = localStorage.getItem("token");
-            const result = await axios({
-                method:"POST",
-                url: "http://localhost:4000/api/registro",
-                data: this.datos,
-                headers:{
-                    Authorization: JSON.parse(token)
-                }
-            });
-            if(result.data.Message.length){
-                this.message.success=result.data.Message;
-                this.message.err=false;
-                location.replace("/usuarios-roles-nuevo/add");
-            }
-        } catch (error) { 
-            this.message.err=error.response.data.Message;           
-            console.log(error.response);
+    async addUser() {
+      try {
+        const token = localStorage.getItem("token");
+        const result = await axios({
+          method: "POST",
+          url: "http://localhost:4000/api/registro",
+          data: this.datos,
+          headers: {
+            Authorization: JSON.parse(token),
+          },
+        });
+        if (result.data.Message.length) {
+          this.message.success = result.data.Message;
+          this.message.err = false;
+          location.replace("/usuarios-roles-nuevo/add");
         }
-    }
-}
-}
+      } catch (error) {
+        this.message.err = error.response.data.Message;
+        console.log(error.response);
+      }
+    },
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

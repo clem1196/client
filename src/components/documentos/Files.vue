@@ -75,8 +75,8 @@
         <div class="row row-search">
           <!--Switch-->
           <div class="col-auto">
-            <div class="form-check form-switch">
-              <label class="form-check-label" for="switFilesList">Clásica</label>
+            <div class="form-check form-switch" title="search clasic">
+              <label class="form-check-label" for="switFilesList"></label>
               <input
                 @click="cambiarFilter"
                 name="inputNameSwitch"
@@ -184,7 +184,7 @@
 
       <!--PAGINATION-->
       <nav aria-label="Page navigation example" class="font-size-pagination">
-        <ul v-if="pagination" class="pagination justify-content-left">
+        <ul v-if="pagination" class="pagination justify-content-center">
           <li class="page-item disabled">
             <button class="page-link">Páginas:</button>
           </li>
@@ -349,7 +349,7 @@ export default {
         if (fileResult.data.Message == "successfull") {
           this.successUpload = fileResult.data.Message;
           this.errUpload = false;
-          location.replace("/documentos");
+          location.replace("/files");
         }
       } catch (error) {
         console.log({ error: error.response.data.Message });
@@ -535,5 +535,5 @@ export default {
 };
 </script>
 <style>
-@import  url("/src/services/style.css");
+
 </style>

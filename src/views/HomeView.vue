@@ -1,5 +1,6 @@
-<template>
+<template>  
   <div class="container text-center mt-5">
+    <!--Home-->
     <div class="card m-auto">
       <button class="btn btn-light btn-lg">Inicio</button>
       <p>
@@ -11,13 +12,11 @@
     </div>
   </div>
 </template>
-
 <script>
-// @ is an alias to /src
-//import HelloWorld from "@/components/HelloWorld.vue";
-
 export default {
   name: "HomeView",
-  
 };
 </script>
+<style scoped>
+
+</style>

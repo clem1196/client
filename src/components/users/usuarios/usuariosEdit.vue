@@ -17,8 +17,8 @@
     >
       <div class="modal-dialog">
         <div v-if="message.noEliminar == false" class="modal-content">
-          <div class="modal-header" style="background: #5dade2">
-            <h5 class="modal-title" id="editarModalLabel" style="color: white">
+          <div class="modal-header headUserForm" >
+            <h5 class="modal-title" id="editarModalLabel">
               {{title}}
             </h5>
 
@@ -36,9 +36,8 @@
                   minlength="3"
                   maxlength="12"
                 />
-                <div
-                  v-if="new_datos.new_nombre_usuario.length < 3"
-                  style="color: red"
+                <div class="text-alert-form"
+                  v-if="new_datos.new_nombre_usuario.length < 3"                  
                 >
                   Mínimo 3 caracteres
                 </div>
@@ -57,33 +56,34 @@
                   maxlength="16"
                 />
                 <div
+                class="text-alert-form"
                   v-if="new_datos.new_contraseña.length < 6"
-                  style="color: red"
+                 
                 >
                   Mínimo 6 caracteres
                 </div>
               </div>
               <!--Si el campo username o password se modifica el boton "Guardar" se habilita de lo
             contrario se deshabilita-->
-              <div class="modal-footer-sm" style="background: #5dade2">
+              <div class="modal-footer-sm footUserForm">
                 <button
                   v-if="new_datos.new_nombre_usuario !== datos.nombre_usuario"
                   type="submit"
-                  class="btn btn-light m-3"
+                  class="btn btnUserForm"
                 >
                   Guardar
                 </button>
                 <button
                   v-else-if="new_datos.new_contraseña !== datos.contraseña"
                   type="submit"
-                  class="btn btn-light m-3"
+                  class="btn btnUserForm"
                 >
                   Guardar
                 </button>
-                <button v-else disabled type="submit" class="btn btn-light m-3">
+                <button v-else disabled type="submit" class="btn btnUserForm">
                   Guardar
                 </button>
-                <a class="btn" href="/usuarios" style="color: white"
+                <a class="btn btnUserForm-cancel" href="/usuarios"
                   >Cancelar</a
                 >
               </div>

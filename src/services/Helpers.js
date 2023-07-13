@@ -154,7 +154,7 @@ if (token) {
   const CaducarToken = async () => {
     const Exp = JSON.parse(window.atob(token.split(".")[1])).exp;
     if (Date.now() >= Exp * 1000) {
-      alert("Su sesión a caducado, inicie sesión nuevamente");
+      //alert("Su sesión a caducado, inicie sesión nuevamente");
       Logout();
       location.replace("/login");
     }

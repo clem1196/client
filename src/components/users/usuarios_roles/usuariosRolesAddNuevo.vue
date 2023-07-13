@@ -17,14 +17,14 @@
     >
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header" style="background: #5dade2">
-            <h5 class="modal-title" id="addModalLabel" style="color: white">
+          <div class="modal-header headUserForm">
+            <h5 class="modal-title" id="addModalLabel">
               {{ title }}
             </h5>
 
             <a href="/usuarios-roles" class="btn btn-close"></a>
           </div>
-          <div class="modal-body bg-light">
+          <div class="modal-body">
             <form @submit.prevent="addUserRoles">
               <!--campo idusuario-->
               <div class="mb-3">
@@ -62,19 +62,19 @@
                 </select>
               </div>
               <!--button guardar-->
-              <div class="modal-footer-sm" style="background: #5dade2">
+              <div class="modal-footer-sm footUserForm">
                 <button
                   v-if="datos.idroles !== null"
                   type="submit"
-                  class="btn btn-light m-3"
+                  class="btn btnUserForm"
                 >
                   Guardar
                 </button>
-                <button v-else disabled type="submit" class="btn btn-light m-3">
+                <button v-else disabled type="submit" class="btn btnUserForm">
                   Guardar
                 </button>
                 <!--cancelar-->
-                <a class="btn" href="/usuarios-roles" style="color: white"
+                <a class="btn btnUserForm-cancel" href="/usuarios-roles"
                   >Cancelar</a
                 >
               </div>

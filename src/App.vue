@@ -52,6 +52,9 @@
             <span class="welcome-user">
               <i class="bi-person-fill"></i> Welcome {{ user }}!!
             </span>
+            <span class="welcome-user">
+              <img src="./assets/clemente.jpg" width="40" height="50rem">
+            </span>
             <a class="btn-signIn" href="/login" type="button">
               <i class="bi-people-fill"></i> Change
             </a>
@@ -104,5 +107,5 @@ export default {
 </script>
 
 <style>
-@import url("/src/services/style.css");
+
 </style>

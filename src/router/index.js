@@ -110,7 +110,7 @@ const routes = [
     name: "rolesAdd",
     component: () =>
       import(
-        /* webpackChunkName: "rolesAdd" */ "../components/users/roles/rolesAdd.vue"
+        /* webpackChunkName: "rolesAdd" */ "../components/users/roles/RolesForm.vue"
       ),
   },
   {
@@ -118,7 +118,7 @@ const routes = [
     name: "rolesEdit",
     component: () =>
       import(
-        /* webpackChunkName: "rolesEdit" */ "../components/users/roles/rolesEdit.vue"
+        /* webpackChunkName: "rolesEdit" */ "../components/users/roles/RolesForm.vue"
       ),
   },
   {
@@ -213,7 +213,7 @@ const routes = [
     name: "documentosAdd",
     component: () =>
       import(
-        /* webpackChunkName: "documentosAdd" */ "../views/ComponentsView.vue"
+        /* webpackChunkName: "documentosAdd" */ "../components/documentos/DocumentForm.vue"
       ),
   },
   {
@@ -221,7 +221,7 @@ const routes = [
     name: "documentosEdit",
     component: () =>
       import(
-        /* webpackChunkName: "documentosEdit" */ "../views/ComponentsView.vue"
+        /* webpackChunkName: "documentosEdit" */ "../components/documentos/DocumentForm.vue"
       ),
   },
   {

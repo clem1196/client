@@ -4,7 +4,13 @@
       Usuarios      
     </div>    
       <!--Add-->
-      <a class="btn-form-users new" href="/usuarios/add">Agregar</a>
+      <a
+      href="/usuarios/add"
+      type="button"
+      class="btn-form-doc icon-add"
+      title=" Add users"
+      ><i class="bi-file-earmark-plus-fill"></i
+    ></a>
         
     <!--Form-->
     <div class="card-search">
@@ -159,7 +165,7 @@
 
     <!--PAGINATION-->
     <nav aria-label="Page navigation example" class="font-size-pagination">
-      <ul v-if="pagination" class="pagination justify-content-left">
+      <ul v-if="pagination" class="pagination justify-content-center">
         <li class="page-item disabled">
           <button class="page-link">Páginas:</button>
         </li>
@@ -481,5 +487,5 @@ export default {
 </script>
 
 <style >
-@import  url("/src/services/style.css");
+
 </style>

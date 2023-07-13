@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Button trigger modal -->
     <button
       id="logout"
       type="button"
@@ -10,7 +9,6 @@
       hidden
     ></button>
 
-    <!-- Modal -->
     <div
       class="modal fade"
       id="logoutModal"
@@ -21,15 +19,16 @@
     >
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-secondary">
-            <h5 class="modal-title" id="logoutModalLabel" style="color: white">
-              Desea Cerrar Sesión?
-            </h5>
-            <a :href="path" class="btn btn-close"></a>
+          <div class="modal-header head">
+            <p class="modal-title title" id="logoutModalLabel">
+              <i class="bi-exclamation-triangle-fill"></i>
+            </p>
+            <a class="modal-close" :href="path">X</a>
           </div>
-          <div class="modal-footer-sm bg-light">
-            <button class="btn btn-secondary m-3" @click="getLogout">Si</button>
-            <a :href="path" class="btn btn-default" style="color: black">No</a>
+          <div class="modal-body body">Desea Cerrar Sesión?</div>
+          <div class="modal-footer footer">
+            <button class="btn yes m-3" @click="getLogout">Si</button>
+            <a :href="path" class="btn not">No</a>
           </div>
         </div>
       </div>
@@ -63,5 +62,6 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
 </style>

@@ -175,7 +175,7 @@
 
     <!--PAGINATION-->
     <nav aria-label="Page navigation example" class="font-size-pagination">
-      <ul v-if="pagination" class="pagination justify-content-left">
+      <ul v-if="pagination" class="pagination justify-content-center">
         <li class="page-item disabled">
           <button class="page-link">Páginas:</button>
         </li>
@@ -509,5 +509,5 @@ export default {
 </script>
 
 <style>
-@import  url("/src/services/style.css");
+
 </style>
