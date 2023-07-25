@@ -1,13 +1,19 @@
 <template>
-  <div class="mt-5 text-center">
-   <div class="card m-auto">
-    <button class="btn btn-light btn-lg">About</button>
-    <p>
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nesciunt,
-      architecto modi! Est maxime molestias culpa deleniti dignissimos
-      necessitatibus nemo. Error sed quaerat numquam? Assumenda deserunt quasi
-      architecto. Ab, quo officiis!
-    </p>
-   </div>
+  <div class="container text-center mt-5">
+    <!--Home-->
+    <div class="card">     
+      <div class="card-body">
+        <h4 class="card-title">About</h4>
+        <p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officiis quas voluptates facilis tempora consectetur, natus enim qui inventore illum ea dicta maiores distinctio, iusto delectus harum quod dolorum asperiores itaque.</p>
+      </div>
+    </div>
   </div>
 </template>
+<script>
+export default {
+  name: "About-View",
+};
+</script>
+<style scoped>
+
+</style>

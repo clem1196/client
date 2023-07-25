@@ -7,6 +7,65 @@
     <div class="row" v-if="token" id="rowDocsView">
       <div class="col-2 panel-right">
         <div class="nav flex-column">
+          <!--Users-->
+          <button
+            v-if="administrator || auditor"
+            class="btn-modules"
+            id="btnusers"
+            data-bs-toggle="collapse"
+            data-bs-target="#tab-users"
+            title="Users"
+          >
+            <i class="bi-people-fill"></i>
+            Users
+          </button>
+          <div class="collapse" id="tab-users">
+            <div
+              class="nav flex-column"
+              id="nav-users"
+              aria-orientation="vertical"
+            >
+              <button
+                @click="btnActive"
+                id="btnUsers_roles"
+                class="nav-link-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#data-users_roles"
+                type="button"
+                aria-selected="false"
+                title="Users with roles"
+              >
+                <i class="bi-person-lines-fill"></i>
+                User-Role
+              </button>
+              <button
+                @click="btnActive"
+                id="btnUsers"
+                class="nav-link-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#data-users"
+                type="button"
+                aria-selected="false"
+                title="User"
+              >
+                <i class="bi-person"></i>
+                User
+              </button>
+              <button
+                @click="btnActive"
+                id="btnRoles"
+                class="nav-link-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#data-roles"
+                type="button"
+                aria-selected="false"
+                title="Role"
+              >
+                <i class="bi-person-workspace"></i>
+                Role
+              </button>
+            </div>
+          </div>
           <!--Documents-->
           <button
             v-if="administrator || employee"
@@ -145,70 +204,22 @@
               </button>
             </div>
           </div>
-          <!--Users-->
-          <button
-            v-if="administrator || auditor"
-            class="btn-modules"
-            id="btnusers"
-            data-bs-toggle="collapse"
-            data-bs-target="#tab-users"
-            title="Users"
-          >
-            <i class="bi-people-fill"></i>
-            Users
-          </button>
-          <div class="collapse" id="tab-users">
-            <div
-              class="nav flex-column"
-              id="nav-users"
-              aria-orientation="vertical"
-            >
-              <button
-                @click="btnActive"
-                id="btnUsers_roles"
-                class="nav-link-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#data-users_roles"
-                type="button"
-                aria-selected="false"
-                title="Users with roles"
-              >
-                <i class="bi-person-lines-fill"></i>
-                User-Role
-              </button>
-              <button
-                @click="btnActive"
-                id="btnUsers"
-                class="nav-link-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#data-users"
-                type="button"
-                aria-selected="false"
-                title="User"
-              >
-                <i class="bi-person"></i>
-                User
-              </button>
-              <button
-                @click="btnActive"
-                id="btnRoles"
-                class="nav-link-tab"
-                data-bs-toggle="pill"
-                data-bs-target="#data-roles"
-                type="button"
-                aria-selected="false"
-                title="Role"
-              >
-                <i class="bi-person-workspace"></i>
-                Role
-              </button>
-            </div>
-          </div>
+          
         </div>
       </div>
       <!--MAIN CONTENT-->
       <div class="col-10" id="col-10">
         <div class="tab-content">
+           <!--users content-->
+           <div class="tab-pane fade" id="data-users_roles">
+            <users-roles></users-roles>
+          </div>
+          <div class="tab-pane fade" id="data-users">
+            <users></users>
+          </div>
+          <div class="tab-pane fade" id="data-roles">
+            <roles></roles>
+          </div>
           <!--home content-->
           <div class="tab-pane fade" id="data-home">
             <home-view></home-view>
@@ -235,16 +246,7 @@
           <div class="tab-pane fade" id="data-stocks">
             <Stocks></Stocks>
           </div>
-          <!--users content-->
-          <div class="tab-pane fade" id="data-users_roles">
-            <users-roles></users-roles>
-          </div>
-          <div class="tab-pane fade" id="data-users">
-            <users></users>
-          </div>
-          <div class="tab-pane fade" id="data-roles">
-            <roles></roles>
-          </div>
+         
         </div>
       </div>
     </div>
@@ -252,7 +254,7 @@
 </template>
 
 <script>
-import Helper from "../services/Helpers";
+import Helper from "../services/users/Helpers";
 //components home
 import HomeView from "./HomeView.vue";
 //components documents

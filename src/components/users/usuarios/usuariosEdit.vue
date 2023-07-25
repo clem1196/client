@@ -131,7 +131,7 @@
 </template>
 
 <script>
-import Hlpers from "../../../services/Helpers";
+import Hlpers from "../../../services/users/Helpers";
 import axios from "axios";
 import usuariosList from "./usuariosList.vue";
 export default {

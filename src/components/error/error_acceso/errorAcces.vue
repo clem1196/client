@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import GetUrls from "../../../services/Helpers";
+import GetUrls from "../../../services/users/Helpers";
 export default {
  name: "error-acceso",
  data(){

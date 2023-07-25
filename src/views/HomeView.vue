@@ -1,20 +1,17 @@
 <template>  
   <div class="container text-center mt-5">
     <!--Home-->
-    <div class="card m-auto">
-      <button class="btn btn-light btn-lg">Inicio</button>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, doloribus
-        voluptatum consequatur, quibusdam suscipit illo dolorum inventore cumque
-        maiores accusantium ab incidunt asperiores quae earum tenetur! Est
-        assumenda autem amet.
-      </p>
-    </div>
+    <div class="card">     
+      <div class="card-body">
+        <h4 class="card-title">Inicio</h4>
+        <p class="card-text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officiis quas voluptates facilis tempora consectetur, natus enim qui inventore illum ea dicta maiores distinctio, iusto delectus harum quod dolorum asperiores itaque.</p>
+      </div>
+    </div>   
   </div>
 </template>
 <script>
 export default {
-  name: "HomeView",
+  name: "Home-View",
 };
 </script>
 <style scoped>

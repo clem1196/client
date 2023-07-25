@@ -1,3 +1,6 @@
+
+const { Date } = require("core-js");
+
 const token = localStorage.getItem("token");
 if (token) {
   const isloggedIn = () => {
@@ -37,7 +40,7 @@ if (token) {
   };
 
   //acceso solo listaas
-  //vendedor  
+  //vendedor
   const isSellerLists = async () => {
     if (
       listRoles.find(
@@ -77,14 +80,11 @@ if (token) {
     }
   };
 
-   //acceso ssolo para modificaciones
-  //vendedor  
+  //acceso ssolo para modificaciones
+  //vendedor
   const isSellerChanges = async () => {
     if (
-      listRoles.find(
-        (element) =>
-          element === "vendedor" || element === "admin"
-      )
+      listRoles.find((element) => element === "vendedor" || element === "admin")
     ) {
       return true;
     } else {
@@ -94,10 +94,7 @@ if (token) {
   //contador
   const isAccountantChanges = async () => {
     if (
-      listRoles.find(
-        (element) =>
-          element === "contador" || element === "admin"
-      )
+      listRoles.find((element) => element === "contador" || element === "admin")
     ) {
       return true;
     } else {
@@ -107,10 +104,7 @@ if (token) {
   //empleado
   const isEmployeeChanges = async () => {
     if (
-      listRoles.find(
-        (element) =>
-          element === "empleado" || element === "admin"
-      )
+      listRoles.find((element) => element === "empleado" || element === "admin")
     ) {
       return true;
     } else {
@@ -122,13 +116,13 @@ if (token) {
     let path = [];
     if ((await isAdministrator()) || (await isAuditor())) {
       path.push("/usuarios-roles");
-    } else if (await isSellerLists()||await isSellerChanges()) {
+    } else if ((await isSellerLists()) || (await isSellerChanges())) {
       path.push("/products");
       path.push("/stock");
-    } else if (await isAccountantLists()||await isAccountantChanges()) {
+    } else if ((await isAccountantLists()) || (await isAccountantChanges())) {
       path.push("/obligations");
-      path.push("/debts");     
-    } else if (await isEmployeeLists()||await isEmployeeChanges()) {
+      path.push("/debts");
+    } else if ((await isEmployeeLists()) || (await isEmployeeChanges())) {
       path.push("/documentos");
     } else {
       path.push("/");
@@ -159,6 +153,7 @@ if (token) {
       location.replace("/login");
     }
   };
+  
 
   module.exports = {
     token,
@@ -170,11 +165,11 @@ if (token) {
     isAccountantLists,
     isAccountantChanges,
     isEmployeeLists,
-    isEmployeeChanges,    
+    isEmployeeChanges,
     getUrls,
     Logout,
     obtenerNombreUsuario,
-    CaducarToken,
+    CaducarToken,   
   };
 } else {
   console.log("No ha iniciado sesión");

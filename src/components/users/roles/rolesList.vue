@@ -1,17 +1,15 @@
 <template>
   <div class="container-fluid mt-4">
-    <div class="card card-title">
-      Roles      
-    </div>    
-      <!--Add-->
-      <a
+    <div class="card card-title">Roles</div>
+    <!--Add-->
+    <a
       href="/roles/add"
       type="button"
       class="btn-form-doc icon-add"
       title=" Add roles"
       ><i class="bi-file-earmark-plus-fill"></i
     ></a>
-        
+
     <!--Form-->
     <div class="card-search">
       <div class="row row-search">
@@ -96,68 +94,52 @@
         <tr class="thead-tr">
           <th>
             <i class="bi-filter"></i>
-            <button
-              @click="sortId"
-              class="btn btn-sm th-font-size"
-            >
-              Id
-            </button>
+            <button @click="sortId" class="btn btn-sm th-font-size">Id</button>
           </th>
           <th>
             <i class="bi-filter"></i>
-            <button
-              @click="sortNombre"
-              class="btn btn-sm th-font-size"
-            >
+            <button @click="sortNombre" class="btn btn-sm th-font-size">
               Nombre
             </button>
           </th>
           <th>
             <i class="bi-filter"></i>
-            <button
-              @click="sortCreado"
-              class="btn btn-sm th-font-size"
-            >
+            <button @click="sortCreado" class="btn btn-sm th-font-size">
               Creado
             </button>
           </th>
           <th>
             <i class="bi-filter"></i>
-            <button              
-              @click="sortModificado"
-              class="btn btn-sm th-font-size"
-            >
+            <button @click="sortModificado" class="btn btn-sm th-font-size">
               Modificado
             </button>
           </th>
           <th><button class="btn btn-sm th-font-size">Action</button></th>
-          
         </tr>
       </thead>
       <tbody>
-        <tr v-for="search in searchRoles" :key="search.idroles" class="tbody-tr">
+        <tr
+          v-for="search in searchRoles"
+          :key="search.idroles"
+          class="tbody-tr"
+        >
           <td>{{ search.idroles }}</td>
           <td>{{ search.nombre_rol }}</td>
 
-           <td v-if="search.registrado">
+          <td v-if="search.registrado">
             {{ new Date(search.registrado).toLocaleString() }}
           </td>
           <td v-else></td>
           <td v-if="search.actualizado">
             {{ new Date(search.actualizado).toLocaleString() }}
           </td>
-          <td v-else></td>          
+          <td v-else></td>
           <td>
-            <a
-              :href="'/roles/edit/' + search.idroles"
-              title="Edit"
-            >
+            <a :href="'/roles/edit/' + search.idroles" title="Edit">
               <i class="bi-pencil size-pencil"></i
             ></a>
             |
-            <a
-              :href="'/roles/delete/' + search.idroles"
-              title="Delete"
+            <a :href="'/roles/delete/' + search.idroles" title="Delete"
               ><i class="bi-trash-fill size-trash"></i
             ></a>
           </td>
@@ -165,89 +147,90 @@
       </tbody>
     </table>
 
-    <!--PAGINATION-->   
-      <nav aria-label="Page navigation example" class="font-size-pagination">
-        <ul v-if="pagination" class="pagination justify-content-center">
-          <li class="page-item disabled">
-            <button class="page-link">Páginas:</button>
-          </li>
-          <!--Primera página-->
-          <li v-if="currentPage >= 2" @click="getFirstPage" class="page-item">
-            <button type="button" class="page-link">Primera</button>
-          </li>
-          <li v-else @click="getFirstPage" class="page-item disabled">
-            <button type="button" class="page-link">Primera</button>
-          </li>
-          <!--Atras-->
-          <li v-if="currentPage >= 2" @click="getPrevious" class="page-item">
-            <button type="button" class="page-link">
-              <i class="bi-chevron-left"></i>
-            </button>
-          </li>
-          <li v-else @click="getPrevious" class="page-item disabled">
-            <button type="button" class="page-link">
-              <i class="bi-chevron-left"></i>
-            </button>
-          </li>
-          <!--Pages-->
-          <li
-            v-for="pag in totalPages()"
-            :key="pag"
-            @click="getDataPages(pag)"
-            class="page-item"
-            :class="isActive(pag)"
+    <!--PAGINATION-->
+    <nav aria-label="Page navigation example" class="font-size-pagination">
+      <ul v-if="pagination" class="pagination justify-content-center">
+        <li class="page-item disabled">
+          <button class="page-link">Páginas:</button>
+        </li>
+        <!--Primera página-->
+        <li v-if="currentPage >= 2" @click="getFirstPage" class="page-item">
+          <button type="button" class="page-link">Primera</button>
+        </li>
+        <li v-else @click="getFirstPage" class="page-item disabled">
+          <button type="button" class="page-link">Primera</button>
+        </li>
+        <!--Atras-->
+        <li v-if="currentPage >= 2" @click="getPrevious" class="page-item">
+          <button type="button" class="page-link">
+            <i class="bi-chevron-left"></i>
+          </button>
+        </li>
+        <li v-else @click="getPrevious" class="page-item disabled">
+          <button type="button" class="page-link">
+            <i class="bi-chevron-left"></i>
+          </button>
+        </li>
+        <!--Pages-->
+        <li
+          v-for="pag in totalPages()"
+          :key="pag"
+          @click="getDataPages(pag)"
+          class="page-item"
+          :class="isActive(pag)"
+        >
+          <button
+            v-if="currentPage - 1 < pag && pag < currentPage + 3"
+            type="button"
+            class="page-link"
           >
-            <button
-              v-if="currentPage - 1 < pag && pag < currentPage + 3"
-              type="button"
-              class="page-link"
-            >
-              {{ pag }}
-            </button>
-          </li>
-          <!--Siguiente-->
-          <li
+            {{ pag }}
+          </button>
+        </li>
+        <!--Siguiente-->
+        <li
+          v-if="currentPage < totalPages()"
+          @click="getNext"
+          class="page-item"
+        >
+          <button
             v-if="currentPage < totalPages()"
-            @click="getNext"
-            class="page-item"
+            type="button"
+            class="page-link"
           >
-            <button
-              v-if="currentPage < totalPages()"
-              type="button"
-              class="page-link"
-            >
-              <i class="bi-chevron-right"></i>
-            </button>
-          </li>
-          <li v-else @click="getNext" class="page-item disabled">
-            <button type="button" class="page-link">
-              <i class="bi-chevron-right"></i>
-            </button>
-          </li>
-          <!--Última página-->
-          <li
-            v-if="currentPage < totalPages()"
-            @click="getLastPage"
-            class="page-item"
-          >
-            <button type="button" class="page-link">Última</button>
-          </li>
-          <li v-else @click="getLastPage" class="page-item disabled">
-            <button type="button" class="page-link">Última</button>
-          </li>
-          <!--Total-->
-          <li class="page-item disabled">
-            <button class="page-link">Total: {{ this.roles.length }}</button>
-          </li>
-        </ul>
-      </nav>    
+            <i class="bi-chevron-right"></i>
+          </button>
+        </li>
+        <li v-else @click="getNext" class="page-item disabled">
+          <button type="button" class="page-link">
+            <i class="bi-chevron-right"></i>
+          </button>
+        </li>
+        <!--Última página-->
+        <li
+          v-if="currentPage < totalPages()"
+          @click="getLastPage"
+          class="page-item"
+        >
+          <button type="button" class="page-link">Última</button>
+        </li>
+        <li v-else @click="getLastPage" class="page-item disabled">
+          <button type="button" class="page-link">Última</button>
+        </li>
+        <!--Total-->
+        <li class="page-item disabled">
+          <button class="page-link">Total: {{ this.roles.length }}</button>
+        </li>
+      </ul>
+    </nav>
     <!--Messages-->
     <small v-if="success.length > 0" class="text-success">{{ success }} </small>
     <small v-if="err.length > 0" class="text-danger">{{ err }}</small>
-  </div>  
+  </div>
 </template>
 
 <script>
+
 import axios from "axios";
 export default {
   name: "roles-list",
@@ -262,18 +245,17 @@ export default {
       //search
       filter: true,
       searchRoles: [],
+      //sort      
       text: "",
       //Messages
       err: "",
       success: "",
     };
   },
-  components: {    
-    
-  },
+  components: {},
   async mounted() {
     await this.getRoles();
-    this.getDataPages(this.currentPage);
+    await this.getDataPages(this.currentPage);
   },
   methods: {
     //LIST ROLES
@@ -298,8 +280,10 @@ export default {
       }
     },
 
-    //FILTRO
-    sortId() {
+    
+
+   //sort
+   sortId() {
       const asc = (a, b) => {
         return a.idroles - b.idroles;
       };
@@ -372,7 +356,7 @@ export default {
       }
     },
 
-    //SEARCH
+    //filter
     getSearchRoles() {
       if (this.text.length == 0) {
         this.getDataPages(1);
@@ -477,6 +461,4 @@ export default {
 };
 </script>
 
-<style >
-
-</style>
+<style></style>

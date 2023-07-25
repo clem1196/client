@@ -1,5 +1,6 @@
 <template>
   <div class="container m-5">
+   <div class="card card-login">
     <div class="form-header">
       <i class="bi-person-circle"></i>
     </div>
@@ -34,12 +35,13 @@
       <p v-if="success" class="alert alert-success">{{ success }}</p>
       <p v-if="err" class="alert alert-danger">{{ err }}</p>
     </div>
+   </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import Helpers from "../../services/Helpers";
+import Helpers from "../../services/users/Helpers";
 export default {
   name: "log-in",
   data() {

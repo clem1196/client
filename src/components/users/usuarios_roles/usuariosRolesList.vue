@@ -91,6 +91,7 @@
         <th>
         <i class="bi-filter"></i>
             <button
+            id="btnId"
               @click="sortId"
               class="btn btn-sm th-font-size"
               
@@ -273,6 +274,8 @@ export default {
       filter: true,
       searchUsuariosRoles: [],
       text: "",
+      //sort
+      sortResult:false,
       //Messages
       success: "",
       err: "",
@@ -307,6 +310,45 @@ export default {
         console.log(error.response);
       }
     },
+    //FILTER O SEARCH     
+    getSearchUsuariosRoles() {
+      if (this.text.length == 0) {
+        this.getDataPages(1);
+      } else {
+        const filterItems = (query) => {
+          return this.usuariosRoles.filter(
+            (usuario) =>
+              (usuario.idusuarios_roles !== null &&
+                usuario.idusuarios_roles.toString().indexOf(query) > -1) ||
+              (usuario.nombre_usuario !== null &&
+                usuario.nombre_usuario
+                  .toLowerCase()
+                  .indexOf(query.toLowerCase()) > -1) ||
+              (usuario.nombre_rol !== null &&
+                usuario.nombre_rol.toLowerCase().indexOf(query.toLowerCase()) >
+                  -1) ||
+              (usuario.registrado !== null &&
+                usuario.registrado.toLowerCase().indexOf(query.toLowerCase()) >
+                  -1) ||
+              (usuario.actualizado !== null &&
+                usuario.actualizado.toLowerCase().indexOf(query.toLowerCase()) >
+                  -1)
+          );
+        };
+        if (filterItems(this.text).length > 0) {
+          this.searchUsuariosRoles = filterItems(this.text);
+          this.pagination = false;
+          this.success =
+            "Se encontraron" + " " + this.searchUsuariosRoles.length + " "  +"registros";
+          this.err = false;
+        } else {
+          this.searchUsuariosRoles = [];
+          this.pagination = false;
+          this.success = false;
+          this.err = "No se encontraron resultados";
+        }
+      }
+    },
 
     //SORT ORDENAR COLUMNAS ASCENDENTE Y DESCENDENTE 
     sortId() {
@@ -316,14 +358,13 @@ export default {
       const desc = (a, b) => {
         return b.idusuarios_roles - a.idusuarios_roles;
       };
-
-      if (this.algunValor) {
-        this.algunValor = false;
+      if (this.sortResult) { 
+        this.sortResult=false            
         return this.searchUsuariosRoles.sort(asc);
-      } else {
-        this.algunValor = true;
+      } else{
+        this.sortResult=true         
         return this.searchUsuariosRoles.sort(desc);
-      }
+      }       
     },
     sortUsuario() {
       const asc = (a, b) => {
@@ -398,45 +439,7 @@ export default {
       }
     },
 
-    //FILTER O SEARCH     
-    getSearchUsuariosRoles() {
-      if (this.text.length == 0) {
-        this.getDataPages(1);
-      } else {
-        const filterItems = (query) => {
-          return this.usuariosRoles.filter(
-            (usuario) =>
-              (usuario.idusuarios_roles !== null &&
-                usuario.idusuarios_roles.toString().indexOf(query) > -1) ||
-              (usuario.nombre_usuario !== null &&
-                usuario.nombre_usuario
-                  .toLowerCase()
-                  .indexOf(query.toLowerCase()) > -1) ||
-              (usuario.nombre_rol !== null &&
-                usuario.nombre_rol.toLowerCase().indexOf(query.toLowerCase()) >
-                  -1) ||
-              (usuario.registrado !== null &&
-                usuario.registrado.toLowerCase().indexOf(query.toLowerCase()) >
-                  -1) ||
-              (usuario.actualizado !== null &&
-                usuario.actualizado.toLowerCase().indexOf(query.toLowerCase()) >
-                  -1)
-          );
-        };
-        if (filterItems(this.text).length > 0) {
-          this.searchUsuariosRoles = filterItems(this.text);
-          this.pagination = false;
-          this.success =
-            "Se encontraron" + " " + this.searchUsuariosRoles.length + " "  +"registros";
-          this.err = false;
-        } else {
-          this.searchUsuariosRoles = [];
-          this.pagination = false;
-          this.success = false;
-          this.err = "No se encontraron resultados";
-        }
-      }
-    },
+    
     //limpiar el campo search
     limpiarText() {
       this.text = "";

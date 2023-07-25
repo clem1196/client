@@ -93,7 +93,7 @@
             <tr class="thead-tr">
               <th>
                 <i class="bi-filter"></i>
-                <button @click="sortId" class="btn btn-sm th-font-size">
+                <button @click="sortDocumentid" class="btn btn-sm th-font-size">
                   Id
                 </button>
               </th>
@@ -187,7 +187,7 @@
           </tbody>
         </table>
         <!--PAGINATION-->
-        <nav aria-label="Page navigation example" class="font-size-pagination">
+        <nav aria-label="Page navigation example" >
           <ul v-if="pagination" class="pagination justify-content-center">
             <li class="page-item disabled">
               <button class="page-link">Páginas:</button>
@@ -317,7 +317,7 @@ export default {
     //await this.getFiles();
     this.getDataPages(this.currentPage);
   },
-  methods: {    
+  methods: {
     //DOCUMENTS LIST
     async getDocuments() {
       try {
@@ -342,9 +342,68 @@ export default {
         console.log(error.response.data.Message);
       }
     },
-
-    //FILTRO
-    sortId() {
+    //filter
+    getSearchDocs() {
+      if (this.text.length == 0) {
+        this.getDataPages(1);
+      } else {
+        const filterItems = (query) => {
+          return this.documents.filter(
+            (doc) =>
+              (doc.documentid !== null &&
+                doc.documentid.toString().indexOf(query) > -1) ||
+              (doc.doc_number !== null &&
+                doc.doc_number.toLowerCase().indexOf(query.toLowerCase()) >
+                  -1) ||
+              (doc.doc_type !== null &&
+                doc.doc_type.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
+              (doc.firstSurname !== null &&
+                doc.firstSurname.toLowerCase().indexOf(query.toLowerCase()) >
+                  -1) ||
+              (doc.lastSurname !== null &&
+                doc.lastSurname.toLowerCase().indexOf(query.toLowerCase()) >
+                  -1) ||
+              (doc.name !== null &&
+                doc.name.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
+              (doc.fullname !== null &&
+                doc.fullname.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
+              (doc.file !== null &&
+                doc.file.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
+              (doc.created !== null &&
+                doc.created.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
+              (doc.updated !== null &&
+                doc.updated.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
+              (doc.state !== null && doc.state.toString().indexOf(query) > -1)
+          );
+        };
+        if (filterItems(this.text).length > 0) {
+          this.searchDocs = filterItems(this.text);
+          this.pagination = false;
+          this.successSearch =
+            "Se encontraron" + " " + this.searchDocs.length + " " + "registros";
+          this.errSearch = false;
+        } else {
+          this.searchDocs = [];
+          this.pagination = false;
+          this.successSearch = false;
+          this.errSearch = "No se encontraron resultados";
+        }
+      }
+    },
+    //limpiar el campo del search
+    limpiarText() {
+      this.text = "";
+    },
+    //cabiar switch a modo avanzado
+    cambiarFilter() {
+      if (this.filter == true) {
+        this.filter = false;
+      } else {
+        this.filter = true;
+      }
+    },
+    //sort
+    sortDocumentid() {
       const asc = (a, b) => {
         return a.documentid - b.documentid;
       };
@@ -522,67 +581,6 @@ export default {
       }
     },
 
-    //SEARCH
-    getSearchDocs() {
-      if (this.text.length == 0) {
-        this.getDataPages(1);
-      } else {
-        const filterItems = (query) => {
-          return this.documents.filter(
-            (doc) =>
-              (doc.documentid !== null &&
-                doc.documentid.toString().indexOf(query) > -1) ||
-              (doc.doc_number !== null &&
-                doc.doc_number.toLowerCase().indexOf(query.toLowerCase()) >
-                  -1) ||
-              (doc.doc_type !== null &&
-                doc.doc_type.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
-              (doc.firstSurname !== null &&
-                doc.firstSurname.toLowerCase().indexOf(query.toLowerCase()) >
-                  -1) ||
-              (doc.lastSurname !== null &&
-                doc.lastSurname.toLowerCase().indexOf(query.toLowerCase()) >
-                  -1) ||
-              (doc.name !== null &&
-                doc.name.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
-              (doc.fullname !== null &&
-                doc.fullname.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
-              (doc.file !== null &&
-                doc.file.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
-              (doc.created !== null &&
-                doc.created.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
-              (doc.updated !== null &&
-                doc.updated.toLowerCase().indexOf(query.toLowerCase()) > -1) ||
-              (doc.state !== null && doc.state.toString().indexOf(query) > -1)
-          );
-        };
-        if (filterItems(this.text).length > 0) {
-          this.searchDocs = filterItems(this.text);
-          this.pagination = false;
-          this.successSearch =
-            "Se encontraron" + " " + this.searchDocs.length + " " + "registros";
-          this.errSearch = false;
-        } else {
-          this.searchDocs = [];
-          this.pagination = false;
-          this.successSearch = false;
-          this.errSearch = "No se encontraron resultados";
-        }
-      }
-    },
-    //limpiar el campo del search
-    limpiarText() {
-      this.text = "";
-    },
-    //cabiar switch a modo avanzado
-    cambiarFilter() {
-      if (this.filter == true) {
-        this.filter = false;
-      } else {
-        this.filter = true;
-      }
-    },
-
     //PAGINATION
     isActive(numPage) {
       return numPage == this.currentPage ? "active" : "";
@@ -641,6 +639,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

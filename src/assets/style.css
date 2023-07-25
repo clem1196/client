@@ -1,22 +1,33 @@
-
 /*Login*/
+.card.card-login{
+  width: 23rem;
+  height: 32rem;
+  align-items: center;
+ padding-top:1.5rem;
+ padding-right:1.5rem;
+ padding-left:1.5rem;
+ box-shadow: 3px 3px 20px 0px;
+}
 .form-header {
   background: #00acc1;
   height: 10rem;
-  width: 25rem;
+  width: 20rem;
   border-radius: 0.4rem;
   text-align: center;
 }
+
 .bi-person-circle {
   font-size: 6rem;
   color: #ffffff;
 }
+
 .form-input {
   text-align: center;
   color: #00acc1;
   height: 3rem;
-  width: 25rem;
+  width: 20rem;
 }
+
 .div-input {
   column-fill: 12pt;
   margin-block: 10pt;
@@ -25,75 +36,49 @@
 .form-button {
   background: #ab47bc;
   height: 4rem;
-  width: 25rem;
+  width: 20rem;
   font-size: 1.5rem;
   color: #ffffff;
 }
+
 .form-a {
   background: #00acc1;
   color: #f8fafa;
   text-decoration: none;
   font-size: 1rem;
   height: 3rem;
-  width: 25rem;
+  width: 20rem;
   display: flex;
-    
-    justify-content: space-evenly;
-    align-items: center;
+
+  justify-content: space-evenly;
+  align-items: center;
 }
+
 .login-alert {
   text-align: center;
   padding-top: 1rem;
-  width: 25rem;
+  width: 20rem;
   margin-block: 10pt;
 }
-.div-buttons{
-  width: 25rem;
-  
-}
-/*App.vue*/
-.navbar-expand-lg {
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  min-width: 600px;
-  background: #9025ae;
-  
+
+.div-buttons {
+  width: 20rem;
+
 }
 
+/*App.vue*/
 .navbar {
   position: relative;
+  background: #6039f7;
   display: flex;
-  flex-wrap: wrap;  
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.2rem;
   font-size: 0.9rem;
-}
-
-.navbar-brand {  
-  padding-left: 0;
-  padding-right: 8px;
-  color: white;
-  border-radius: 0.25rem;
-  text-align: center;
-  font-size: 1.2rem;
-}
-
-.navbar-brand:hover {  
-  padding-left: 0;
-  padding-right: 8px;
-  background-color: #b370bd;
-  border-radius: 0.25rem;
-  text-align: center;
-  font-size: 1.2rem;
 }
 
 .navbar-collapse {
   margin-top: 8px;
   margin-bottom: 2px;
-}
-
-.navbar.navbar-expand-lg {
-  background: #6039f7;
 }
 
 .navbar-toggler {
@@ -107,25 +92,33 @@
 }
 
 .navbar-toggler:hover {
-  font-size: 1.8rem;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
   color: white;
-  background: #e1bee7;
+  background: #03d9f6;
 }
 
 .navbar-toggler:focus {
   box-shadow: 3px 3px 3px 0px;
-  color: #e1bee7;
-  background: white;
+  color: #c7f2f8;
+  background: #00acc1;
+}
+
+.navbar-brand {
+  padding: 10px;
+  color: white;
+  border-radius: 0.25rem;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.navbar-brand:hover {
+  background: #00acc1;
+  color: white;
 }
 
 .navbar-nav {
   display: flex;
-
-  padding-left: 0;
+  padding-left: 4px;
   list-style: none;
-
   margin-right: auto;
 }
 
@@ -134,19 +127,17 @@
   padding-right: 8px;
   color: white;
   border-radius: 0.25rem;
+  text-align: center;
   height: 40px;
   width: 80px;
-  vertical-align: auto;
+
 }
 
 .nav-link:hover {
-  padding-left: 8px;
-  padding-right: 8px;
-  background-color: #b370bd;
-  border-radius: 0.25rem;
+  background: #00acc1;
+  color: white;
 
-  height: 40px;
-  width: 80px;
+
 }
 
 .nav-link:focus {
@@ -156,7 +147,7 @@
 }
 
 .d-flex {
-  display: flex !important;
+  display: flex;
   align-items: center;
   justify-content: none;
   align-content: center;
@@ -167,7 +158,7 @@
 .welcome-user {
   padding-right: 8px;
   color: #e1bee7;
-  font-size: 16px;
+  font-size: 15px;
   font-style: oblique;
 }
 
@@ -213,16 +204,27 @@
   color: white;
   margin: 2px;
 }
-
-.btn-cancel {
+.btn-acept:hover {
+  background: #e6c9eb;
   color: #ab47bc;
-  padding-left: 16px;
+  
 }
 
+
+.btn-cancel {
+  color: #a868b3;
+  padding-left: 16px;
+}
+.btn-cancel:hover {
+  color: #ea98f7;
+  
+}
 .remove-file {
   color: #ab47bc;
 }
-
+.remove-file:hover {
+  color: #e284f3;
+}
 .alert {
   padding: 0.3rem 0.9rem;
   font-size: 13px;
@@ -243,11 +245,10 @@
 }
 
 /*General*/
-
 .card.card-title {
   background: #00acc1;
   color: white;
-  padding: 1%;
+  padding: 0.8%;
   font-size: large;
   text-align: center;
 }
@@ -304,8 +305,9 @@
   font-size: 0.8rem;
   padding-left: 0.5rem;
 }
-.form-control-sm.search{ 
-  padding: 0.25rem 15rem; 
+
+.form-control-sm.search {
+  padding: 0.25rem 15rem;
 }
 
 .form-select-sm {
@@ -408,15 +410,15 @@
   border: none;
   background-color: #e0f7fa;
   border-radius: 0.25rem;
-  font-size: 0.8rem;  
+  font-size: 0.8rem;
   justify-content: center;
 }
 
 .row-search {
   padding-left: 25px;
-    padding-top: 6px;
-    align-items: end;
-    padding-right: 0;
+  padding-top: 6px;
+  align-items: end;
+  padding-right: 0;
 }
 
 .col-auto {
@@ -467,7 +469,7 @@
 /*table documents*/
 .thead-tr {
   background: #00acc1;
-  text-align: center;  
+  text-align: center;
 }
 
 .th-font-size {
@@ -477,7 +479,7 @@
 
 .tbody-tr {
   font-size: small;
-  background-color: none;
+  background-color:#E0F7FA ;
   text-align: center;
 }
 
@@ -501,19 +503,16 @@
   display: flex;
   padding: 0.5rem;
   list-style: none;
-  flex-wrap: wrap;  
+  flex-wrap: wrap;
+  font-size: 0.8rem;
 }
 
 .page-item {
   padding: 0.2rem;
-  background: none; 
+  background: none;
 }
 
-.font-size-pagination {
-  font-size: 0.8rem;
-  background-color: #00acc1;
- border-radius: 0.25rem;
-}
+
 
 .page-item.active .page-link {
   z-index: 3;
@@ -525,16 +524,16 @@
 
 .page-item.active .page-link:focus {
   box-shadow: 0px 0px 4px 3px;
-  color: #e1bee7;
+  color: #f4d5fa;
   border-radius: 0.25rem;
 }
 
 .page-item.disabled .page-link {
-  color: #ced3d3;
+  color: #6a7777;
   pointer-events: none;
-  background: #00acc1;
-  border-color: #8dbbc1;
- 
+  background: none;
+  border-color: none;
+
 }
 
 .page-link {
@@ -610,67 +609,81 @@
   display: flex;
   flex-wrap: wrap;
 }
+
 /*logOut.vue*/
 .modal-header.head {
   background: #ab47bc;
   height: 3rem;
   font-size: 2rem;
 }
+
 .modal-body.body {
   color: #ab47bc;
   font-size: 1rem;
   height: 3rem;
 }
+
 .modal-title.title {
   color: #f9fbfb;
 }
+
 .modal-footer.footer {
   background: #efeff0;
   padding: 0;
   margin: 0;
 }
+
 .btn.yes {
   color: #f8f6f8;
   background: #ab47bc;
 }
+
 .btn.yes:hover {
   color: #f8f6f8;
   background: #d65beb;
 }
+
 .btn.not {
   color: #ab47bc;
 }
+
 .btn.not:hover {
   color: #ab47bc;
   background: #e5c7eb;
 }
+
 .modal-close {
   color: #f8f6f8;
   font-size: 1.5rem;
   text-decoration: none;
 }
+
 /*UsersForm*/
-.modal-header.headUserForm{
+.modal-header.headUserForm {
   background: #00acc1;
   color: white;
 }
-.modal-footer-sm.footUserForm{
+
+.modal-footer-sm.footUserForm {
   background: #00acc1;
   padding: 0.8rem;
   border-radius: 0.30rem;
-  
+
 }
-.btn.btnUserForm{
+
+.btn.btnUserForm {
   background-color: blueviolet;
   color: aliceblue;
   border-radius: 0.30rem;
 }
-.btn.btnUserForm-cancel{
+
+.btn.btnUserForm-cancel {
   background-color: none;
   color: aliceblue;
   margin-left: 1.5rem;
   border-radius: 0.30rem;
 }
-.text-alert-form{
+
+.text-alert-form {
   color: blueviolet;
 }

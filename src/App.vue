@@ -53,7 +53,7 @@
               <i class="bi-person-fill"></i> Welcome {{ user }}!!
             </span>
             <span class="welcome-user">
-              <img src="./assets/clemente.jpg" width="40" height="50rem">
+              <img src="./assets/clemente.jpg" width="30" height="40rem">
             </span>
             <a class="btn-signIn" href="/login" type="button">
               <i class="bi-people-fill"></i> Change
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import Helper from "./services/Helpers";
+import Helper from "./services/users/Helpers";
 export default {
   data() {
     return {

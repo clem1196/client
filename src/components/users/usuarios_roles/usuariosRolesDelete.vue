@@ -74,7 +74,7 @@
 
 <script>
 import axios from "axios";
-import Helpers from "../../../services/Helpers";
+import Helpers from "../../../services/users/Helpers";
 import usuariosRolesList from "./usuariosRolesList.vue";
 export default {
   name: "usuariosRoles-delete",

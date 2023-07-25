@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import Helpers from "../../services/Helpers";
+import Helpers from "../../services/users/Helpers";
 export default {
   name: "log-out",
   data() {
